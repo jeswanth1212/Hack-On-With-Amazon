@@ -1,5 +1,12 @@
-1. In the hero section carousel, if the auto scroll comes to the last element, then it must continue to the first element and turn into a loop.
-2. The nav bar still looks improper.
-- Add more top bottom dark gradient.
-- When I hover over a elemenet, there must be a smooth snimation of the text of the icon and both of them must be in a enclosed container thats slightly highlighted.
-3. I want the carousels that are below my apps to be like the image ive added as context.
+1. As you can see in the image I have attached all the images of the movies and series are cut at the top and bottom of the containers, which looks awkward. So either reduce the size of the container and increase the image magnification, or whatever that suits the best for this scenario. Just fix it properly
+
+2. Known error shown
+
+3. As you can see the icons are not placed properly. The time section is too much to the left and is not in proepr alignment at all. What I would suggest is, just remove that section totally, and make it again once more without any errors. And also hwo I want the nav bar to be:
+Top Left: Profile Settings
+Top Middle: Search, Live TV, Friends, My List
+Top Right:  Time
+
+4. Entire website to be controlled by arrow keys similar to how people would be doing in their tv with their remote. By default when the page opens, the key control should be between search and live tv, so yeah when people click left it should go to search, to live tv if right move, or to the recommendations carousel when bottom click.
+
+5. Trailers shown when people hover over the recommendations carousel below the "My Apps" section.

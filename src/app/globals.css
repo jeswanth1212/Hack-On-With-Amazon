@@ -148,3 +148,59 @@
 .nav-item:hover .nav-label {
   @apply opacity-100;
 }
+
+/* App icons styles - updated */
+.app-carousel-item {
+  @apply rounded-2xl overflow-hidden;
+}
+
+.app-carousel-item > * {
+  @apply rounded-2xl overflow-hidden;
+}
+
+/* Movie carousel item styles */
+.movie-carousel-item {
+  @apply rounded-lg;
+  height: auto;
+  overflow: visible !important;
+}
+
+.movie-carousel-item > * {
+  height: 100%;
+  transition: all 0.3s ease;
+  overflow: visible !important;
+}
+
+/* Group hover styles for content cards */
+.group:hover .group-hover\:scale-100 {
+  transform: scale(1);
+}
+
+.group:hover .group-hover\:opacity-100 {
+  opacity: 1;
+}
+
+.group:hover .group-hover\:bg-black\/60 {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+/* Carousel styling */
+.carousel {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.carousel::-webkit-scrollbar {
+  display: none;
+}
+
+/* Ensure carousel navigation buttons are visible */
+.carousel-prev, .carousel-next {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.carousel:hover .carousel-prev,
+.carousel:hover .carousel-next {
+  opacity: 1;
+}

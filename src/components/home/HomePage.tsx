@@ -7,16 +7,28 @@ import ContentCarousel from '../ui/ContentCarousel';
 import ContentCard from '../ui/ContentCard';
 import AppIcon from '../ui/AppIcon';
 import { fetchTrendingWeek } from '@/lib/tmdb';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 // App icons data
 const appsData = [
   { id: 1, name: 'Netflix', iconFile: 'netflix.png' },
   { id: 2, name: 'Prime Video', iconFile: 'prime.png' },
   { id: 3, name: 'Freevee', iconFile: 'freevee.png' },
-  { id: 4, name: 'YouTube', iconFile: 'YouTube.jpg' },
+  { id: 4, name: 'YouTube', iconFile: 'youtube.png' },
   { id: 5, name: 'Disney+', iconFile: 'disney.png' },
   { id: 6, name: 'HBO Max', iconFile: 'hbo.png' },
+  { id: 7, name: 'Apple TV+', iconFile: 'apple.png' },
+  { id: 8, name: 'Hulu', iconFile: 'hulu.png' },
 ];
+
+// Helper function to duplicate array items to reach desired length
+const duplicateToLength = (array: any[], targetLength: number) => {
+  const result = [...array];
+  while (result.length < targetLength) {
+    result.push(...array.slice(0, Math.min(array.length, targetLength - result.length)));
+  }
+  return result;
+};
 
 export default function HomePage() {
   const [trendingData, setTrendingData] = useState<any[]>([]);
@@ -65,10 +77,11 @@ export default function HomePage() {
   const movies = trendingData.filter(item => item.mediaType === 'movie');
   const tvShows = trendingData.filter(item => item.mediaType === 'tv');
   
-  // Create genre-based collections
-  const actionMovies = movies.slice(0, 5);
-  const comedyMovies = movies.slice(5, 10);
-  const popularSeries = tvShows.slice(0, 5);
+  // Create genre-based collections and duplicate to have ~15 items
+  const actionMovies = duplicateToLength(movies.slice(0, 5), 15);
+  const comedyMovies = duplicateToLength(movies.slice(5, 10), 15);
+  const popularSeries = duplicateToLength(tvShows.slice(0, 5), 15);
+  const trendingThisWeek = duplicateToLength(trendingData.slice(0, 7), 15);
 
   // Split the trending data for different sections
   const featuredContent = trendingData.slice(0, 5);
@@ -76,22 +89,46 @@ export default function HomePage() {
   return (
     <MainLayout>
       <HeroBanner featuredContent={featuredContent} />
-      <div className="max-w-full px-4 md:px-6 lg:px-8 mx-auto">
-        <ContentCarousel title="My Apps" slidesToShow={6} compact={true}>
-          {appsData.map((app) => (
-            <AppIcon
-              key={app.id}
-              id={app.id}
-              name={app.name}
-              iconFile={app.iconFile}
-            />
-          ))}
-        </ContentCarousel>
+      <div className="max-w-full mx-auto">
+        {/* App Icons with Shadcn Carousel */}
+        <div className="mb-10 px-8">
+          <h2 className="text-2xl font-bold mb-4 text-white">My Apps</h2>
+          <div className="relative">
+            <Carousel
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+              className="w-full carousel"
+            >
+              <CarouselContent>
+                {appsData.map((app) => (
+                  <CarouselItem 
+                    key={app.id} 
+                    className="basis-1/4 md:basis-1/5"
+                  >
+                    <div className="h-[140px] aspect-video p-1">
+                      <AppIcon
+                        id={app.id}
+                        name={app.name}
+                        iconFile={app.iconFile}
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <div className="hidden md:block">
+                <CarouselPrevious className="carousel-prev left-2 bg-background/80 hover:bg-background" />
+                <CarouselNext className="carousel-next right-2 bg-background/80 hover:bg-background" />
+              </div>
+            </Carousel>
+          </div>
+        </div>
 
-        <ContentCarousel title="Action Movies" slidesToShow={5}>
-          {actionMovies.map((item) => (
+        <ContentCarousel title="Trending this week">
+          {trendingThisWeek.map((item, index) => (
             <ContentCard
-              key={item.id}
+              key={`trending-${item.id}-${index}`}
               id={item.id}
               title={item.title}
               imageUrl={item.posterUrl}
@@ -102,10 +139,10 @@ export default function HomePage() {
           ))}
         </ContentCarousel>
 
-        <ContentCarousel title="Comedy Movies" slidesToShow={5}>
-          {comedyMovies.map((item) => (
+        <ContentCarousel title="Action Movies">
+          {actionMovies.map((item, index) => (
             <ContentCard
-              key={item.id}
+              key={`action-${item.id}-${index}`}
               id={item.id}
               title={item.title}
               imageUrl={item.posterUrl}
@@ -116,10 +153,24 @@ export default function HomePage() {
           ))}
         </ContentCarousel>
 
-        <ContentCarousel title="Popular TV Shows" slidesToShow={5}>
-          {popularSeries.map((item) => (
+        <ContentCarousel title="Comedy Movies">
+          {comedyMovies.map((item, index) => (
             <ContentCard
-              key={item.id}
+              key={`comedy-${item.id}-${index}`}
+              id={item.id}
+              title={item.title}
+              imageUrl={item.posterUrl}
+              year={item.releaseDate?.substring(0, 4)}
+              rating={item.rating.toFixed(1)}
+              source={item.provider}
+            />
+          ))}
+        </ContentCarousel>
+
+        <ContentCarousel title="Popular TV Shows">
+          {popularSeries.map((item, index) => (
+            <ContentCard
+              key={`tv-${item.id}-${index}`}
               id={item.id}
               title={item.title}
               imageUrl={item.posterUrl}

@@ -1,7 +1,5 @@
 'use client';
 
-import { Card } from "@/components/ui/card";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { cn } from "@/lib/utils";
 
 interface AppIconProps {
@@ -19,19 +17,17 @@ export default function AppIcon({
   onClick,
 }: AppIconProps) {
   return (
-    <Card 
-      className="content-card border-0 overflow-hidden cursor-pointer mx-1 h-full bg-transparent"
-      onClick={onClick}
-    >
-      <AspectRatio ratio={16/9}>
-        <div className="w-full h-full flex items-center justify-center">
-          <img 
-            src={`/apps/${iconFile}`} 
-            alt={name} 
-            className="w-full h-full object-contain"
-          />
-        </div>
-      </AspectRatio>
-    </Card>
+    <div className="h-full w-full rounded-2xl overflow-hidden bg-black/10 hover:scale-110 transition-transform duration-200 border border-gray-800">
+      <div 
+        className="h-full w-full flex items-center justify-center cursor-pointer"
+        onClick={onClick}
+      >
+        <img 
+          src={`/apps/${iconFile}`} 
+          alt={name} 
+          className="h-full w-full object-cover"
+        />
+      </div>
+    </div>
   );
 } 
