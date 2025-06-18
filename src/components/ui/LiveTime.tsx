@@ -27,6 +27,8 @@ export default function LiveTime() {
   }, []);
 
   return (
-    <div className="text-sm text-white font-light">{time}</div>
+    <div className="text-base font-medium text-white px-3 py-1.5 rounded-lg bg-black/50">
+      {time}
+    </div>
   );
 } 

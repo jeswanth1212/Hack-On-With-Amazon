@@ -1,6 +1,4 @@
-1. As you can see in the image I have attached all the images of the movies and series are cut at the top and bottom of the containers, which looks awkward. So either reduce the size of the container and increase the image magnification, or whatever that suits the best for this scenario. Just fix it properly
 
-2. Known error shown
 
 3. As you can see the icons are not placed properly. The time section is too much to the left and is not in proepr alignment at all. What I would suggest is, just remove that section totally, and make it again once more without any errors. And also hwo I want the nav bar to be:
 Top Left: Profile Settings
