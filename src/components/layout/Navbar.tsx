@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { cn } from "@/lib/utils";
 import LiveTime from '@/components/ui/LiveTime';
 import SearchOverlay from '@/components/ui/SearchOverlay';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
   User,
   Tv2,
@@ -15,22 +17,27 @@ import {
 interface NavItemProps {
   icon: React.ReactNode;
   label: string;
+  href?: string;
   onClick?: () => void;
+  isActive?: boolean;
 }
 
-const NavItem = ({ icon, label, onClick }: NavItemProps) => {
+const NavItem = ({ icon, label, href, onClick, isActive }: NavItemProps) => {
   const [showLabel, setShowLabel] = useState(false);
 
-  return (
+  const content = (
     <div
-      className="nav-item"
+      className={cn(
+        "nav-item",
+        isActive && "bg-white/10 rounded-lg"
+      )}
       onMouseEnter={() => setShowLabel(true)}
       onMouseLeave={() => setShowLabel(false)}
       onClick={onClick}
     >
       <div className={cn(
         "flex items-center px-3 py-2 rounded-lg transition-all duration-300",
-        showLabel ? "bg-white/10" : "bg-transparent"
+        (showLabel || isActive) ? "bg-white/10" : "bg-transparent"
       )}>
         <div className={cn(
           "transition-transform duration-300",
@@ -48,9 +55,20 @@ const NavItem = ({ icon, label, onClick }: NavItemProps) => {
       </div>
     </div>
   );
+
+  if (href) {
+    return (
+      <Link href={href}>
+        {content}
+      </Link>
+    );
+  }
+
+  return content;
 };
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -98,7 +116,12 @@ export default function Navbar() {
               onClick={handleSearchClick}
             />
             <NavItem icon={<Tv2 size={24} className="text-white" />} label="Live TV" />
-            <NavItem icon={<Users size={24} className="text-white" />} label="Friends" />
+            <NavItem 
+              icon={<Users size={24} className="text-white" />} 
+              label="Friends" 
+              href="/friends"
+              isActive={pathname === '/friends'}
+            />
             <NavItem icon={<Heart size={24} className="text-white" />} label="My List" />
           </div>
 
