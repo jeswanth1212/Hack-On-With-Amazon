@@ -1,43 +1,67 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 /**
- * Hook to handle keyboard events for TV-style navigation
+ * A hook for handling keyboard navigation events
  */
-export function useKeyboardNavigation(
-  options: {
-    onEscape?: () => void;
-    onEnter?: () => void;
-    onArrowUp?: () => void;
-    onArrowDown?: () => void;
-    onArrowLeft?: () => void;
-    onArrowRight?: () => void;
-    disabled?: boolean;
-  }
-) {
+export function useKeyboardNavigation({
+  disabled = false,
+  onEnter,
+  onEscape,
+  onArrowUp,
+  onArrowDown,
+  onArrowLeft,
+  onArrowRight,
+}: {
+  disabled?: boolean;
+  onEnter?: () => void;
+  onEscape?: () => void;
+  onArrowUp?: () => void;
+  onArrowDown?: () => void;
+  onArrowLeft?: () => void;
+  onArrowRight?: () => void;
+}) {
   useEffect(() => {
-    if (options.disabled) return;
+    if (disabled) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
       switch (e.key) {
-        case 'Escape':
-          options.onEscape?.();
-          break;
         case 'Enter':
-          options.onEnter?.();
+          if (onEnter) {
+            e.preventDefault();
+            onEnter();
+          }
+          break;
+        case 'Escape':
+          if (onEscape) {
+            e.preventDefault();
+            onEscape();
+          }
           break;
         case 'ArrowUp':
-          options.onArrowUp?.();
+          if (onArrowUp) {
+            e.preventDefault();
+            onArrowUp();
+          }
           break;
         case 'ArrowDown':
-          options.onArrowDown?.();
+          if (onArrowDown) {
+            e.preventDefault();
+            onArrowDown();
+          }
           break;
         case 'ArrowLeft':
-          options.onArrowLeft?.();
+          if (onArrowLeft) {
+            e.preventDefault();
+            onArrowLeft();
+          }
           break;
         case 'ArrowRight':
-          options.onArrowRight?.();
+          if (onArrowRight) {
+            e.preventDefault();
+            onArrowRight();
+          }
           break;
         default:
           break;
@@ -48,7 +72,7 @@ export function useKeyboardNavigation(
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [options]);
+  }, [disabled, onEnter, onEscape, onArrowUp, onArrowDown, onArrowLeft, onArrowRight]);
 }
 
 // Hook for handling keyboard navigation for Fire TV remote

@@ -33,7 +33,7 @@ export default function ContentCard({
       <div 
         className={cn(
           "group relative h-full w-full aspect-[2/3] overflow-visible rounded-lg cursor-pointer transition-all duration-300",
-          isHovered ? "ring-2 ring-blue-500 scale-[1.03] z-10" : "",
+          isHovered ? "scale-[1.03] z-10 ring-2 ring-blue-500" : "",
           className
         )}
         onClick={onClick}
