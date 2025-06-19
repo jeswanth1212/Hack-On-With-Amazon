@@ -1,0 +1,44 @@
+# Ignore the data folder
+data/
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Environment
+.env
+.venv/
+env/
+venv/
+ENV/
+*.env
+
+# VSCode
+.vscode/
+
+# macOS
+.DS_Store
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# PyCharm
+.idea/
+
+# Flask cache
+instance/
+*.db
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
