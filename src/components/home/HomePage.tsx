@@ -7,6 +7,8 @@ import ContentCarousel from '../ui/ContentCarousel';
 import ContentCard from '../ui/ContentCard';
 import AppIcon from '../ui/AppIcon';
 import { fetchTrendingWeek } from '@/lib/tmdb';
+import { getRecommendations, RecommendationItem } from '@/lib/utils';
+import { useAuth } from '@/lib/hooks';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 // App icons data
@@ -30,26 +32,84 @@ const duplicateToLength = (array: any[], targetLength: number) => {
   return result;
 };
 
+// Helper to fetch TMDB poster and backdrop for a movie or TV show by title/year
+async function fetchTmdbImages(title: string, year?: number) {
+  const apiKey = 'ee41666274420bb7514d6f2f779b5fd9';
+  const query = encodeURIComponent(title);
+  let url = `https://api.themoviedb.org/3/search/multi?api_key=${apiKey}&language=en-US&query=${query}&page=1&include_adult=false`;
+  if (year) url += `&year=${year}`;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return { poster: null, backdrop: null };
+    const data = await res.json();
+    const result = data.results && data.results.length > 0 ? data.results[0] : null;
+    return {
+      poster: result && result.poster_path ? `https://image.tmdb.org/t/p/w500${result.poster_path}` : null,
+      backdrop: result && result.backdrop_path ? `https://image.tmdb.org/t/p/original${result.backdrop_path}` : null
+    };
+  } catch (e) {
+    // ignore
+  }
+  return { poster: null, backdrop: null };
+}
+
 export default function HomePage() {
   const [trendingData, setTrendingData] = useState<any[]>([]);
+  const [personalizedData, setPersonalizedData] = useState<any[]>([]);
+  const [heroData, setHeroData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { user, userContext } = useAuth();
 
+  // Fetch trending data and personalized recommendations
   useEffect(() => {
-    const getTrendingData = async () => {
+    const fetchData = async () => {
       try {
-        const data = await fetchTrendingWeek();
-        setTrendingData(data);
+        // Fetch trending data
+        const trending = await fetchTrendingWeek();
+        setTrendingData(trending);
+        
+        // Fetch personalized recommendations if user is logged in
+        if (user) {
+          const recs = await getRecommendations(user.user_id, 12, userContext); // get more for splitting
+          
+          // Fetch images for all recommendations
+          const processedRecs = await Promise.all(recs.map(async (rec: RecommendationItem) => {
+            const images = await fetchTmdbImages(rec.title, rec.release_year);
+            let posterUrl = images.poster || '/placeholder.jpg';
+            let backdropUrl = images.backdrop || posterUrl;
+            const mediaType = rec.genres?.toLowerCase().includes('tv') ? 'tv' : 'movie';
+            return {
+              id: rec.item_id,
+              title: rec.title,
+              description: rec.overview || 'No description available',
+              imageUrl: posterUrl, // for carousels
+              posterUrl: posterUrl,
+              backdropUrl: backdropUrl, // for hero banner
+              mediaType: mediaType,
+              releaseDate: rec.release_year ? `${rec.release_year}-01-01` : undefined,
+              rating: rec.score * 10, // Scale the score to match TMDB's 0-10 rating
+              provider: mediaType === 'movie' ? 'Movie' : 'TV Show'
+            };
+          }));
+          
+          // Split into hero and below carousel, no overlap
+          const hero = processedRecs.slice(0, 5).map(item => ({ ...item, imageUrl: item.backdropUrl || item.posterUrl }));
+          const below = processedRecs.slice(5, 11); // next 6
+          setHeroData(hero);
+          setPersonalizedData(below);
+        }
+        
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching trending data:', err);
-        setError('Failed to load trending content');
+        console.error('Error fetching data:', err);
+        setError('Failed to load content');
         setLoading(false);
       }
     };
 
-    getTrendingData();
-  }, []);
+    fetchData();
+  }, [user, userContext]);
 
   // Show loading state
   if (loading) {
@@ -83,8 +143,8 @@ export default function HomePage() {
   const popularSeries = duplicateToLength(tvShows.slice(0, 5), 15);
   const trendingThisWeek = duplicateToLength(trendingData.slice(0, 7), 15);
 
-  // Split the trending data for different sections
-  const featuredContent = trendingData.slice(0, 5);
+  // Use heroData for banner if available, else trending
+  const featuredContent = heroData.length > 0 ? heroData : trendingData.slice(0, 5);
 
   return (
     <MainLayout>
@@ -124,6 +184,22 @@ export default function HomePage() {
             </Carousel>
           </div>
         </div>
+
+        {user && personalizedData.length > 0 && (
+          <ContentCarousel title={`Recommended for ${user.user_id}`}>
+            {personalizedData.map((item, index) => (
+              <ContentCard
+                key={`recommended-${item.id}-${index}`}
+                id={item.id}
+                title={item.title}
+                imageUrl={item.posterUrl}
+                year={item.releaseDate?.substring(0, 4)}
+                rating={typeof item.rating === 'number' ? item.rating.toFixed(1) : '0.0'}
+                source={item.provider}
+              />
+            ))}
+          </ContentCarousel>
+        )}
 
         <ContentCarousel title="Trending this week">
           {trendingThisWeek.map((item, index) => (

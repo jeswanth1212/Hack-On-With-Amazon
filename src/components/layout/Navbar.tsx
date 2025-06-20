@@ -4,15 +4,26 @@ import { useState, useEffect } from 'react';
 import { cn } from "@/lib/utils";
 import LiveTime from '@/components/ui/LiveTime';
 import SearchOverlay from '@/components/ui/SearchOverlay';
+import LoginDialog from '@/components/ui/LoginDialog';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/lib/hooks';
 import {
   User,
   Tv2,
   Users,
   Heart,
   Search,
+  LogOut,
 } from "lucide-react";
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface NavItemProps {
   icon: React.ReactNode;
@@ -71,6 +82,8 @@ export default function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -94,6 +107,12 @@ export default function Navbar() {
     setSearchOpen(false);
   };
 
+  const handleProfileClick = () => {
+    if (!user) {
+      setLoginOpen(true);
+    }
+  };
+
   return (
     <>
       <div className={cn(
@@ -103,9 +122,35 @@ export default function Navbar() {
           : "bg-gradient-to-b from-black/90 via-black/70 to-transparent"
       )}>
         <div className="flex items-center justify-between w-full">
-          {/* Left Section - Profile only */}
+          {/* Left Section - Profile */}
           <div>
-            <NavItem icon={<User size={24} className="text-white" />} label="Profile" />
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <div className="cursor-pointer">
+                    <NavItem 
+                      icon={<User size={24} className="text-white" />} 
+                      label={`User ${user.user_id}`} 
+                    />
+                  </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-56">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem disabled>Profile</DropdownMenuItem>
+                  <DropdownMenuItem disabled>Settings</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={logout} className="text-red-500">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div onClick={handleProfileClick}>
+                <NavItem icon={<User size={24} className="text-white" />} label="Login" />
+              </div>
+            )}
           </div>
 
           {/* Middle Section - Search, Live TV, Friends, My List */}
@@ -133,6 +178,7 @@ export default function Navbar() {
       </div>
 
       <SearchOverlay isOpen={searchOpen} onClose={handleCloseSearch} />
+      <LoginDialog isOpen={loginOpen} onClose={() => setLoginOpen(false)} />
     </>
   );
 } 
