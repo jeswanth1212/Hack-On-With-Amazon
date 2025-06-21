@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback, createContext, useContext } from 'react';
 import { useRouter } from "next/navigation";
-import { validateUserId, ContextData, UserProfile } from './utils';
+import { validateUserId, ContextData, UserProfile, createUserProfile } from './utils';
 
 /**
  * Custom hook to handle keyboard navigation in app drawers.
@@ -129,11 +129,28 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   // Register new user (would need to be implemented on the backend)
   const registerUser = async (userData: UserProfile): Promise<boolean> => {
-    // This would call a backend endpoint to create a new user
-    // For now, we'll just simulate success
-    setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
-    return true;
+    setLoading(true);
+    setError(null);
+    
+    try {
+      // Call the backend API to create a user profile
+      const createdUser = await createUserProfile(userData);
+      
+      if (createdUser) {
+        setUser(createdUser);
+        localStorage.setItem('user', JSON.stringify(createdUser));
+        setLoading(false);
+        return true;
+      } else {
+        setError('Failed to create user profile');
+        setLoading(false);
+        return false;
+      }
+    } catch (e) {
+      setError('Failed to register user');
+      setLoading(false);
+      return false;
+    }
   };
 
   return React.createElement(

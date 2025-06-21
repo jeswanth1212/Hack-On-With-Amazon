@@ -36,9 +36,20 @@ def run_preprocess(sample_size=None):
     """
     logger.info("Running data preprocessing...")
     
-    from src.data.preprocess import main as preprocess_main
+    from src.database.preprocess import preprocess_data
     
-    preprocess_main(sample_size=sample_size)
+    # Import the download function to get the data paths
+    from src.database.download import download_all_datasets
+    
+    # Download datasets if needed and get their paths
+    downloaded_data = download_all_datasets()
+    
+    # Store sample_size in downloaded_data dict if provided
+    if sample_size is not None:
+        downloaded_data['sample_size'] = sample_size
+    
+    # Run preprocessing
+    preprocess_data(downloaded_data)
     
     logger.info("Data preprocessing complete")
 

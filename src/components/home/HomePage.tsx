@@ -88,31 +88,39 @@ export default function HomePage() {
         
         // Fetch personalized recommendations if user is logged in
         if (user) {
-          const recs = await getRecommendations(user.user_id, 12, userContext);
-          // Fetch TMDb ID and images for all recommendations
-          const processedRecs = await Promise.all(recs.map(async (rec) => {
-            const tmdbId = await fetchTmdbId(rec.title, rec.release_year);
-            if (!tmdbId) return null; // skip if not found
-            const images = await fetchTmdbImages(rec.title, rec.release_year);
-            let posterUrl = images.poster || '/placeholder.jpg';
-            let backdropUrl = images.backdrop || posterUrl;
-            const mediaType = rec.genres?.toLowerCase().includes('tv') ? 'tv' : 'movie';
-            return {
-              id: tmdbId,
-              title: rec.title,
-              description: rec.overview || 'No description available',
-              imageUrl: posterUrl,
-              posterUrl: posterUrl,
-              backdropUrl: backdropUrl,
-              mediaType: mediaType,
-              releaseDate: rec.release_year ? `${rec.release_year}-01-01` : undefined,
-              rating: rec.score * 10,
-              provider: mediaType === 'movie' ? 'Movie' : 'TV Show',
-              genres: rec.genres
-            };
-          }));
+          let processedRecs: any[] = [];
+          try {
+            const recs = await getRecommendations(user.user_id, 12, userContext);
+            
+            // Fetch TMDb ID and images for all recommendations
+            processedRecs = await Promise.all(recs.map(async (rec) => {
+              const tmdbId = await fetchTmdbId(rec.title, rec.release_year);
+              if (!tmdbId) return null; // skip if not found
+              const images = await fetchTmdbImages(rec.title, rec.release_year);
+              let posterUrl = images.poster || '/placeholder.jpg';
+              let backdropUrl = images.backdrop || posterUrl;
+              const mediaType = rec.genres?.toLowerCase().includes('tv') ? 'tv' : 'movie';
+              return {
+                id: tmdbId,
+                title: rec.title,
+                description: rec.overview || 'No description available',
+                imageUrl: posterUrl,
+                posterUrl: posterUrl,
+                backdropUrl: backdropUrl,
+                mediaType: mediaType,
+                releaseDate: rec.release_year ? `${rec.release_year}-01-01` : undefined,
+                rating: rec.score * 10,
+                provider: mediaType === 'movie' ? 'Movie' : 'TV Show',
+                genres: rec.genres
+              };
+            }));
+          } catch (err) {
+            console.error("Failed to get recommendations from API, using trending data as fallback", err);
+            // If recommendations API fails, just use trending data as fallback
+            processedRecs = trending.slice(0, 12);
+          }
           // Filter out any nulls (where TMDb ID not found)
-          const filteredRecs = processedRecs.filter(Boolean);
+          const filteredRecs = processedRecs.filter((item): item is NonNullable<typeof item> => !!item);
           // Split into hero and below carousel, no overlap
           const hero = filteredRecs.slice(0, 5)
             .filter((item): item is NonNullable<typeof item> => !!item)

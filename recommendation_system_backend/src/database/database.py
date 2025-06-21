@@ -3,6 +3,8 @@ import os
 import logging
 from pathlib import Path
 import pandas as pd
+import numpy as np
+from sklearn.preprocessing import LabelEncoder
 
 # Set up logging
 logging.basicConfig(
@@ -38,6 +40,8 @@ def init_db():
         age INTEGER,
         age_group TEXT,
         location TEXT,
+        language_preference TEXT,
+        preferred_genres TEXT,
         last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     ''')
@@ -46,19 +50,22 @@ def init_db():
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS Items (
         item_id TEXT PRIMARY KEY,
-        title TEXT NOT NULL,
+        title TEXT,
         title_type TEXT,
         genres TEXT,
         release_year INTEGER,
-        runtime_minutes INTEGER,
+        runtime_minutes REAL,
         vote_average REAL,
         vote_count INTEGER,
         popularity REAL,
-        is_trending INTEGER DEFAULT 0,
+        is_trending INTEGER,
         overview TEXT,
         imdb_id TEXT,
         tmdb_id TEXT,
-        movielens_id TEXT
+        movielens_id TEXT,
+        language_code TEXT,
+        language TEXT,
+        region TEXT
     )
     ''')
     
@@ -89,20 +96,25 @@ def init_db():
     cursor.execute('CREATE INDEX IF NOT EXISTS idx_items_genres ON Items (genres)')
     cursor.execute('CREATE INDEX IF NOT EXISTS idx_items_release_year ON Items (release_year)')
     cursor.execute('CREATE INDEX IF NOT EXISTS idx_items_popularity ON Items (popularity)')
+    cursor.execute('CREATE INDEX IF NOT EXISTS idx_items_language ON Items (language)')
     
     conn.commit()
     conn.close()
     logger.info("Database initialized successfully.")
 
-def add_user(user_id, age=None, age_group=None, location=None):
+def add_user(user_id, age=None, age_group=None, location=None, language_preference=None, preferred_genres=None):
     """Add a new user to the UserProfiles table."""
     conn = get_db_connection()
     cursor = conn.cursor()
     
+    # Convert list of genres to pipe-separated string if needed
+    if preferred_genres and isinstance(preferred_genres, list):
+        preferred_genres = '|'.join(preferred_genres)
+    
     cursor.execute('''
-    INSERT OR REPLACE INTO UserProfiles (user_id, age, age_group, location)
-    VALUES (?, ?, ?, ?)
-    ''', (user_id, age, age_group, location))
+    INSERT OR REPLACE INTO UserProfiles (user_id, age, age_group, location, language_preference, preferred_genres)
+    VALUES (?, ?, ?, ?, ?, ?)
+    ''', (user_id, age, age_group, location, language_preference, preferred_genres))
     
     conn.commit()
     conn.close()
@@ -110,7 +122,7 @@ def add_user(user_id, age=None, age_group=None, location=None):
 
 def add_item(item_id, title, title_type=None, genres=None, release_year=None, 
              runtime_minutes=None, vote_average=None, vote_count=None, 
-             popularity=None, is_trending=0, overview=None, 
+             popularity=None, is_trending=0, overview=None, language=None,
              imdb_id=None, tmdb_id=None, movielens_id=None):
     """Add a new item to the Items table."""
     conn = get_db_connection()
@@ -120,13 +132,13 @@ def add_item(item_id, title, title_type=None, genres=None, release_year=None,
     INSERT OR REPLACE INTO Items (
         item_id, title, title_type, genres, release_year, runtime_minutes,
         vote_average, vote_count, popularity, is_trending, overview,
-        imdb_id, tmdb_id, movielens_id
+        language, imdb_id, tmdb_id, movielens_id
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ''', (
         item_id, title, title_type, genres, release_year, runtime_minutes,
         vote_average, vote_count, popularity, is_trending, overview,
-        imdb_id, tmdb_id, movielens_id
+        language, imdb_id, tmdb_id, movielens_id
     ))
     
     conn.commit()

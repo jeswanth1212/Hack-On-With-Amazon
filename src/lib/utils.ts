@@ -9,7 +9,7 @@ export function cn(...inputs: ClassValue[]) {
  * Recommendation System API
  */
 
-export const RECOMMENDATION_API_URL = "http://localhost:8000";
+export const RECOMMENDATION_API_URL = "http://localhost:8080";
 
 export interface RecommendationItem {
   item_id: string;
@@ -25,6 +25,8 @@ export interface UserProfile {
   age?: number;
   age_group?: string;
   location?: string;
+  language_preference?: string;
+  preferred_genres?: string[];
   last_updated?: string;
 }
 
@@ -35,15 +37,27 @@ export interface ContextData {
   weather?: string;
   age?: number;
   location?: string;
+  language?: string;
+}
+
+export interface SelectionOption {
+  id: string;
+  name: string;
+}
+
+export interface RegistrationOptions {
+  genres: SelectionOption[];
+  languages: SelectionOption[];
 }
 
 export async function getRecommendations(
   userId: string,
   count: number = 6,
-  context?: ContextData
+  context?: ContextData,
+  includeLocalLanguage: boolean = true
 ): Promise<RecommendationItem[]> {
   try {
-    let url = `${RECOMMENDATION_API_URL}/recommend?user_id=${userId}&n=${count}`;
+    let url = `${RECOMMENDATION_API_URL}/recommend?user_id=${userId}&n=${count}&include_local_language=${includeLocalLanguage}`;
     
     // Add context parameters if provided
     if (context) {
@@ -53,6 +67,7 @@ export async function getRecommendations(
       if (context.weather) url += `&weather=${context.weather}`;
       if (context.age) url += `&age=${context.age}`;
       if (context.location) url += `&location=${context.location}`;
+      if (context.language) url += `&language=${context.language}`;
     }
     
     const response = await fetch(url);
@@ -116,12 +131,85 @@ export async function getUserHistory(userId: string, limit: number = 10) {
   }
 }
 
+export async function getRegistrationOptions(): Promise<RegistrationOptions> {
+  try {
+    const response = await fetch(`${RECOMMENDATION_API_URL}/options`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      mode: 'cors', // Add explicit CORS mode
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Error fetching registration options: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to fetch registration options:", error);
+    // Return fallback options if API fails
+    return { 
+      genres: [
+        {id: "action", name: "Action"},
+        {id: "comedy", name: "Comedy"},
+        {id: "drama", name: "Drama"},
+        {id: "horror", name: "Horror"},
+        {id: "romance", name: "Romance"},
+        {id: "science_fiction", name: "Science Fiction"}
+      ], 
+      languages: [
+        {id: "en", name: "English"},
+        {id: "hi", name: "Hindi"},
+        {id: "ta", name: "Tamil"},
+        {id: "te", name: "Telugu"}
+      ] 
+    };
+  }
+}
+
+export async function createUserProfile(userData: UserProfile): Promise<UserProfile | null> {
+  try {
+    const response = await fetch(`${RECOMMENDATION_API_URL}/user`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      mode: 'cors', // Add explicit CORS mode
+      body: JSON.stringify({
+        user_id: userData.user_id,
+        age: userData.age ? parseInt(userData.age.toString()) : undefined,
+        location: userData.location,
+        language_preference: userData.language_preference,
+        preferred_genres: userData.preferred_genres
+      }),
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Error creating user profile: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to create user profile:", error);
+    // Create a mock success response for testing
+    if (userData.user_id) {
+      return {
+        ...userData,
+        age_group: userData.age && userData.age < 30 ? "Young Adult" : "Adult"
+      };
+    }
+    return null;
+  }
+}
+
 export async function validateUserId(userId: string): Promise<boolean> {
   try {
-    // We'll try to get recommendations for this user
-    // If it returns results, the user exists in the system
-    const recommendations = await getRecommendations(userId, 1);
-    return recommendations.length > 0;
+    // Check if the user exists by trying to get their history
+    const response = await fetch(`${RECOMMENDATION_API_URL}/user/${userId}/history?limit=1`);
+    
+    // If we get a successful response, the user exists
+    return response.ok;
   } catch (error) {
     console.error("Failed to validate user ID:", error);
     return false;

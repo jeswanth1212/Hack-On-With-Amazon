@@ -11,18 +11,23 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 from pathlib import Path
+import traceback
 
 # Add the project root to the path to import our modules
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+# Import from other modules
 from src.models.model import RecommendationEngine
-from src.data.database import (
-    add_interaction, get_user_interactions, get_item_details,
-    add_user, get_db_connection, init_db, setup_database
+from src.database.database import (
+    init_db, setup_database, add_user, add_interaction, get_user_interactions, 
+    get_db_connection, get_item_details, get_all_users, get_all_items, get_all_interactions
 )
 from src.utils.context_utils import (
     get_current_time_of_day, get_current_day_of_week,
     simulate_weather, simulate_mood, get_age_group
 )
+
+# Configuration
+USE_ONLY_TMDB_DATA = True
 
 # Set up logging
 logging.basicConfig(
@@ -45,7 +50,7 @@ app = FastAPI(
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*", "http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -97,6 +102,22 @@ class ContextData(BaseModel):
     weather: Optional[str] = None
     age: Optional[int] = None
     location: Optional[str] = None
+    language: Optional[str] = None
+
+class UserProfileCreate(BaseModel):
+    user_id: str
+    age: Optional[int] = None
+    location: Optional[str] = None
+    language_preference: Optional[str] = None
+    preferred_genres: Optional[List[str]] = None
+
+class UserProfileResponse(BaseModel):
+    user_id: str
+    age: Optional[int] = None
+    age_group: Optional[str] = None
+    location: Optional[str] = None
+    language_preference: Optional[str] = None
+    preferred_genres: Optional[List[str]] = None
 
 # Background thread for processing interactions
 def process_interactions():
@@ -157,7 +178,8 @@ def get_context_data(
     day_of_week: Optional[str] = None,
     weather: Optional[str] = None,
     age: Optional[int] = None,
-    location: Optional[str] = None
+    location: Optional[str] = None,
+    language: Optional[str] = None
 ) -> Dict[str, Any]:
     """
     Get contextual data with default values where not provided.
@@ -169,6 +191,7 @@ def get_context_data(
         weather (str, optional): Weather
         age (int, optional): User age
         location (str, optional): User location
+        language (str, optional): Preferred language
         
     Returns:
         dict: Contextual data
@@ -180,7 +203,8 @@ def get_context_data(
         "day_of_week": day_of_week if day_of_week else get_current_day_of_week(),
         "weather": weather if weather else simulate_weather(location),
         "age": age,
-        "location": location
+        "location": location,
+        "language": language
     }
     
     # Add age_group if age is provided
@@ -232,7 +256,8 @@ async def create_interaction(interaction: InteractionCreate):
 async def get_recommendations(
     user_id: str = Query(..., description="User ID"),
     n: int = Query(10, ge=1, le=50, description="Number of recommendations"),
-    context: ContextData = Depends(get_context_data)
+    context: ContextData = Depends(get_context_data),
+    include_local_language: bool = Query(True, description="Whether to include local language recommendations")
 ):
     """
     Get recommendations for a user.
@@ -241,6 +266,7 @@ async def get_recommendations(
         user_id (str): User ID
         n (int): Number of recommendations
         context (ContextData): Contextual data
+        include_local_language (bool): Whether to include local language recommendations
         
     Returns:
         List[RecommendationResponse]: List of recommendations
@@ -249,7 +275,43 @@ async def get_recommendations(
     if engine is None:
         raise HTTPException(status_code=503, detail="Recommendation engine not loaded")
     
-    # Get recommendations
+    # Get user profile data including preferred genres
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM UserProfiles WHERE user_id = ?', (user_id,))
+    user_profile = cursor.fetchone()
+    conn.close()
+    
+    # If user profile exists, add data to context
+    if user_profile:
+        # Handle context as either dict or object
+        if isinstance(context, dict):
+            if user_profile['age'] and not context.get('age'):
+                context['age'] = user_profile['age']
+                
+            if user_profile['language_preference'] and not context.get('language'):
+                context['language'] = user_profile['language_preference']
+                
+            if user_profile['location'] and not context.get('location'):
+                context['location'] = user_profile['location']
+        else:
+            if user_profile['age'] and not context.age:
+                context.age = user_profile['age']
+                
+            if user_profile['language_preference'] and not context.language:
+                context.language = user_profile['language_preference']
+                
+            if user_profile['location'] and not context.location:
+                context.location = user_profile['location']
+            
+        # Get preferred genres if available
+        preferred_genres = None
+        if user_profile['preferred_genres']:
+            # Convert from pipe-separated string to list
+            preferred_genres = user_profile['preferred_genres'].split('|')
+            logger.info(f"Using user's preferred genres: {preferred_genres}")
+    
+    # Get base recommendations
     recommendations = engine.get_recommendations(
         user_id=user_id,
         n=n,
@@ -259,23 +321,115 @@ async def get_recommendations(
     
     # Prepare response
     response = []
+    
+    # Map to store item IDs that have been included in response
+    included_item_ids = set()
+    
+    # Process standard recommendations
     for item_id, score in recommendations:
         # Get item details
         item_details = get_item_details(item_id)
         
         if item_details:
+            # Boost score for items matching user's preferred genres
+            boost_factor = 1.0
+            if preferred_genres and item_details.get("genres"):
+                item_genres = item_details["genres"].lower().split("|")
+                matches = [g for g in preferred_genres if g.lower() in item_genres or 
+                          any(g.lower() in genre.lower() for genre in item_genres)]
+                if matches:
+                    # Add a boost based on number of matching genres
+                    boost_factor = 1.0 + (0.1 * len(matches))
+                    logger.info(f"Boosting item {item_id} by factor {boost_factor} due to genre match")
+            
             response.append(
                 RecommendationResponse(
                     item_id=item_id,
                     title=item_details["title"],
-                    score=float(score),
+                    score=float(score * boost_factor),
                     genres=item_details.get("genres"),
                     release_year=item_details.get("release_year"),
                     overview=item_details.get("overview")
                 )
             )
+            included_item_ids.add(item_id)
     
-    return response
+    # If we should include local language recommendations and location is provided
+    # Check if context is a dict or a Pydantic model
+    context_location = context.get('location') if isinstance(context, dict) else context.location
+    
+    if include_local_language and context_location:
+        # Determine language based on location (simplified mapping)
+        local_language = None
+        
+        # Map some Indian cities to languages
+        location = context_location.lower() if context_location else ""
+        
+        if any(city in location for city in ["mumbai", "pune"]):
+            local_language = "hi"  # Hindi (could also be Marathi)
+        elif any(city in location for city in ["delhi", "lucknow", "jaipur"]):
+            local_language = "hi"  # Hindi
+        elif any(city in location for city in ["chennai", "coimbatore"]):
+            local_language = "ta"  # Tamil
+        elif any(city in location for city in ["hyderabad"]):
+            local_language = "te"  # Telugu
+        elif any(city in location for city in ["bangalore", "bengaluru"]):
+            local_language = "kn"  # Kannada
+        elif any(city in location for city in ["kochi", "thiruvananthapuram", "kerala"]):
+            local_language = "ml"  # Malayalam
+        elif any(city in location for city in ["kolkata", "patna"]):
+            local_language = "bn"  # Bengali
+        elif any(city in location for city in ["ahmedabad", "surat"]):
+            local_language = "gu"  # Gujarati
+        
+        # If language determined or explicitly provided in context, find local language movies
+        context_language = context.get('language') if isinstance(context, dict) else context.language
+        target_language = context_language or local_language
+        
+        if target_language:
+            # Get local language movies (5 movies)
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            
+            # Get popular movies in target language that user hasn't seen
+            cursor.execute('''
+            SELECT i.* FROM Items i
+            WHERE i.language = ? AND i.item_id NOT IN (
+                SELECT item_id FROM Interactions WHERE user_id = ?
+            )
+            ORDER BY i.popularity DESC, i.vote_average DESC
+            LIMIT 5
+            ''', (target_language, user_id))
+            
+            local_movies = cursor.fetchall()
+            conn.close()
+            
+            # Add these movies to the recommendations with a boosted score
+            for movie in local_movies:
+                item_id = movie['item_id']
+                
+                # Skip if already included
+                if item_id in included_item_ids:
+                    continue
+                
+                # Add to response with a somewhat high score
+                response.append(
+                    RecommendationResponse(
+                        item_id=item_id,
+                        title=movie["title"],
+                        score=0.85,  # Give local language movies a high score
+                        genres=movie.get("genres"),
+                        release_year=movie.get("release_year"),
+                        overview=movie.get("overview")
+                    )
+                )
+                included_item_ids.add(item_id)
+    
+    # Sort by score (highest first)
+    response.sort(key=lambda x: x.score, reverse=True)
+    
+    # Limit to requested number
+    return response[:n]
 
 @app.get("/user/{user_id}/history", response_model=List[Dict[str, Any]])
 async def get_user_history(
@@ -296,6 +450,126 @@ async def get_user_history(
     interactions = get_user_interactions(user_id, limit)
     
     return interactions
+
+@app.post("/user", response_model=UserProfileResponse)
+async def create_user_profile(user_profile: UserProfileCreate):
+    """
+    Create or update a user profile.
+    
+    Args:
+        user_profile (UserProfileCreate): User profile data
+        
+    Returns:
+        UserProfileResponse: Created user profile
+    """
+    # Calculate age_group if age is provided
+    age_group = None
+    if user_profile.age:
+        age_group = get_age_group(user_profile.age)
+    
+    # Add user to database
+    add_user(
+        user_id=user_profile.user_id,
+        age=user_profile.age,
+        age_group=age_group,
+        location=user_profile.location,
+        language_preference=user_profile.language_preference,
+        preferred_genres=user_profile.preferred_genres
+    )
+    
+    # Initialize user in the recommendation engine
+    if engine is not None:
+        # Add user to recommendation engine with a default context
+        # This helps the engine recognize this as a valid user
+        context_data = {
+            "age": user_profile.age,
+            "location": user_profile.location,
+            "language": user_profile.language_preference
+        }
+        
+        if user_profile.age:
+            context_data["age_group"] = age_group
+        
+        # For new users with no interactions, we add them to the engine
+        # so they can start receiving recommendations
+        
+        # Add the preferred genres to the context data for initial recommendations
+        if user_profile.preferred_genres:
+            context_data["preferred_genres"] = user_profile.preferred_genres
+            
+        engine.record_interaction(
+            user_id=user_profile.user_id,
+            item_id="initialization",  # Special marker for user initialization
+            sentiment_score=0.0,  # Neutral score
+            context_data=context_data
+        )
+    
+    # Return response
+    return UserProfileResponse(
+        user_id=user_profile.user_id,
+        age=user_profile.age,
+        age_group=age_group,
+        location=user_profile.location,
+        language_preference=user_profile.language_preference,
+        preferred_genres=user_profile.preferred_genres
+    )
+
+@app.get("/options", response_model=Dict[str, List[Dict[str, str]]])
+async def get_selection_options():
+    """
+    Get available options for user registration (genres and languages).
+    
+    Returns:
+        Dict[str, List[Dict[str, str]]]: Available genres and languages
+    """
+    # Define common genres
+    genres = [
+        {"id": "action", "name": "Action"},
+        {"id": "adventure", "name": "Adventure"},
+        {"id": "animation", "name": "Animation"},
+        {"id": "comedy", "name": "Comedy"},
+        {"id": "crime", "name": "Crime"},
+        {"id": "documentary", "name": "Documentary"},
+        {"id": "drama", "name": "Drama"},
+        {"id": "family", "name": "Family"},
+        {"id": "fantasy", "name": "Fantasy"},
+        {"id": "history", "name": "History"},
+        {"id": "horror", "name": "Horror"},
+        {"id": "music", "name": "Music"},
+        {"id": "mystery", "name": "Mystery"},
+        {"id": "romance", "name": "Romance"},
+        {"id": "science_fiction", "name": "Science Fiction"},
+        {"id": "thriller", "name": "Thriller"},
+        {"id": "war", "name": "War"},
+        {"id": "western", "name": "Western"}
+    ]
+    
+    # Define languages (focusing on Indian languages)
+    languages = [
+        {"id": "hi", "name": "Hindi"},
+        {"id": "ta", "name": "Tamil"},
+        {"id": "te", "name": "Telugu"},
+        {"id": "ml", "name": "Malayalam"},
+        {"id": "kn", "name": "Kannada"},
+        {"id": "bn", "name": "Bengali"},
+        {"id": "mr", "name": "Marathi"},
+        {"id": "pa", "name": "Punjabi"},
+        {"id": "gu", "name": "Gujarati"},
+        {"id": "or", "name": "Odia"},
+        {"id": "as", "name": "Assamese"},
+        {"id": "en", "name": "English"},
+        {"id": "ja", "name": "Japanese"},
+        {"id": "ko", "name": "Korean"},
+        {"id": "zh", "name": "Chinese"},
+        {"id": "fr", "name": "French"},
+        {"id": "es", "name": "Spanish"},
+        {"id": "de", "name": "German"}
+    ]
+    
+    return {
+        "genres": genres,
+        "languages": languages
+    }
 
 @app.on_event("startup")
 async def startup_event():
@@ -338,7 +612,7 @@ async def shutdown_event():
 
 def start():
     """Start the API server."""
-    uvicorn.run("src.api.main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("src.api.main:app", host="0.0.0.0", port=8080, reload=True)
 
 if __name__ == "__main__":
     start() 
