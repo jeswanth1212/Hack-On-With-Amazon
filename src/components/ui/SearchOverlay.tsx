@@ -7,13 +7,51 @@ import { useKeyboardNavigation } from '@/lib/hooks';
 import { searchMulti } from '@/lib/tmdb';
 import ContentCard from './ContentCard';
 import { ScrollArea } from './scroll-area';
+import { getRecommendations } from '@/lib/utils';
+import { useAuth } from '@/lib/hooks';
+
+// Copy from HomePage for TMDb lookup
+async function fetchTmdbId(title: string, year?: number) {
+  const apiKey = 'ee41666274420bb7514d6f2f779b5fd9';
+  const query = encodeURIComponent(title);
+  let url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${query}`;
+  if (year) url += `&year=${year}`;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data.results && data.results.length > 0) {
+      return data.results[0].id;
+    }
+  } catch (e) {}
+  return null;
+}
+
+async function fetchTmdbImages(title: string, year?: number) {
+  const apiKey = 'ee41666274420bb7514d6f2f779b5fd9';
+  const query = encodeURIComponent(title);
+  let url = `https://api.themoviedb.org/3/search/multi?api_key=${apiKey}&language=en-US&query=${query}&page=1&include_adult=false`;
+  if (year) url += `&year=${year}`;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return { poster: null, backdrop: null };
+    const data = await res.json();
+    const result = data.results && data.results.length > 0 ? data.results[0] : null;
+    return {
+      poster: result && result.poster_path ? `https://image.tmdb.org/t/p/w500${result.poster_path}` : null,
+      backdrop: result && result.backdrop_path ? `https://image.tmdb.org/t/p/original${result.backdrop_path}` : null
+    };
+  } catch (e) {}
+  return { poster: null, backdrop: null };
+}
 
 interface SearchOverlayProps {
   isOpen: boolean;
   onClose: () => void;
+  homepageTmdbIds?: number[]; // Pass homepage TMDb IDs to avoid overlap
 }
 
-export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
+export default function SearchOverlay({ isOpen, onClose, homepageTmdbIds = [] }: SearchOverlayProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const [inputValue, setInputValue] = useState('');
@@ -22,6 +60,9 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   const [debouncedValue, setDebouncedValue] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [hasSearched, setHasSearched] = useState(false);
+  const { user, userContext } = useAuth();
+  const [extraRecs, setExtraRecs] = useState<any[]>([]);
+  const [extraLoading, setExtraLoading] = useState(false);
 
   // Reset state when closing
   useEffect(() => {
@@ -107,68 +148,43 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
     fetchResults();
   }, [debouncedValue]);
 
-  // TV remote-style keyboard navigation
-  useKeyboardNavigation({
-    disabled: !isOpen,
-    onEscape: onClose,
-    onArrowDown: () => {
-      if (searchResults.length === 0) return;
-      
-      const rowSize = 4;
-      const maxIndex = searchResults.length - 1;
-      
-      if (selectedIndex < 0) {
-        // If no item is selected, select the first one
-        setSelectedIndex(0);
-      } else if (selectedIndex + rowSize <= maxIndex) {
-        // Move down a row
-        setSelectedIndex(selectedIndex + rowSize);
-      }
-    },
-    onArrowUp: () => {
-      if (searchResults.length === 0 || selectedIndex < 0) return;
-      
-      const rowSize = 4;
-      
-      if (selectedIndex - rowSize >= 0) {
-        // Move up a row
-        setSelectedIndex(selectedIndex - rowSize);
-      } else {
-        // Move focus back to search input
-        setSelectedIndex(-1);
-        if (inputRef.current) {
-          inputRef.current.focus();
+  // Fetch extra recommendations when overlay opens and search is empty
+  useEffect(() => {
+    // Use JSON.stringify to avoid infinite loop if homepageTmdbIds is a new array each render
+    if (isOpen && user && inputValue.length === 0) {
+      setExtraLoading(true);
+      (async () => {
+        try {
+          // Fetch 16 to allow for filtering out homepage recs
+          const recs = await getRecommendations(user.user_id, 16, userContext);
+          // Map to TMDb IDs and filter out homepage recs
+          const processed = await Promise.all(recs.map(async (rec) => {
+            const tmdbId = await fetchTmdbId(rec.title, rec.release_year);
+            if (!tmdbId || homepageTmdbIds.includes(tmdbId)) return null;
+            const images = await fetchTmdbImages(rec.title, rec.release_year);
+            let posterUrl = images.poster || '/placeholder.jpg';
+            return {
+              id: tmdbId,
+              title: rec.title,
+              imageUrl: posterUrl,
+              year: rec.release_year,
+              rating: rec.score * 10,
+              provider: rec.genres?.toLowerCase().includes('tv') ? 'TV Show' : 'Movie',
+            };
+          }));
+          // Only show 8 unique, valid recs
+          setExtraRecs(processed.filter(Boolean).slice(0, 8));
+        } catch (e) {
+          setExtraRecs([]);
+        } finally {
+          setExtraLoading(false);
         }
-      }
-    },
-    onArrowLeft: () => {
-      if (searchResults.length === 0 || selectedIndex < 0) return;
-      
-      if (selectedIndex % 4 !== 0) {
-        // Not at the left edge of a row
-        setSelectedIndex(selectedIndex - 1);
-      }
-    },
-    onArrowRight: () => {
-      if (searchResults.length === 0) return;
-      
-      const maxIndex = searchResults.length - 1;
-      
-      if (selectedIndex < 0) {
-        // If no item is selected and results exist, select the first one
-        setSelectedIndex(0);
-      } else if (selectedIndex < maxIndex && (selectedIndex + 1) % 4 !== 0) {
-        // Not at the right edge of a row
-        setSelectedIndex(selectedIndex + 1);
-      }
-    },
-    onEnter: () => {
-      if (selectedIndex >= 0 && searchResults[selectedIndex]) {
-        // Handle selection (in a real app, this would navigate to content detail)
-        console.log('Selected:', searchResults[selectedIndex]);
-      }
-    },
-  });
+      })();
+    } else if (!isOpen || inputValue.length > 0) {
+      setExtraRecs([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, user, userContext, inputValue, JSON.stringify(homepageTmdbIds)]); // Fix: use stringified array for stable dependency
 
   if (!isOpen) return null;
   
@@ -217,7 +233,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
       </div>
 
       {/* Main Scrollable Area */}
-      {shouldShowResults && (
+      {shouldShowResults ? (
         <ScrollArea className="w-full flex-grow mt-6 px-6 pb-10 overflow-auto">
           <div className="w-[90%] max-w-5xl mx-auto">
             {loading ? (
@@ -259,6 +275,41 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                 </div>
               </div>
             ) : null}
+          </div>
+        </ScrollArea>
+      ) : (
+        // Show extra recommendations when search is empty
+        <ScrollArea className="w-full flex-grow mt-6 px-6 pb-10 overflow-auto">
+          <div className="w-[90%] max-w-5xl mx-auto">
+            {extraLoading ? (
+              <div className="flex items-center justify-center h-40">
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
+              </div>
+            ) : extraRecs.length > 0 ? (
+              <>
+                <div className="text-white text-lg mb-4">Recommended for you</div>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-8 px-6 py-4">
+                  {extraRecs.map((item, index) => (
+                    <ContentCard
+                      key={`extra-rec-${item.id}-${index}`}
+                      id={item.id}
+                      title={item.title}
+                      imageUrl={item.imageUrl}
+                      year={item.year}
+                      rating={typeof item.rating === 'number' ? item.rating.toFixed(1) : '0.0'}
+                      source={item.provider}
+                    />
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="flex flex-col items-center justify-center h-40 text-center mt-10">
+                <div className="text-white text-xl mb-2">No recommendations found</div>
+                <div className="text-gray-400">
+                  Try searching for something or check your profile
+                </div>
+              </div>
+            )}
           </div>
         </ScrollArea>
       )}

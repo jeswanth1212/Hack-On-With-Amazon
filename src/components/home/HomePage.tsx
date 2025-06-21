@@ -107,14 +107,18 @@ export default function HomePage() {
               mediaType: mediaType,
               releaseDate: rec.release_year ? `${rec.release_year}-01-01` : undefined,
               rating: rec.score * 10,
-              provider: mediaType === 'movie' ? 'Movie' : 'TV Show'
+              provider: mediaType === 'movie' ? 'Movie' : 'TV Show',
+              genres: rec.genres
             };
           }));
           // Filter out any nulls (where TMDb ID not found)
           const filteredRecs = processedRecs.filter(Boolean);
           // Split into hero and below carousel, no overlap
-          const hero = filteredRecs.slice(0, 5).filter((item): item is NonNullable<typeof item> => !!item).map(item => ({ ...item, imageUrl: item.backdropUrl || item.posterUrl }));
-          const below = filteredRecs.slice(5, 11).filter((item): item is NonNullable<typeof item> => !!item);
+          const hero = filteredRecs.slice(0, 5)
+            .filter((item): item is NonNullable<typeof item> => !!item)
+            .map(item => ({ ...item, imageUrl: item.backdropUrl || item.posterUrl, genres: item.genres }));
+          const below = filteredRecs.slice(5, 11)
+            .filter((item): item is NonNullable<typeof item> => !!item);
           setHeroData(hero);
           setPersonalizedData(below);
         }
@@ -161,7 +165,7 @@ export default function HomePage() {
   const trendingThisWeek = duplicateToLength(trendingData.slice(0, 7), 15);
 
   // Use heroData for banner if available, else trending
-  const featuredContent = heroData.length > 0 ? heroData : trendingData.slice(0, 5);
+  const featuredContent = heroData.length > 0 ? heroData : trendingData.slice(0, 5).map(item => ({ ...item, genres: item.genres }));
 
   return (
     <MainLayout>

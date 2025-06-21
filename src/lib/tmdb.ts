@@ -2,6 +2,38 @@ const API_KEY = "ee41666274420bb7514d6f2f779b5fd9";
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
 
+// TMDb genre map for movies and TV
+const GENRE_MAP: { [id: number]: string } = {
+  28: 'Action',
+  12: 'Adventure',
+  16: 'Animation',
+  35: 'Comedy',
+  80: 'Crime',
+  99: 'Documentary',
+  18: 'Drama',
+  10751: 'Family',
+  14: 'Fantasy',
+  36: 'History',
+  27: 'Horror',
+  10402: 'Music',
+  9648: 'Mystery',
+  10749: 'Romance',
+  878: 'Science Fiction',
+  10770: 'TV Movie',
+  53: 'Thriller',
+  10752: 'War',
+  37: 'Western',
+  10759: 'Action & Adventure',
+  10762: 'Kids',
+  10763: 'News',
+  10764: 'Reality',
+  10765: 'Sci-Fi & Fantasy',
+  10766: 'Soap',
+  10767: 'Talk',
+  10768: 'War & Politics',
+  10769: 'Foreign',
+};
+
 // Function to fetch trending data for the week
 export async function fetchTrendingWeek() {
   const response = await fetch(
@@ -19,7 +51,11 @@ export async function fetchTrendingWeek() {
     const title = item.title || item.name;
     const imageUrl = `${IMAGE_BASE_URL}/original${item.backdrop_path}`;
     const posterUrl = `${IMAGE_BASE_URL}/w500${item.poster_path}`;
-    
+    // Map genre_ids to names if present
+    let genres: string[] = [];
+    if (Array.isArray(item.genre_ids)) {
+      genres = item.genre_ids.map((id: number) => GENRE_MAP[id]).filter(Boolean);
+    }
     return {
       id: item.id,
       title,
@@ -29,7 +65,8 @@ export async function fetchTrendingWeek() {
       mediaType: item.media_type,
       releaseDate: item.release_date || item.first_air_date,
       rating: item.vote_average,
-      provider: item.media_type === "movie" ? "Movie" : "TV Show"
+      provider: item.media_type === "movie" ? "Movie" : "TV Show",
+      genres,
     };
   });
 }
@@ -93,4 +130,6 @@ export async function searchMulti(query: string, limit: number = 15) {
       provider: item.media_type === "movie" ? "Movie" : "TV Show"
     };
   });
-} 
+}
+
+export { GENRE_MAP }; 

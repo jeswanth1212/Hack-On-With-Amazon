@@ -13,6 +13,9 @@ interface FeaturedContent {
   description: string;
   imageUrl: string;
   provider?: string;
+  rating?: number;
+  releaseDate?: string;
+  genres?: string | string[];
 }
 
 interface HeroBannerProps {
@@ -73,9 +76,25 @@ export default function HeroBanner({ featuredContent }: HeroBannerProps) {
                   <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-2 drop-shadow-lg">
                     {item.title}
                   </h2>
-                  <p className="text-base md:text-lg text-white mb-6 max-w-xl md:max-w-2xl line-clamp-2">
-                    {item.description}
-                  </p>
+                  <div className="flex flex-wrap items-center gap-4 mb-6">
+                    {typeof item.rating === 'number' && (
+                      <span className="text-yellow-400 font-semibold text-lg flex items-center">
+                        ★ {item.rating.toFixed(1)}
+                      </span>
+                    )}
+                    {item.releaseDate && (
+                      <span className="text-white/90 text-base">
+                        {item.releaseDate.slice(0, 4)}
+                      </span>
+                    )}
+                    {item.genres && (
+                      <span className="text-white/80 text-base">
+                        {Array.isArray(item.genres)
+                          ? item.genres.join(', ')
+                          : item.genres}
+                      </span>
+                    )}
+                  </div>
                   <div className="flex gap-4">
                     <Button className="bg-white text-background hover:bg-white/90" size="lg" onClick={() => router.push(`/movie/${item.id}`)}>
                       <Play className="mr-2 h-5 w-5" /> Watch Now

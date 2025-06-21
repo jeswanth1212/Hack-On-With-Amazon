@@ -91,7 +91,7 @@ const MovieDetailPage: React.FC<MovieDetailPageProps> = ({ tmdbId }) => {
   const posters = images?.posters?.slice(0, 8) || [];
   const backdrops = images?.backdrops?.slice(0, 8) || [];
   const trailers = (videos?.results || []).filter((v: any) => v.site === 'YouTube' && v.type === 'Trailer');
-  const similar = recommendations?.results?.slice(0, 8) || [];
+  const similar = (recommendations?.results || []).filter((rec: any) => rec.original_language === original_language).slice(0, 8);
 
   // Combine cast and crew into one array, removing duplicates by name+role
   const combinedPeople = [
