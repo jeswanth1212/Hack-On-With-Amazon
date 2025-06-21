@@ -34,6 +34,11 @@ interface NavItemProps {
   isActive?: boolean;
 }
 
+interface NavbarProps {
+  onSearchOpen?: () => void;
+  onSearchClose?: () => void;
+}
+
 const NavItem = ({ icon, label, href, onClick, isActive }: NavItemProps) => {
   const [showLabel, setShowLabel] = useState(false);
 
@@ -79,7 +84,7 @@ const NavItem = ({ icon, label, href, onClick, isActive }: NavItemProps) => {
   return content;
 };
 
-export default function Navbar() {
+export default function Navbar({ onSearchOpen, onSearchClose }: NavbarProps = {}) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -102,10 +107,12 @@ export default function Navbar() {
 
   const handleSearchClick = () => {
     setSearchOpen(true);
+    if (onSearchOpen) onSearchOpen();
   };
 
   const handleCloseSearch = () => {
     setSearchOpen(false);
+    if (onSearchClose) onSearchClose();
   };
 
   const handleProfileClick = () => {
