@@ -13,12 +13,12 @@ export function useKeyboardNavigation(items: any[], initialFocusIndex = 0) {
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-        e.preventDefault();
+            e.preventDefault();
         setFocusIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : items.length - 1));
       } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-        e.preventDefault();
+            e.preventDefault();
         setFocusIndex((prevIndex) => (prevIndex < items.length - 1 ? prevIndex + 1 : 0));
-      }
+          }
     },
     [items.length]
   );
@@ -60,7 +60,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [error, setError] = useState<string | null>(null);
   const [userContext, setUserContext] = useState<ContextData>({});
   const router = useRouter();
-
+  
   // Load user from localStorage on initial render
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -82,7 +82,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     
     setLoading(false);
   }, []);
-
+  
   // Login function
   const login = async (userId: string): Promise<boolean> => {
     setLoading(true);

@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from 'next/navigation';
 
 interface ContentCardProps {
   id: string | number;
@@ -27,6 +28,11 @@ export default function ContentCard({
   className,
 }: ContentCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(`/movie/${id}`);
+  };
 
   return (
     <div className="h-full w-full">
@@ -36,7 +42,7 @@ export default function ContentCard({
           isHovered ? "scale-[1.03] z-10 ring-2 ring-blue-500" : "",
           className
         )}
-        onClick={onClick}
+        onClick={handleClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
