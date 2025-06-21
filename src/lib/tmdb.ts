@@ -132,4 +132,93 @@ export async function searchMulti(query: string, limit: number = 15) {
   });
 }
 
-export { GENRE_MAP }; 
+export { GENRE_MAP };
+
+// ------------------------------------------------------------------
+// Discover movies by language, genre(s) and release date >= 2020-01-01
+// ------------------------------------------------------------------
+
+// Build reverse map from genre name (lower-case) -> id for quick lookup
+const GENRE_NAME_TO_ID: { [name: string]: number } = Object.entries(GENRE_MAP).reduce((acc, [id, name]) => {
+  acc[name.toLowerCase()] = Number(id);
+  return acc;
+}, {} as { [name: string]: number });
+
+export interface DiscoveredMovie {
+  id: number;
+  title: string;
+  description: string;
+  imageUrl: string;
+  posterUrl: string;
+  mediaType: 'movie';
+  releaseDate: string;
+  rating: number;
+  provider: string;
+  genres: string[];
+}
+
+/**
+ * Discover movies on TMDB filtered by language, genres and released after 2020.
+ *
+ * @param language ISO 639-1 original language code (e.g. 'hi', 'en').
+ * @param genres   Array of genre names (e.g. ['action', 'comedy']). Only the first
+ *                 few that map to TMDB genre IDs will be used.
+ * @param count    Max number of movies to return (defaults to 10).
+ */
+export async function discoverMoviesByLanguageGenre(
+  language: string,
+  genres: string[] = [],
+  count: number = 10
+): Promise<DiscoveredMovie[]> {
+  if (!language) language = 'en';
+
+  // Resolve genre IDs
+  const genreIds: number[] = [];
+  for (const g of genres) {
+    const normalized = g.replace(/_/g, ' ').toLowerCase();
+    const id = GENRE_NAME_TO_ID[normalized];
+    if (id) genreIds.push(id);
+  }
+
+  // Build discover URL
+  let url = `${BASE_URL}/discover/movie?api_key=${API_KEY}` +
+            `&with_original_language=${language}` +
+            `&sort_by=popularity.desc` +
+            `&primary_release_date.gte=2020-01-01` +
+            `&page=1`;
+
+  if (genreIds.length > 0) {
+    url += `&with_genres=${genreIds.join(',')}`;
+  }
+
+  const response = await fetch(url);
+  if (!response.ok) {
+    console.error('TMDB discover request failed:', response.status);
+    return [];
+  }
+
+  const data = await response.json();
+  const results = Array.isArray(data.results) ? data.results.slice(0, count) : [];
+
+  return results.map((item: any) => {
+    const title = item.title || item.name;
+    const imageUrl = `${IMAGE_BASE_URL}/original${item.backdrop_path}`;
+    const posterUrl = `${IMAGE_BASE_URL}/w500${item.poster_path}`;
+    const mappedGenres = Array.isArray(item.genre_ids)
+      ? item.genre_ids.map((id: number) => GENRE_MAP[id]).filter(Boolean)
+      : [];
+
+    return {
+      id: item.id,
+      title,
+      description: item.overview,
+      imageUrl,
+      posterUrl,
+      mediaType: 'movie',
+      releaseDate: item.release_date,
+      rating: item.vote_average,
+      provider: 'Movie',
+      genres: mappedGenres,
+    } as DiscoveredMovie;
+  });
+} 

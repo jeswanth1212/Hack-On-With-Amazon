@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback, createContext, useContext } from 'react';
 import { useRouter } from "next/navigation";
-import { validateUserId, ContextData, UserProfile, createUserProfile } from './utils';
+import { validateUserId, ContextData, UserProfile, createUserProfile, getUserProfile } from './utils';
 
 /**
  * Custom hook to handle keyboard navigation in app drawers.
@@ -92,9 +92,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const isValid = await validateUserId(userId);
       
       if (isValid) {
-        const userProfile: UserProfile = {
-          user_id: userId
-        };
+        // Try to fetch full profile details
+        const fetchedProfile = await getUserProfile(userId);
+        const userProfile: UserProfile = fetchedProfile || { user_id: userId };
         
         setUser(userProfile);
         localStorage.setItem('user', JSON.stringify(userProfile));

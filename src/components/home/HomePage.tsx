@@ -6,7 +6,7 @@ import HeroBanner from '../ui/HeroBanner';
 import ContentCarousel from '../ui/ContentCarousel';
 import ContentCard from '../ui/ContentCard';
 import AppIcon from '../ui/AppIcon';
-import { fetchTrendingWeek } from '@/lib/tmdb';
+import { fetchTrendingWeek, discoverMoviesByLanguageGenre } from '@/lib/tmdb';
 import { getRecommendations, RecommendationItem } from '@/lib/utils';
 import { useAuth } from '@/lib/hooks';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
@@ -86,8 +86,29 @@ export default function HomePage() {
         const trending = await fetchTrendingWeek();
         setTrendingData(trending);
         
-        // Fetch personalized recommendations if user is logged in
+        // Only continue if user is logged in
         if (user) {
+          // ----------------------------------------------
+          // 1. Fetch TMDB movies based on user preferences
+          // ----------------------------------------------
+          let tmdbFiltered: any[] = [];
+
+          if (user.language_preference && user.preferred_genres && user.preferred_genres.length > 0) {
+            try {
+              tmdbFiltered = await discoverMoviesByLanguageGenre(
+                user.language_preference,
+                user.preferred_genres,
+                10 // get enough for hero, carousel, search overlay
+              );
+            } catch (e) {
+              console.error('Failed to fetch TMDB-filtered movies:', e);
+              tmdbFiltered = [];
+            }
+          }
+
+          // -------------------------------------------------
+          // 2. Fetch backend recommendations (existing logic)
+          // -------------------------------------------------
           let processedRecs: any[] = [];
           try {
             const recs = await getRecommendations(user.user_id, 12, userContext);
@@ -119,16 +140,59 @@ export default function HomePage() {
             // If recommendations API fails, just use trending data as fallback
             processedRecs = trending.slice(0, 12);
           }
-          // Filter out any nulls (where TMDb ID not found)
-          const filteredRecs = processedRecs.filter((item): item is NonNullable<typeof item> => !!item);
-          // Split into hero and below carousel, no overlap
-          const hero = filteredRecs.slice(0, 5)
-            .filter((item): item is NonNullable<typeof item> => !!item)
-            .map(item => ({ ...item, imageUrl: item.backdropUrl || item.posterUrl, genres: item.genres }));
-          const below = filteredRecs.slice(5, 11)
-            .filter((item): item is NonNullable<typeof item> => !!item);
-          setHeroData(hero);
-          setPersonalizedData(below);
+          // Filter out invalid entries
+          const filteredRecs = processedRecs.filter(Boolean);
+
+          // If no backend recommendations were returned, fall back to trending data (skipping any overlap with heroTmdb)
+          let fallbackBackend: any[] = [];
+          if (filteredRecs.length === 0) {
+            fallbackBackend = trending
+              .filter((item: any) => !tmdbFiltered.some(t => t.id === item.id))
+              .slice(0, 6);
+          }
+
+          const backendPool = filteredRecs.length > 0 ? filteredRecs : fallbackBackend;
+
+          // -------------------------------------------------
+          // 3. Build Hero Banner data (3 TMDB + 2 backend recs)
+          // -------------------------------------------------
+
+          // Make sure TMDB movies are unique across sections
+          const heroTmdb = tmdbFiltered.slice(0, 3).map(item => ({
+            ...item,
+            imageUrl: item.imageUrl,
+          }));
+
+          const heroBackend = backendPool.slice(0, 2).map(item => ({
+            ...item,
+            imageUrl: item.backdropUrl || item.posterUrl,
+          }));
+
+          const heroCombined = [...heroTmdb, ...heroBackend];
+          setHeroData(heroCombined);
+
+          // -------------------------------------------------
+          // 4. Build Recommendation carousel (4 TMDB + rest backend)
+          // -------------------------------------------------
+
+          // For carousel, skip TMDB movies already used in hero
+          const carouselTmdb = tmdbFiltered.slice(3, 7).map(item => ({
+            ...item,
+            posterUrl: item.posterUrl,
+          }));
+
+          const carouselBackend = backendPool;
+
+          const carouselCombined = [...carouselTmdb, ...carouselBackend];
+          setPersonalizedData(carouselCombined);
+
+          // -------------------------------------------------
+          // 5. Persist TMDB IDs used on home page for SearchOverlay
+          // -------------------------------------------------
+          const usedTmdbIds = [...heroTmdb, ...carouselTmdb].map(m => m.id);
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('homeTmdbIds', JSON.stringify(usedTmdbIds));
+          }
         }
         setLoading(false);
       } catch (err) {

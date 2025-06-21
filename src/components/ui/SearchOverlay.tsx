@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Search, X } from 'lucide-react';
 import Image from 'next/image';
 import { useKeyboardNavigation } from '@/lib/hooks';
-import { searchMulti } from '@/lib/tmdb';
+import { searchMulti, discoverMoviesByLanguageGenre, fetchTrendingWeek } from '@/lib/tmdb';
 import ContentCard from './ContentCard';
 import { ScrollArea } from './scroll-area';
 import { getRecommendations } from '@/lib/utils';
@@ -48,10 +48,9 @@ async function fetchTmdbImages(title: string, year?: number) {
 interface SearchOverlayProps {
   isOpen: boolean;
   onClose: () => void;
-  homepageTmdbIds?: number[]; // Pass homepage TMDb IDs to avoid overlap
 }
 
-export default function SearchOverlay({ isOpen, onClose, homepageTmdbIds = [] }: SearchOverlayProps) {
+export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const [inputValue, setInputValue] = useState('');
@@ -63,6 +62,16 @@ export default function SearchOverlay({ isOpen, onClose, homepageTmdbIds = [] }:
   const { user, userContext } = useAuth();
   const [extraRecs, setExtraRecs] = useState<any[]>([]);
   const [extraLoading, setExtraLoading] = useState(false);
+  // Load homepage TMDB IDs from localStorage (to avoid duplicates)
+  const homeTmdbIds: number[] = typeof window !== 'undefined'
+    ? (() => {
+        try {
+          return JSON.parse(localStorage.getItem('homeTmdbIds') || '[]');
+        } catch {
+          return [];
+        }
+      })()
+    : [];
 
   // Reset state when closing
   useEffect(() => {
@@ -150,17 +159,44 @@ export default function SearchOverlay({ isOpen, onClose, homepageTmdbIds = [] }:
 
   // Fetch extra recommendations when overlay opens and search is empty
   useEffect(() => {
-    // Use JSON.stringify to avoid infinite loop if homepageTmdbIds is a new array each render
     if (isOpen && user && inputValue.length === 0) {
       setExtraLoading(true);
       (async () => {
         try {
-          // Fetch 16 to allow for filtering out homepage recs
+          // ------------------------------
+          // 1. TMDB filtered movies (4)
+          // ------------------------------
+          let tmdbMovies: any[] = [];
+          try {
+            const lang = (user.language_preference ?? 'en');
+            const genres = (user.preferred_genres && user.preferred_genres.length > 0)
+              ? user.preferred_genres
+              : [];
+            tmdbMovies = await discoverMoviesByLanguageGenre(lang, genres, 10);
+          } catch (e) {
+            console.error('Failed to fetch TMDB discover movies for search overlay:', e);
+            tmdbMovies = [];
+          }
+
+          // Filter duplicates with homepage IDs and map into card objects
+          const tmdbProcessed = tmdbMovies
+            .filter(item => !homeTmdbIds.includes(item.id))
+            .map(item => ({
+              id: item.id,
+              title: item.title,
+              imageUrl: item.posterUrl,
+              year: item.releaseDate?.substring(0,4),
+              rating: item.rating,
+              provider: 'Movie',
+            }));
+
+          // ------------------------------
+          // 2. Backend recommendations (up to 4)
+          // ------------------------------
           const recs = await getRecommendations(user.user_id, 16, userContext);
-          // Map to TMDb IDs and filter out homepage recs
-          const processed = await Promise.all(recs.map(async (rec) => {
+          const processedBackend = await Promise.all(recs.map(async (rec) => {
             const tmdbId = await fetchTmdbId(rec.title, rec.release_year);
-            if (!tmdbId || homepageTmdbIds.includes(tmdbId)) return null;
+            if (!tmdbId || homeTmdbIds.includes(tmdbId)) return null;
             const images = await fetchTmdbImages(rec.title, rec.release_year);
             let posterUrl = images.poster || '/placeholder.jpg';
             return {
@@ -172,8 +208,36 @@ export default function SearchOverlay({ isOpen, onClose, homepageTmdbIds = [] }:
               provider: rec.genres?.toLowerCase().includes('tv') ? 'TV Show' : 'Movie',
             };
           }));
-          // Only show 8 unique, valid recs
-          setExtraRecs(processed.filter(Boolean).slice(0, 8));
+
+          // Ensure at least 4 TMDB picks
+          const firstTmdb = tmdbProcessed.slice(0, 4);
+          const backendPicks = processedBackend.filter(Boolean).slice(0, 4);
+          let combined = [...firstTmdb, ...backendPicks];
+
+          // If we still have < 8, take additional TMDB picks (excluding already used)
+          if (combined.length < 8) {
+            const remainingTmdb = tmdbProcessed.slice(4).filter(it => !combined.some((c: any) => c && c.id === it.id));
+            combined = [...combined, ...remainingTmdb.slice(0, 8 - combined.length)];
+          }
+
+          // Final fallback: if still empty, use trending week
+          if (combined.length === 0) {
+            try {
+              const trending = await fetchTrendingWeek();
+              combined = trending.slice(0, 8).map((item: any) => ({
+                id: item.id,
+                title: item.title,
+                imageUrl: item.posterUrl,
+                year: item.releaseDate?.substring(0,4),
+                rating: item.rating,
+                provider: item.provider,
+              }));
+            } catch {
+              combined = [];
+            }
+          }
+
+          setExtraRecs(combined);
         } catch (e) {
           setExtraRecs([]);
         } finally {
@@ -183,8 +247,7 @@ export default function SearchOverlay({ isOpen, onClose, homepageTmdbIds = [] }:
     } else if (!isOpen || inputValue.length > 0) {
       setExtraRecs([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, user, userContext, inputValue, JSON.stringify(homepageTmdbIds)]); // Fix: use stringified array for stable dependency
+  }, [isOpen, user, userContext, inputValue]);
 
   if (!isOpen) return null;
   

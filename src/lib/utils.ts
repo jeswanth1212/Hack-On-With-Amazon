@@ -215,3 +215,20 @@ export async function validateUserId(userId: string): Promise<boolean> {
     return false;
   }
 }
+
+// -------------------------------------------------------------
+// Fetch full user profile (language preference, genres, etc.)
+// -------------------------------------------------------------
+
+export async function getUserProfile(userId: string): Promise<UserProfile | null> {
+  try {
+    const response = await fetch(`${RECOMMENDATION_API_URL}/user/${userId}`);
+    if (!response.ok) {
+      return null;
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to fetch user profile:", error);
+    return null;
+  }
+}

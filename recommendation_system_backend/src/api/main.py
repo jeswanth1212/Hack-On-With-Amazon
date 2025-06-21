@@ -282,6 +282,9 @@ async def get_recommendations(
     user_profile = cursor.fetchone()
     conn.close()
     
+    # Initialise variable to avoid UnboundLocalError later
+    preferred_genres = None
+    
     # If user profile exists, add data to context
     if user_profile:
         # Handle context as either dict or object
@@ -304,12 +307,11 @@ async def get_recommendations(
             if user_profile['location'] and not context.location:
                 context.location = user_profile['location']
             
-        # Get preferred genres if available
-        preferred_genres = None
-        if user_profile['preferred_genres']:
-            # Convert from pipe-separated string to list
-            preferred_genres = user_profile['preferred_genres'].split('|')
-            logger.info(f"Using user's preferred genres: {preferred_genres}")
+            # Get preferred genres if available
+            if user_profile['preferred_genres']:
+                # Convert from pipe-separated string to list
+                preferred_genres = user_profile['preferred_genres'].split('|')
+                logger.info(f"Using user's preferred genres: {preferred_genres}")
     
     # Get base recommendations
     recommendations = engine.get_recommendations(
@@ -570,6 +572,39 @@ async def get_selection_options():
         "genres": genres,
         "languages": languages
     }
+
+@app.get("/user/{user_id}", response_model=UserProfileResponse, tags=["User"])
+async def get_user_profile(user_id: str):
+    """Fetch a single user profile from the database.
+
+    Args:
+        user_id (str): The user ID to look up.
+
+    Returns:
+        UserProfileResponse: The user profile data.
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM UserProfiles WHERE user_id = ?", (user_id,))
+    row = cursor.fetchone()
+    conn.close()
+
+    if row is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    # Convert pipe-separated genres back to list
+    preferred_genres = None
+    if row["preferred_genres"]:
+        preferred_genres = row["preferred_genres"].split("|")
+
+    return UserProfileResponse(
+        user_id=row["user_id"],
+        age=row["age"],
+        age_group=row["age_group"],
+        location=row["location"],
+        language_preference=row["language_preference"],
+        preferred_genres=preferred_genres,
+    )
 
 @app.on_event("startup")
 async def startup_event():
