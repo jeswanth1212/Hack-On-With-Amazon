@@ -151,7 +151,9 @@ export default function HomePage() {
               .slice(0, 6);
           }
 
-          const backendPool = filteredRecs.length > 0 ? filteredRecs : fallbackBackend;
+          const backendPoolRaw = filteredRecs.length > 0 ? filteredRecs : fallbackBackend;
+          // Shuffle backend pool for variety
+          const backendPool = [...backendPoolRaw].sort(() => Math.random() - 0.5);
 
           // -------------------------------------------------
           // 3. Build Hero Banner data (3 TMDB + 2 backend recs)

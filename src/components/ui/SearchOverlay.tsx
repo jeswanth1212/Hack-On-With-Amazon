@@ -211,7 +211,10 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
 
           // Ensure at least 4 TMDB picks
           const firstTmdb = tmdbProcessed.slice(0, 4);
-          const backendPicks = processedBackend.filter(Boolean).slice(0, 4);
+          const backendPicks = processedBackend
+            .filter(Boolean)
+            .sort(() => Math.random() - 0.5)
+            .slice(0, 4);
           let combined = [...firstTmdb, ...backendPicks];
 
           // If we still have < 8, take additional TMDB picks (excluding already used)

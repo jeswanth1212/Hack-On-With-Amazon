@@ -308,6 +308,7 @@ async def get_recommendations(
                 context.location = user_profile['location']
             
             # Get preferred genres if available
+            preferred_genres = None
             if user_profile['preferred_genres']:
                 # Convert from pipe-separated string to list
                 preferred_genres = user_profile['preferred_genres'].split('|')

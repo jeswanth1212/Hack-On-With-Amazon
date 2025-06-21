@@ -5055,3 +5055,154 @@
 2025-06-22 01:28:20,946 - src.models.model - INFO - Getting recommendations for user 453
 2025-06-22 01:28:20,948 - src.models.model - WARNING - User 453 has no interactions
 2025-06-22 01:28:20,958 - src.models.model - INFO - Applied contextual adjustment with: mood=bored, time=late_night, day=Sunday, weather=rainy, age=20
+2025-06-22 01:28:45,786 - src.models.model - INFO - Getting recommendations for user 453
+2025-06-22 01:28:45,787 - src.models.model - WARNING - User 453 has no interactions
+2025-06-22 01:28:45,794 - src.models.model - INFO - Applied contextual adjustment with: mood=relaxed, time=late_night, day=Sunday, weather=clear, age=20
+2025-06-22 01:28:45,818 - src.models.model - INFO - Getting recommendations for user 453
+2025-06-22 01:28:45,821 - src.models.model - WARNING - User 453 has no interactions
+2025-06-22 01:28:45,841 - src.models.model - INFO - Applied contextual adjustment with: mood=relaxed, time=late_night, day=Sunday, weather=foggy, age=20
+2025-06-22 01:29:18,223 - src.models.model - INFO - Getting recommendations for user 453
+2025-06-22 01:29:18,225 - src.models.model - WARNING - User 453 has no interactions
+2025-06-22 01:29:18,241 - src.models.model - INFO - Applied contextual adjustment with: mood=sad, time=late_night, day=Sunday, weather=sunny, age=20
+2025-06-22 01:32:22,232 - src.models.model - INFO - Getting recommendations for user 453
+2025-06-22 01:32:22,235 - src.models.model - WARNING - User 453 has no interactions
+2025-06-22 01:32:22,248 - src.models.model - INFO - Applied contextual adjustment with: mood=neutral, time=late_night, day=Sunday, weather=snowy, age=20
+2025-06-22 01:32:30,883 - src.models.model - INFO - Getting recommendations for user 453
+2025-06-22 01:32:30,893 - src.models.model - WARNING - User 453 has no interactions
+2025-06-22 01:32:30,935 - src.models.model - INFO - Applied contextual adjustment with: mood=relaxed, time=late_night, day=Sunday, weather=cloudy, age=20
+2025-06-22 01:32:42,778 - src.models.model - INFO - Getting recommendations for user 453
+2025-06-22 01:32:42,778 - src.models.model - WARNING - User 453 has no interactions
+2025-06-22 01:32:42,788 - src.models.model - INFO - Applied contextual adjustment with: mood=relaxed, time=late_night, day=Sunday, weather=cloudy, age=20
+2025-06-22 01:34:05,542 - src.api.main - INFO - Shutting down API server...
+2025-06-22 01:34:06,001 - src.models.model - INFO - Saved all models to disk
+2025-06-22 01:34:06,009 - src.api.main - INFO - Recommendation engine models saved
+2025-06-22 01:34:26,522 - src.models.model - INFO - Loaded SVD model
+2025-06-22 01:34:26,705 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 01:34:26,709 - src.models.model - INFO - Loaded context model
+2025-06-22 01:34:26,714 - src.models.model - INFO - Loaded item features
+2025-06-22 01:34:26,736 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 01:34:26,766 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 01:34:26,792 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 01:34:26,795 - src.models.model - INFO - Loaded user factors
+2025-06-22 01:34:26,797 - src.models.model - INFO - Loaded item factors
+2025-06-22 01:34:26,806 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 01:34:26,806 - src.models.model - INFO - Loaded 504 user IDs
+2025-06-22 01:34:26,807 - src.models.model - INFO - Loaded 585 item IDs
+2025-06-22 01:34:26,842 - src.api.main - INFO - Starting interaction processing thread
+2025-06-22 01:34:27,007 - src.api.main - INFO - Starting API server...
+2025-06-22 01:34:27,008 - src.database.database - INFO - Initializing database...
+2025-06-22 01:34:27,014 - src.database.database - INFO - Database initialized successfully.
+2025-06-22 01:34:27,015 - src.database.database - INFO - Loading data from CSV files into the database...
+2025-06-22 01:34:27,074 - src.database.database - INFO - Loaded 725 movies from CSV
+2025-06-22 01:34:27,376 - src.database.database - INFO - Movies data loaded into database
+2025-06-22 01:34:27,418 - src.database.database - INFO - Loaded 4677 interactions from CSV
+2025-06-22 01:34:27,421 - src.database.database - INFO - Processing interactions batch 1 to 1000 of 4677
+2025-06-22 01:34:27,703 - src.database.database - INFO - Processing interactions batch 1001 to 2000 of 4677
+2025-06-22 01:34:28,172 - src.database.database - INFO - Processing interactions batch 2001 to 3000 of 4677
+2025-06-22 01:34:28,359 - src.database.database - INFO - Processing interactions batch 3001 to 4000 of 4677
+2025-06-22 01:34:28,588 - src.database.database - INFO - Processing interactions batch 4001 to 4677 of 4677
+2025-06-22 01:34:28,753 - src.database.database - INFO - Interactions data loaded into database
+2025-06-22 01:34:28,757 - src.database.database - INFO - Database setup completed successfully.
+2025-06-22 01:34:28,757 - src.api.main - INFO - Database initialized and data loaded successfully
+2025-06-22 01:34:28,760 - src.models.model - INFO - Loaded SVD model
+2025-06-22 01:34:28,815 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 01:34:28,816 - src.models.model - INFO - Loaded context model
+2025-06-22 01:34:28,819 - src.models.model - INFO - Loaded item features
+2025-06-22 01:34:28,828 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 01:34:28,833 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 01:34:28,836 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 01:34:28,837 - src.models.model - INFO - Loaded user factors
+2025-06-22 01:34:28,839 - src.models.model - INFO - Loaded item factors
+2025-06-22 01:34:28,841 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 01:34:28,842 - src.models.model - INFO - Loaded 504 user IDs
+2025-06-22 01:34:28,842 - src.models.model - INFO - Loaded 585 item IDs
+2025-06-22 01:34:31,876 - src.api.main - INFO - Shutting down API server...
+2025-06-22 01:34:32,283 - src.models.model - INFO - Saved all models to disk
+2025-06-22 01:34:32,284 - src.api.main - INFO - Recommendation engine models saved
+2025-06-22 01:34:39,164 - src.models.model - INFO - Loaded SVD model
+2025-06-22 01:34:39,264 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 01:34:39,265 - src.models.model - INFO - Loaded context model
+2025-06-22 01:34:39,266 - src.models.model - INFO - Loaded item features
+2025-06-22 01:34:39,275 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 01:34:39,282 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 01:34:39,291 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 01:34:39,292 - src.models.model - INFO - Loaded user factors
+2025-06-22 01:34:39,294 - src.models.model - INFO - Loaded item factors
+2025-06-22 01:34:39,297 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 01:34:39,297 - src.models.model - INFO - Loaded 504 user IDs
+2025-06-22 01:34:39,298 - src.models.model - INFO - Loaded 585 item IDs
+2025-06-22 01:34:39,310 - src.api.main - INFO - Starting interaction processing thread
+2025-06-22 01:34:39,378 - src.api.main - INFO - Starting API server...
+2025-06-22 01:34:39,379 - src.database.database - INFO - Initializing database...
+2025-06-22 01:34:39,381 - src.database.database - INFO - Database initialized successfully.
+2025-06-22 01:34:39,382 - src.database.database - INFO - Loading data from CSV files into the database...
+2025-06-22 01:34:39,401 - src.database.database - INFO - Loaded 725 movies from CSV
+2025-06-22 01:34:39,500 - src.database.database - INFO - Movies data loaded into database
+2025-06-22 01:34:39,513 - src.database.database - INFO - Loaded 4677 interactions from CSV
+2025-06-22 01:34:39,514 - src.database.database - INFO - Processing interactions batch 1 to 1000 of 4677
+2025-06-22 01:34:39,703 - src.database.database - INFO - Processing interactions batch 1001 to 2000 of 4677
+2025-06-22 01:34:39,930 - src.database.database - INFO - Processing interactions batch 2001 to 3000 of 4677
+2025-06-22 01:34:40,259 - src.database.database - INFO - Processing interactions batch 3001 to 4000 of 4677
+2025-06-22 01:34:40,464 - src.database.database - INFO - Processing interactions batch 4001 to 4677 of 4677
+2025-06-22 01:34:40,605 - src.database.database - INFO - Interactions data loaded into database
+2025-06-22 01:34:40,606 - src.database.database - INFO - Database setup completed successfully.
+2025-06-22 01:34:40,607 - src.api.main - INFO - Database initialized and data loaded successfully
+2025-06-22 01:34:40,610 - src.models.model - INFO - Loaded SVD model
+2025-06-22 01:34:40,677 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 01:34:40,680 - src.models.model - INFO - Loaded context model
+2025-06-22 01:34:40,682 - src.models.model - INFO - Loaded item features
+2025-06-22 01:34:40,689 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 01:34:40,695 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 01:34:40,699 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 01:34:40,702 - src.models.model - INFO - Loaded user factors
+2025-06-22 01:34:40,704 - src.models.model - INFO - Loaded item factors
+2025-06-22 01:34:40,709 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 01:34:40,710 - src.models.model - INFO - Loaded 504 user IDs
+2025-06-22 01:34:40,710 - src.models.model - INFO - Loaded 585 item IDs
+2025-06-22 01:35:36,456 - src.api.main - INFO - Shutting down API server...
+2025-06-22 01:35:36,680 - src.models.model - INFO - Saved all models to disk
+2025-06-22 01:35:36,681 - src.api.main - INFO - Recommendation engine models saved
+2025-06-22 01:35:42,724 - src.models.model - INFO - Loaded SVD model
+2025-06-22 01:35:42,803 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 01:35:42,805 - src.models.model - INFO - Loaded context model
+2025-06-22 01:35:42,805 - src.models.model - INFO - Loaded item features
+2025-06-22 01:35:42,814 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 01:35:42,819 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 01:35:42,824 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 01:35:42,825 - src.models.model - INFO - Loaded user factors
+2025-06-22 01:35:42,825 - src.models.model - INFO - Loaded item factors
+2025-06-22 01:35:42,829 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 01:35:42,829 - src.models.model - INFO - Loaded 504 user IDs
+2025-06-22 01:35:42,829 - src.models.model - INFO - Loaded 585 item IDs
+2025-06-22 01:35:42,844 - src.api.main - INFO - Starting interaction processing thread
+2025-06-22 01:35:42,912 - src.api.main - INFO - Starting API server...
+2025-06-22 01:35:42,912 - src.database.database - INFO - Initializing database...
+2025-06-22 01:35:42,916 - src.database.database - INFO - Database initialized successfully.
+2025-06-22 01:35:42,916 - src.database.database - INFO - Loading data from CSV files into the database...
+2025-06-22 01:35:42,938 - src.database.database - INFO - Loaded 725 movies from CSV
+2025-06-22 01:35:43,057 - src.database.database - INFO - Movies data loaded into database
+2025-06-22 01:35:43,074 - src.database.database - INFO - Loaded 4677 interactions from CSV
+2025-06-22 01:35:43,074 - src.database.database - INFO - Processing interactions batch 1 to 1000 of 4677
+2025-06-22 01:35:43,491 - src.database.database - INFO - Processing interactions batch 1001 to 2000 of 4677
+2025-06-22 01:35:43,956 - src.database.database - INFO - Processing interactions batch 2001 to 3000 of 4677
+2025-06-22 01:35:44,454 - src.database.database - INFO - Processing interactions batch 3001 to 4000 of 4677
+2025-06-22 01:35:44,875 - src.database.database - INFO - Processing interactions batch 4001 to 4677 of 4677
+2025-06-22 01:35:45,023 - src.database.database - INFO - Interactions data loaded into database
+2025-06-22 01:35:45,024 - src.database.database - INFO - Database setup completed successfully.
+2025-06-22 01:35:45,024 - src.api.main - INFO - Database initialized and data loaded successfully
+2025-06-22 01:35:45,025 - src.models.model - INFO - Loaded SVD model
+2025-06-22 01:35:45,087 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 01:35:45,089 - src.models.model - INFO - Loaded context model
+2025-06-22 01:35:45,090 - src.models.model - INFO - Loaded item features
+2025-06-22 01:35:45,099 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 01:35:45,108 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 01:35:45,112 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 01:35:45,114 - src.models.model - INFO - Loaded user factors
+2025-06-22 01:35:45,115 - src.models.model - INFO - Loaded item factors
+2025-06-22 01:35:45,117 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 01:35:45,117 - src.models.model - INFO - Loaded 504 user IDs
+2025-06-22 01:35:45,119 - src.models.model - INFO - Loaded 585 item IDs
+2025-06-22 01:35:52,723 - src.models.model - INFO - Getting recommendations for user 4321
+2025-06-22 01:35:52,724 - src.models.model - WARNING - User 4321 not found in training data
+2025-06-22 01:35:52,753 - src.models.model - WARNING - User 4321 not found in training data
+2025-06-22 01:35:52,772 - src.models.model - INFO - Applied contextual adjustment with: mood=happy, time=late_night, day=Sunday, weather=foggy, age=19
