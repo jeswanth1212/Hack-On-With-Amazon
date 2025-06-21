@@ -45,7 +45,7 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: #000000;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -81,7 +81,7 @@
 /* Force dark mode for Fire TV app */
 :root {
   /* FireTV Dark Theme - 60-30-10 rule */
-  --background: #0F1319;
+  --background: #000000;
   --foreground: #FFFFFF;
   --card: #1A1F26;
   --card-foreground: #FFFFFF;

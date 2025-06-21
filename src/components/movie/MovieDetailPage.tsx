@@ -175,7 +175,7 @@ const MovieDetailPage: React.FC<MovieDetailPageProps> = ({ tmdbId }) => {
           </div>
         </div>
         {/* Fade-out gradient at the bottom */}
-        <div className="absolute bottom-0 left-0 w-full h-40 pointer-events-none" style={{ zIndex: 2, background: 'linear-gradient(to bottom, rgba(0,0,0,0) 0%, #111 100%)' }} />
+        <div className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 1, background: 'linear-gradient(to bottom, rgba(0,0,0,0) 50%, #000 100%)' }} />
       </div>
 
       {/* Cast & Crew Carousel, starts right after the fade */}
