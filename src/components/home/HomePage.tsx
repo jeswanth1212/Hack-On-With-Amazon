@@ -53,6 +53,23 @@ async function fetchTmdbImages(title: string, year?: number) {
   return { poster: null, backdrop: null };
 }
 
+// Helper to fetch TMDB ID for a movie by title/year
+async function fetchTmdbId(title: string, year?: number) {
+  const apiKey = 'ee41666274420bb7514d6f2f779b5fd9';
+  const query = encodeURIComponent(title);
+  let url = `https://api.themoviedb.org/3/search/movie?api_key=${apiKey}&query=${query}`;
+  if (year) url += `&year=${year}`;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data.results && data.results.length > 0) {
+      return data.results[0].id;
+    }
+  } catch (e) {}
+  return null;
+}
+
 export default function HomePage() {
   const [trendingData, setTrendingData] = useState<any[]>([]);
   const [personalizedData, setPersonalizedData] = useState<any[]>([]);
@@ -71,35 +88,36 @@ export default function HomePage() {
         
         // Fetch personalized recommendations if user is logged in
         if (user) {
-          const recs = await getRecommendations(user.user_id, 12, userContext); // get more for splitting
-          
-          // Fetch images for all recommendations
-          const processedRecs = await Promise.all(recs.map(async (rec: RecommendationItem) => {
+          const recs = await getRecommendations(user.user_id, 12, userContext);
+          // Fetch TMDb ID and images for all recommendations
+          const processedRecs = await Promise.all(recs.map(async (rec) => {
+            const tmdbId = await fetchTmdbId(rec.title, rec.release_year);
+            if (!tmdbId) return null; // skip if not found
             const images = await fetchTmdbImages(rec.title, rec.release_year);
             let posterUrl = images.poster || '/placeholder.jpg';
             let backdropUrl = images.backdrop || posterUrl;
             const mediaType = rec.genres?.toLowerCase().includes('tv') ? 'tv' : 'movie';
             return {
-              id: rec.item_id,
+              id: tmdbId,
               title: rec.title,
               description: rec.overview || 'No description available',
-              imageUrl: posterUrl, // for carousels
+              imageUrl: posterUrl,
               posterUrl: posterUrl,
-              backdropUrl: backdropUrl, // for hero banner
+              backdropUrl: backdropUrl,
               mediaType: mediaType,
               releaseDate: rec.release_year ? `${rec.release_year}-01-01` : undefined,
-              rating: rec.score * 10, // Scale the score to match TMDB's 0-10 rating
+              rating: rec.score * 10,
               provider: mediaType === 'movie' ? 'Movie' : 'TV Show'
             };
           }));
-          
+          // Filter out any nulls (where TMDb ID not found)
+          const filteredRecs = processedRecs.filter(Boolean);
           // Split into hero and below carousel, no overlap
-          const hero = processedRecs.slice(0, 5).map(item => ({ ...item, imageUrl: item.backdropUrl || item.posterUrl }));
-          const below = processedRecs.slice(5, 11); // next 6
+          const hero = filteredRecs.slice(0, 5).filter((item): item is NonNullable<typeof item> => !!item).map(item => ({ ...item, imageUrl: item.backdropUrl || item.posterUrl }));
+          const below = filteredRecs.slice(5, 11).filter((item): item is NonNullable<typeof item> => !!item);
           setHeroData(hero);
           setPersonalizedData(below);
         }
-        
         setLoading(false);
       } catch (err) {
         console.error('Error fetching data:', err);
@@ -107,7 +125,6 @@ export default function HomePage() {
         setLoading(false);
       }
     };
-
     fetchData();
   }, [user, userContext]);
 
