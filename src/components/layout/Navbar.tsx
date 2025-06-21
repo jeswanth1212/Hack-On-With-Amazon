@@ -15,6 +15,7 @@ import {
   Heart,
   Search,
   LogOut,
+  Home,
 } from "lucide-react";
 import { 
   DropdownMenu,
@@ -155,6 +156,12 @@ export default function Navbar() {
 
           {/* Middle Section - Search, Live TV, Friends, My List */}
           <div className="flex gap-6">
+            <NavItem 
+              icon={<Home size={24} className="text-white" />} 
+              label="Home"
+              href="/"
+              isActive={pathname === '/'}
+            />
             <NavItem 
               icon={<Search size={24} className="text-white" />} 
               label="Search"

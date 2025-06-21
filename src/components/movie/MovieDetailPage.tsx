@@ -126,6 +126,7 @@ const MovieDetailPage: React.FC<MovieDetailPageProps> = ({ tmdbId }) => {
       year={person.role}
       rating={undefined}
       source={undefined}
+      showHoverArrow={false}
     />
   ));
 
