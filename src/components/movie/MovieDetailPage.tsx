@@ -8,6 +8,8 @@ import { Badge } from '../ui/badge';
 import { Separator } from '../ui/separator';
 import ContentCard from '../ui/ContentCard';
 import ContentCarousel from '../ui/ContentCarousel';
+import { useAuth } from '@/lib/hooks';
+import { recordInteraction } from '@/lib/utils';
 
 // TODO: Replace with your actual TMDb API key
 const TMDB_API_KEY = 'ee41666274420bb7514d6f2f779b5fd9';
@@ -53,6 +55,9 @@ const MovieDetailPage: React.FC<MovieDetailPageProps> = ({ tmdbId }) => {
   const [movie, setMovie] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { user, userContext } = useAuth();
+  const [watching, setWatching] = useState(false);
+  const [watchSuccess, setWatchSuccess] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -170,7 +175,30 @@ const MovieDetailPage: React.FC<MovieDetailPageProps> = ({ tmdbId }) => {
             </div>
             <p className="text-lg text-gray-100 mb-4 max-w-2xl drop-shadow">{overview}</p>
             <div className="flex gap-4 mt-2">
-              <Button className="w-40 bg-yellow-500 text-black font-bold hover:bg-yellow-400 transition">Watch</Button>
+              <Button
+                className="w-40 bg-yellow-500 text-black font-bold hover:bg-yellow-400 transition"
+                disabled={watching || !user}
+                onClick={async () => {
+                  if (!user) return;
+                  setWatching(true);
+                  setWatchSuccess(false);
+                  try {
+                    await recordInteraction(
+                      user.user_id,
+                      tmdbId,
+                      1.0, // sentiment_score for watch
+                      userContext
+                    );
+                    setWatchSuccess(true);
+                  } catch (e) {
+                    // Optionally handle error
+                  } finally {
+                    setWatching(false);
+                  }
+                }}
+              >
+                {watching ? 'Recording...' : watchSuccess ? 'Watched!' : 'Watch'}
+              </Button>
             </div>
           </div>
         </div>

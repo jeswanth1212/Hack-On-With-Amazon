@@ -65,6 +65,9 @@ export default function ContentCard({
             </div>
           </div>
         )}
+        {/* Fade overlay for text visibility on hover */}
+        <div className="absolute left-0 right-0 bottom-0 h-16 pointer-events-none rounded-b-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+             style={{background: 'linear-gradient(to top, rgba(0,0,0,0.6) 80%, rgba(0,0,0,0) 100%)'}} />
         {/* Content info */}
         <div className="absolute bottom-0 left-0 right-0 p-3 opacity-0 transition-opacity group-hover:opacity-100">
           <h3 className="text-sm font-bold text-white line-clamp-1">{title}</h3>
