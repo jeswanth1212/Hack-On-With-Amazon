@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback, createContext, useContext } from 'react';
 import { useRouter } from "next/navigation";
-import { validateUserId, ContextData, UserProfile, createUserProfile, getUserProfile } from './utils';
+import { validateUserId, ContextData, UserProfile, createUserProfile, getUserProfile, getFriendActivities, getFriendRequests, getNotificationCount } from './utils';
 
 /**
  * Custom hook to handle keyboard navigation in app drawers.
@@ -177,6 +177,93 @@ export function useAuth(): AuthContextType {
   
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
+  }
+  
+  return context;
+}
+
+// Notification Context
+interface NotificationState {
+  friendRequestCount: number;
+  friendActivityCount: number;
+  totalCount: number;
+  lastCheckedActivity: number;
+  markActivityAsRead: () => void;
+}
+
+const NotificationContext = createContext<NotificationState>({
+  friendRequestCount: 0,
+  friendActivityCount: 0,
+  totalCount: 0,
+  lastCheckedActivity: Date.now(),
+  markActivityAsRead: () => {}
+});
+
+export function NotificationProvider({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth();
+  const [friendRequestCount, setFriendRequestCount] = useState(0);
+  const [friendActivityCount, setFriendActivityCount] = useState(0);
+  const [lastCheckedActivity, setLastCheckedActivity] = useState(() => {
+    // Initialize with stored value or current time
+    const stored = localStorage.getItem('lastCheckedActivity');
+    return stored ? parseInt(stored, 10) : Date.now();
+  });
+  
+  // Load notifications
+  useEffect(() => {
+    if (!user) return;
+    
+    const loadNotifications = async () => {
+      try {
+        // Get notification counts from API
+        const lastCheckedISOString = new Date(lastCheckedActivity).toISOString();
+        const counts = await getNotificationCount(user.user_id, lastCheckedISOString);
+        
+        setFriendRequestCount(counts.friend_requests);
+        setFriendActivityCount(counts.friend_activities);
+      } catch (error) {
+        console.error('Error loading notifications:', error);
+      }
+    };
+    
+    // Initial load
+    loadNotifications();
+    
+    // Set up polling every 60 seconds
+    const interval = setInterval(loadNotifications, 60000);
+    return () => clearInterval(interval);
+  }, [user, lastCheckedActivity]);
+  
+  const markActivityAsRead = () => {
+    const now = Date.now();
+    setLastCheckedActivity(now);
+    setFriendActivityCount(0);
+    // Store the timestamp in localStorage
+    localStorage.setItem('lastCheckedActivity', now.toString());
+  };
+  
+  const totalCount = friendRequestCount + friendActivityCount;
+  
+  return React.createElement(
+    NotificationContext.Provider,
+    {
+      value: { 
+        friendRequestCount, 
+        friendActivityCount, 
+        totalCount,
+        lastCheckedActivity,
+        markActivityAsRead
+      }
+    },
+    children
+  );
+}
+
+export function useNotifications() {
+  const context = useContext(NotificationContext);
+  
+  if (!context) {
+    throw new Error('useNotifications must be used within a NotificationProvider');
   }
   
   return context;

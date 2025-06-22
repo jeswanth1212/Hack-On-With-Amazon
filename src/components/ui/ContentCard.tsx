@@ -13,6 +13,8 @@ interface ContentCardProps {
   year?: string;
   rating?: string;
   source?: string;
+  badge?: string;
+  type?: string;
   onClick?: () => void;
   className?: string;
   showHoverArrow?: boolean;
@@ -25,6 +27,8 @@ export default function ContentCard({
   year,
   rating,
   source,
+  badge,
+  type,
   onClick,
   className,
   showHoverArrow = true,
@@ -57,6 +61,21 @@ export default function ContentCard({
             className="h-full w-full object-cover"
           />
         </div>
+        
+        {/* Badge (if provided) */}
+        {badge && (
+          <div className="absolute top-2 left-2 bg-primary/80 text-primary-foreground text-xs px-2 py-1 rounded-md">
+            {badge}
+          </div>
+        )}
+        
+        {/* Media type badge (if provided) */}
+        {type && (
+          <div className="absolute top-2 right-2 bg-background/80 text-foreground text-xs px-2 py-1 rounded-md">
+            {type}
+          </div>
+        )}
+        
         {/* Hover overlay */}
         {showHoverArrow && (
           <div className="absolute inset-0 grid place-content-center">

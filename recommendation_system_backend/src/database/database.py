@@ -83,9 +83,44 @@ def init_db():
         day_of_week TEXT,
         weather TEXT,
         location TEXT,
-        event_type TEXT,
-        FOREIGN KEY (user_id) REFERENCES UserProfiles (user_id),
-        FOREIGN KEY (item_id) REFERENCES Items (item_id)
+        event_type TEXT
+    )
+    ''')
+    
+    # Create recommendation_cache table
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS recommendation_cache (
+        cache_key TEXT PRIMARY KEY,
+        recommendations TEXT,
+        created_at TEXT
+    )
+    ''')
+    
+    # Create Friendships table
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS Friendships (
+        friendship_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id_1 TEXT,
+        user_id_2 TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(user_id_1, user_id_2),
+        FOREIGN KEY (user_id_1) REFERENCES UserProfiles (user_id),
+        FOREIGN KEY (user_id_2) REFERENCES UserProfiles (user_id)
+    )
+    ''')
+    
+    # Create FriendRequests table
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS FriendRequests (
+        request_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        sender_id TEXT,
+        receiver_id TEXT,
+        status TEXT CHECK(status IN ('pending', 'accepted', 'rejected')),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP,
+        UNIQUE(sender_id, receiver_id),
+        FOREIGN KEY (sender_id) REFERENCES UserProfiles (user_id),
+        FOREIGN KEY (receiver_id) REFERENCES UserProfiles (user_id)
     )
     ''')
     
@@ -97,6 +132,11 @@ def init_db():
     cursor.execute('CREATE INDEX IF NOT EXISTS idx_items_release_year ON Items (release_year)')
     cursor.execute('CREATE INDEX IF NOT EXISTS idx_items_popularity ON Items (popularity)')
     cursor.execute('CREATE INDEX IF NOT EXISTS idx_items_language ON Items (language)')
+    cursor.execute('CREATE INDEX IF NOT EXISTS idx_friendships_user_id_1 ON Friendships (user_id_1)')
+    cursor.execute('CREATE INDEX IF NOT EXISTS idx_friendships_user_id_2 ON Friendships (user_id_2)')
+    cursor.execute('CREATE INDEX IF NOT EXISTS idx_friend_requests_sender ON FriendRequests (sender_id)')
+    cursor.execute('CREATE INDEX IF NOT EXISTS idx_friend_requests_receiver ON FriendRequests (receiver_id)')
+    cursor.execute('CREATE INDEX IF NOT EXISTS idx_friend_requests_status ON FriendRequests (status)')
     
     conn.commit()
     conn.close()
@@ -403,6 +443,250 @@ def setup_database():
     load_data_from_csv()
     
     logger.info("Database setup completed successfully.")
+
+# Friend system functions
+def search_users(query, current_user_id, limit=20):
+    """
+    Search for users by partial user_id match, excluding the current user.
+    
+    Args:
+        query (str): The search query
+        current_user_id (str): The current user's ID to exclude from results
+        limit (int): Maximum number of results to return
+        
+    Returns:
+        List of matching user profiles
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    search_pattern = f"%{query}%"
+    
+    cursor.execute('''
+    SELECT * FROM UserProfiles 
+    WHERE user_id LIKE ? AND user_id != ?
+    LIMIT ?
+    ''', (search_pattern, current_user_id, limit))
+    
+    results = cursor.fetchall()
+    conn.close()
+    
+    return [dict(row) for row in results]
+
+def send_friend_request(sender_id, receiver_id):
+    """
+    Send a friend request from sender to receiver.
+    
+    Args:
+        sender_id (str): The ID of the user sending the request
+        receiver_id (str): The ID of the user receiving the request
+        
+    Returns:
+        bool: True if request was sent, False otherwise
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    try:
+        # First check if there's an existing request in either direction
+        cursor.execute('''
+        SELECT * FROM FriendRequests 
+        WHERE (sender_id = ? AND receiver_id = ?) 
+        OR (sender_id = ? AND receiver_id = ?)
+        ''', (sender_id, receiver_id, receiver_id, sender_id))
+        
+        existing_request = cursor.fetchone()
+        if existing_request:
+            logger.warning(f"Friend request already exists between {sender_id} and {receiver_id}")
+            conn.close()
+            return False
+        
+        # Check if they're already friends
+        cursor.execute('''
+        SELECT * FROM Friendships
+        WHERE (user_id_1 = ? AND user_id_2 = ?) 
+        OR (user_id_1 = ? AND user_id_2 = ?)
+        ''', (sender_id, receiver_id, receiver_id, sender_id))
+        
+        if cursor.fetchone():
+            logger.warning(f"Users {sender_id} and {receiver_id} are already friends")
+            conn.close()
+            return False
+            
+        # Create the friend request
+        cursor.execute('''
+        INSERT INTO FriendRequests (sender_id, receiver_id, status)
+        VALUES (?, ?, 'pending')
+        ''', (sender_id, receiver_id))
+        
+        conn.commit()
+        conn.close()
+        logger.info(f"Friend request sent from {sender_id} to {receiver_id}")
+        return True
+    
+    except Exception as e:
+        logger.error(f"Error sending friend request: {e}")
+        conn.close()
+        return False
+
+def respond_to_friend_request(request_id, status):
+    """
+    Respond to a friend request by updating its status.
+    
+    Args:
+        request_id (int): The ID of the friend request
+        status (str): The new status ('accepted' or 'rejected')
+        
+    Returns:
+        bool: True if updated successfully, False otherwise
+    """
+    if status not in ['accepted', 'rejected']:
+        logger.error(f"Invalid status: {status}")
+        return False
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    try:
+        # Update the request status
+        cursor.execute('''
+        UPDATE FriendRequests
+        SET status = ?, updated_at = CURRENT_TIMESTAMP
+        WHERE request_id = ?
+        ''', (status, request_id))
+        
+        # If accepted, create friendship
+        if status == 'accepted':
+            # Get the request details
+            cursor.execute('SELECT sender_id, receiver_id FROM FriendRequests WHERE request_id = ?', (request_id,))
+            request = cursor.fetchone()
+            
+            if request:
+                # Create two-way friendship
+                cursor.execute('''
+                INSERT INTO Friendships (user_id_1, user_id_2)
+                VALUES (?, ?)
+                ''', (request['sender_id'], request['receiver_id']))
+                
+                logger.info(f"Friendship created between {request['sender_id']} and {request['receiver_id']}")
+        
+        conn.commit()
+        conn.close()
+        logger.info(f"Friend request {request_id} {status}")
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error responding to friend request: {e}")
+        conn.close()
+        return False
+
+def get_pending_friend_requests(user_id):
+    """
+    Get all pending friend requests for a user.
+    
+    Args:
+        user_id (str): The user's ID
+        
+    Returns:
+        List of pending friend requests
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute('''
+    SELECT fr.*, up.age, up.location, up.language_preference
+    FROM FriendRequests fr
+    JOIN UserProfiles up ON fr.sender_id = up.user_id
+    WHERE fr.receiver_id = ? AND fr.status = 'pending'
+    ''', (user_id,))
+    
+    requests = cursor.fetchall()
+    conn.close()
+    
+    return [dict(row) for row in requests]
+
+def get_friends(user_id):
+    """
+    Get all friends of a user.
+    
+    Args:
+        user_id (str): The user's ID
+        
+    Returns:
+        List of friend profiles
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute('''
+    SELECT up.*, f.created_at as friendship_date
+    FROM Friendships f
+    JOIN UserProfiles up ON 
+        CASE 
+            WHEN f.user_id_1 = ? THEN up.user_id = f.user_id_2
+            ELSE up.user_id = f.user_id_1
+        END
+    WHERE f.user_id_1 = ? OR f.user_id_2 = ?
+    ''', (user_id, user_id, user_id))
+    
+    friends = cursor.fetchall()
+    conn.close()
+    
+    return [dict(row) for row in friends]
+
+def get_friend_activities(user_id, limit=50):
+    """Get activities of a user's friends."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Get the user's friends
+    cursor.execute('''
+    SELECT user_id_2 as friend_id FROM Friendships WHERE user_id_1 = ?
+    UNION
+    SELECT user_id_1 as friend_id FROM Friendships WHERE user_id_2 = ?
+    ''', (user_id, user_id))
+    
+    friends = [row['friend_id'] for row in cursor.fetchall()]
+    
+    if not friends:
+        conn.close()
+        return []
+    
+    # Get activities from friends
+    placeholders = ','.join(['?'] * len(friends))
+    query = f'''
+    SELECT 
+        i.user_id as friend_id,
+        i.item_id,
+        it.title,
+        i.timestamp,
+        it.genres,
+        it.release_year,
+        i.sentiment_score
+    FROM Interactions i
+    JOIN Items it ON i.item_id = it.item_id
+    WHERE i.user_id IN ({placeholders})
+    ORDER BY i.timestamp DESC
+    LIMIT ?
+    '''
+    
+    cursor.execute(query, friends + [limit])
+    activities = cursor.fetchall()
+    conn.close()
+    
+    # Convert to list of dictionaries and format timestamps
+    result = []
+    for row in activities:
+        activity_dict = dict(row)
+        # Convert timestamp to ISO format string if it's a number
+        if isinstance(activity_dict['timestamp'], (int, float)):
+            import datetime
+            activity_dict['timestamp'] = datetime.datetime.fromtimestamp(
+                activity_dict['timestamp']
+            ).isoformat()
+        result.append(activity_dict)
+    
+    return result
 
 if __name__ == "__main__":
     # Initialize the database

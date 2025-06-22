@@ -7,7 +7,8 @@ import ContentCarousel from '../ui/ContentCarousel';
 import ContentCard from '../ui/ContentCard';
 import AppIcon from '../ui/AppIcon';
 import { fetchTrendingWeek, discoverMoviesByLanguageGenre } from '@/lib/tmdb';
-import { getRecommendations, RecommendationItem } from '@/lib/utils';
+import { getRecommendations, RecommendationItem, getFriendRecommendations, getFriendActivities, FriendActivity } from '@/lib/utils';
+import { Users } from 'lucide-react';
 import { useAuth } from '@/lib/hooks';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
@@ -74,6 +75,8 @@ export default function HomePage() {
   const [trendingData, setTrendingData] = useState<any[]>([]);
   const [personalizedData, setPersonalizedData] = useState<any[]>([]);
   const [heroData, setHeroData] = useState<any[]>([]);
+  const [friendRecommendationsData, setFriendRecommendationsData] = useState<any[]>([]);
+  const [friendActivitiesData, setFriendActivitiesData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { user, userContext } = useAuth();
@@ -111,7 +114,22 @@ export default function HomePage() {
           // -------------------------------------------------
           let processedRecs: any[] = [];
           try {
-            const recs = await getRecommendations(user.user_id, 12, userContext);
+            // Enhanced context with preferred languages
+            const enhancedContext = {
+              ...userContext,
+              preferred_languages: user.language_preference ? user.language_preference : 'en',
+              user_unique_id: user.user_id + "_" + Date.now() // Ensure uniqueness
+            };
+            
+            // Get unique recommendations based on user context
+            const recs = await getRecommendations(
+              user.user_id, 
+              12, 
+              enhancedContext, 
+              true,  // includeLocalLanguage
+              0.95,  // languageWeight
+              true   // ensureLanguageDiversity
+            );
             
             // Fetch TMDb ID and images for all recommendations
             processedRecs = await Promise.all(recs.map(async (rec) => {
@@ -194,6 +212,97 @@ export default function HomePage() {
           const usedTmdbIds = [...heroTmdb, ...carouselTmdb].map(m => m.id);
           if (typeof window !== 'undefined') {
             localStorage.setItem('homeTmdbIds', JSON.stringify(usedTmdbIds));
+            // Remove recommendation caching
+          }
+
+          // -------------------------------------------------
+          // 6. Fetch friend recommendations
+          // -------------------------------------------------
+          try {
+            const friendRecs = await getFriendRecommendations(user.user_id, 6);
+            
+            // Fetch TMDb ID and images for friend recommendations
+            const processedFriendRecs = await Promise.all(friendRecs.map(async (rec) => {
+              const tmdbId = await fetchTmdbId(rec.title, rec.release_year);
+              if (!tmdbId) return null; // skip if not found
+              const images = await fetchTmdbImages(rec.title, rec.release_year);
+              let posterUrl = images.poster || '/placeholder.jpg';
+              let backdropUrl = images.backdrop || posterUrl;
+              const mediaType = rec.genres?.toLowerCase().includes('tv') ? 'tv' : 'movie';
+              return {
+                id: tmdbId,
+                title: rec.title,
+                description: rec.overview || 'No description available',
+                imageUrl: posterUrl,
+                posterUrl: posterUrl,
+                backdropUrl: backdropUrl,
+                mediaType: mediaType,
+                releaseDate: rec.release_year ? `${rec.release_year}-01-01` : undefined,
+                rating: rec.score * 10,
+                provider: mediaType === 'movie' ? 'Movie' : 'TV Show',
+                genres: rec.genres,
+                // Add friend info if available
+                friendRecommended: true,
+                friends: (rec as any).friends
+              };
+            }));
+            
+            // Filter out invalid entries
+            const filteredFriendRecs = processedFriendRecs.filter(Boolean);
+            setFriendRecommendationsData(filteredFriendRecs);
+          } catch (err) {
+            console.error("Failed to get friend recommendations", err);
+            setFriendRecommendationsData([]);
+          }
+
+          // -------------------------------------------------
+          // 7. Fetch friend activities for "Continue Watching with Friends"
+          // -------------------------------------------------
+          try {
+            const friendActivities = await getFriendActivities(user.user_id, 10);
+            
+            // Process friend activities to get TMDB data
+            const processedActivities = await Promise.all(friendActivities.map(async (activity) => {
+              const tmdbId = await fetchTmdbId(activity.title, activity.release_year);
+              if (!tmdbId) return null; // skip if not found
+              
+              const images = await fetchTmdbImages(activity.title, activity.release_year);
+              let posterUrl = images.poster || '/placeholder.jpg';
+              let backdropUrl = images.backdrop || posterUrl;
+              const mediaType = activity.genres?.toLowerCase().includes('tv') ? 'tv' : 'movie';
+              
+              // Get sentiment description
+              let sentimentDescription = "watched";
+              if (activity.sentiment_score !== undefined) {
+                if (activity.sentiment_score > 0.7) sentimentDescription = "loved";
+                else if (activity.sentiment_score > 0.5) sentimentDescription = "liked";
+                else if (activity.sentiment_score < 0.3) sentimentDescription = "disliked";
+                else if (activity.sentiment_score < 0.5) sentimentDescription = "felt neutral about";
+              }
+              
+              return {
+                id: tmdbId,
+                title: activity.title,
+                imageUrl: posterUrl,
+                posterUrl: posterUrl,
+                backdropUrl: backdropUrl,
+                mediaType: mediaType,
+                releaseDate: activity.release_year ? `${activity.release_year}-01-01` : undefined,
+                friendId: activity.friend_id,
+                timestamp: activity.timestamp,
+                sentimentScore: activity.sentiment_score,
+                sentimentDescription
+              };
+            }));
+            
+            // Filter out invalid entries and sort by timestamp (most recent first)
+            const filteredActivities = processedActivities
+              .filter(Boolean)
+              .sort((a, b) => new Date(b!.timestamp).getTime() - new Date(a!.timestamp).getTime());
+            
+            setFriendActivitiesData(filteredActivities);
+          } catch (err) {
+            console.error("Failed to get friend activities", err);
           }
         }
         setLoading(false);
@@ -280,21 +389,59 @@ export default function HomePage() {
           </div>
         </div>
 
-        {user && personalizedData.length > 0 && (
-          <ContentCarousel title={`Recommended for ${user.user_id}`}>
-            {personalizedData.map((item, index) => (
-              <ContentCard
-                key={`recommended-${item.id}-${index}`}
-                id={item.id}
-                title={item.title}
-                imageUrl={item.posterUrl}
-                year={item.releaseDate?.substring(0, 4)}
-                rating={typeof item.rating === 'number' ? item.rating.toFixed(1) : '0.0'}
-                source={item.provider}
-              />
-            ))}
-          </ContentCarousel>
-        )}
+         {/* Personalized Recommendations */}
+         <section className="px-4 py-8 md:px-8">
+            <h2 className="text-2xl md:text-3xl font-bold mb-6 text-white">
+              {user ? 'Recommended for You' : 'Popular Picks'}
+            </h2>
+            <ContentCarousel title="">
+              {personalizedData.map((item, i) => (
+                <ContentCard 
+                  key={`personalized-${i}-${item.id}`} 
+                  id={item.id}
+                  title={item.title}
+                  imageUrl={item.posterUrl || item.imageUrl}
+                  rating={item.rating ? item.rating.toString() : undefined}
+                  year={item.releaseDate?.substring(0, 4)}
+                />
+              ))}
+            </ContentCarousel>
+          </section>
+
+                  {/* Friend Activities - Continue Watching with Friends */}
+          {user && friendActivitiesData.length > 0 && (
+            <section className="px-8 mt-4">
+              <div className="flex items-center gap-2 mb-4">
+                <Users size={20} className="text-primary" />
+                <h2 className="text-xl font-semibold">Continue Watching with Friends</h2>
+              </div>
+              <Carousel className="w-full">
+                <CarouselContent>
+                  {friendActivitiesData.map((item) => (
+                    <CarouselItem key={`${item.id}-${item.friendId}`} className="basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5">
+                      <ContentCard
+                        id={item.id}
+                        title={item.title}
+                        imageUrl={item.posterUrl}
+                        badge={`Friend ${item.friendId} ${item.sentimentDescription}`}
+                        type={item.mediaType}
+                      />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+              </Carousel>
+            </section>
+          )}
+
+          {/* Friend Recommendations */}
+          {user && friendRecommendationsData.length > 0 && (
+            <section className="px-8 mt-4">
+              <h2 className="text-xl font-semibold mb-4">Recommended by Friends</h2>
+              <ContentCarousel items={friendRecommendationsData} />
+            </section>
+          )}
 
         <ContentCarousel title="Trending this week">
           {trendingThisWeek.map((item, index) => (

@@ -7,14 +7,21 @@ import os
 import sys
 import argparse
 import logging
+import sqlite3
+import time
+import datetime
 from pathlib import Path
+
+# Set up paths
+script_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(script_dir)
 
 # Set up logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler("logs/runner.log"),
+        logging.FileHandler(os.path.join(script_dir, "logs/runner.log")),
         logging.StreamHandler()
     ]
 )
@@ -63,13 +70,63 @@ def train_models():
     
     logger.info("Model training complete")
 
-def start_api():
-    """Start the API server."""
-    logger.info("Starting API server...")
-    
-    from src.api.main import start as start_api
-    
-    start_api()
+def setup_database():
+    """Set up the SQLite database schema."""
+    try:
+        db_path = os.path.join(script_dir, "data/processed/recommendation.db")
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        
+        # Create recommendation cache table
+        cursor.execute('''
+        CREATE TABLE IF NOT EXISTS recommendation_cache (
+            cache_key TEXT PRIMARY KEY,
+            recommendations TEXT NOT NULL,
+            created_at TEXT NOT NULL
+        )
+        ''')
+        
+        conn.commit()
+        conn.close()
+        logger.info("Database schema setup complete")
+    except Exception as e:
+        logger.error(f"Error setting up database: {e}")
+
+def clean_recommendation_cache():
+    """Clean old entries from recommendation cache."""
+    try:
+        db_path = os.path.join(script_dir, "data/processed/recommendation.db")
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        
+        # Delete cache entries older than 24 hours
+        current_time = datetime.datetime.now().isoformat()
+        cursor.execute(
+            "DELETE FROM recommendation_cache WHERE datetime(created_at) < datetime('now', '-1 day')"
+        )
+        
+        conn.commit()
+        conn.close()
+        logger.info("Cleaned recommendation cache")
+    except Exception as e:
+        logger.error(f"Error cleaning recommendation cache: {e}")
+
+def run_api():
+    """Run the API server."""
+    try:
+        # Set up database if needed
+        setup_database()
+        
+        # Clean recommendation cache
+        clean_recommendation_cache()
+        
+        # Import and start the API
+        from src.api.main import start
+        logger.info("Starting API server...")
+        start()
+    except Exception as e:
+        logger.error(f"Error starting API server: {e}")
+        sys.exit(1)
 
 def main():
     """Main function to run the recommendation system."""
@@ -93,7 +150,7 @@ def main():
         train_models()
     
     if args.step in ['all', 'api']:
-        start_api()
+        run_api()
 
 if __name__ == "__main__":
     main() 

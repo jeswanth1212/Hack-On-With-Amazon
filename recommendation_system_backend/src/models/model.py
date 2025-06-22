@@ -10,6 +10,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.linear_model import SGDRegressor
 import sys
 import scipy.sparse as sp
+import random
 
 # Add the project root to the path to import our modules
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
@@ -444,7 +445,7 @@ class RecommendationEngine:
     and contextual adjustments to provide personalized recommendations.
     """
     
-    def __init__(self, cf_weight=0.7, cb_weight=0.3, context_alpha=0.2):
+    def __init__(self, cf_weight=0.6, cb_weight=0.4, context_alpha=0.5):
         """
         Initialize the recommendation engine.
         
@@ -476,6 +477,9 @@ class RecommendationEngine:
         
         # Load pre-trained models if they exist
         self._load_models()
+        
+        # Initialize logger
+        self.logger = logging.getLogger(__name__)
     
     def _load_models(self):
         """Load pre-trained models if they exist."""
@@ -993,77 +997,473 @@ class RecommendationEngine:
         
         return adjusted_recommendations
     
-    def get_recommendations(self, user_id, n=10, context_data=None, exclude_items=None):
+    def _get_content_based_recommendations(self, user_id, n=10, context_data=None, exclude_items=None):
         """
-        Get recommendations for a user.
+        Get content-based recommendations for new or cold-start users.
+        Uses contextual data to personalize results.
         
         Args:
-            user_id (str): User ID
-            n (int): Number of recommendations
-            context_data (dict, optional): Contextual data
-            exclude_items (list, optional): List of item IDs to exclude
+            user_id: User ID
+            n: Number of recommendations
+            context_data: Contextual data
+            exclude_items: Items to exclude
+        
+        Returns:
+            List of (item_id, score) tuples
+        """
+        self.logger.warning(f"User {user_id} not found in training data")
+        
+        if exclude_items is None:
+            exclude_items = []
+            
+        # Get popular items as a fallback
+        popular_items = []
+        
+        try:
+            # Use database to get popular items
+            from src.database.database import get_db_connection
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            
+            # Get items with more than 5 interactions, sorted by popularity
+            cursor.execute('''
+                SELECT item_id, COUNT(*) as interaction_count 
+                FROM interactions 
+                GROUP BY item_id 
+                HAVING COUNT(*) > 5 
+                ORDER BY interaction_count DESC 
+                LIMIT 100
+            ''')
+            
+            items = cursor.fetchall()
+            conn.close()
+            
+            # Convert to item_id list
+            if items:
+                popular_items = [item['item_id'] for item in items]
+        except Exception as e:
+            self.logger.error(f"Error getting popular items: {e}")
+        
+        # If database query didn't work, use item popularity from model
+        if not popular_items and hasattr(self, 'item_popularity'):
+            popular_items = [item_id for item_id, _ in 
+                            sorted(self.item_popularity.items(), key=lambda x: x[1], reverse=True)[:100]]
+        
+        # If still no popular items, use a fallback method
+        if not popular_items:
+            # Create a simple fallback list of recommendations if all else fails
+            if hasattr(self, 'item_ids') and len(self.item_ids) > 0:
+                import random
+                # Use a subset of all known items
+                all_items = list(self.item_ids)
+                random.shuffle(all_items)
+                popular_items = all_items[:min(100, len(all_items))]
+            else:
+                # If we have no items at all, return an empty list
+                self.logger.error("No items available for recommendations")
+                return []
+        
+        # Filter out excluded items
+        popular_items = [item_id for item_id in popular_items if item_id not in exclude_items]
+        
+        # Apply contextual adjustments if available
+        if context_data and popular_items:
+            # Get item metadata
+            item_metadata = {}
+            
+            try:
+                # Get item details from database
+                conn = get_db_connection()
+                cursor = conn.cursor()
+                
+                placeholders = ','.join(['?' for _ in popular_items])
+                cursor.execute(f"SELECT * FROM items WHERE item_id IN ({placeholders})", popular_items)
+                items = cursor.fetchall()
+                conn.close()
+                
+                for item in items:
+                    item_metadata[item['item_id']] = {
+                        'genres': item.get('genres', ''),
+                        'language': item.get('language', ''),
+                        'release_year': item.get('release_year'),
+                    }
+            except Exception as e:
+                self.logger.error(f"Error getting item metadata: {e}")
+            
+            # Score items based on context
+            item_scores = {}
+            
+            for item_id in popular_items:
+                base_score = 0.5  # Start with moderate score
+                
+                # Add random noise to create variation (0.1 range)
+                import random
+                base_score += (random.random() * 0.2) - 0.1
+                
+                # Adjust based on item metadata if available
+                metadata = item_metadata.get(item_id, {})
+                
+                # Mood-based adjustments
+                if context_data.get('mood') and metadata.get('genres'):
+                    genres = str(metadata['genres']).lower()
+                    mood = str(context_data['mood']).lower()
+                    
+                    # Happy/excited: boost comedy, action, adventure
+                    if mood in ['happy', 'excited']:
+                        if any(g in genres for g in ['comedy', 'action', 'adventure', 'animation']):
+                            base_score += 0.15
+                    
+                    # Sad: boost drama, romance
+                    elif mood in ['sad', 'depressed']:
+                        if any(g in genres for g in ['drama', 'romance']):
+                            base_score += 0.15
+                    
+                    # Relaxed: boost documentary, drama
+                    elif mood in ['relaxed', 'calm']:
+                        if any(g in genres for g in ['documentary', 'drama']):
+                            base_score += 0.15
+                
+                # Time-based adjustments
+                if context_data.get('time_of_day') and metadata.get('genres'):
+                    genres = str(metadata['genres']).lower()
+                    time = str(context_data['time_of_day']).lower()
+                    
+                    # Evening/night: boost thriller, horror
+                    if time in ['evening', 'night']:
+                        if any(g in genres for g in ['thriller', 'horror', 'mystery']):
+                            base_score += 0.1
+                    
+                    # Morning: boost comedy, animation
+                    elif time in ['morning']:
+                        if any(g in genres for g in ['comedy', 'animation', 'family']):
+                            base_score += 0.1
+                
+                # Language preference adjustments
+                if context_data.get('language') and metadata.get('language'):
+                    if context_data['language'] == metadata.get('language'):
+                        base_score += 0.2
+                
+                item_scores[item_id] = base_score
+            
+            # Convert to list, sort by score
+            recommendations = [(item_id, score) for item_id, score in item_scores.items()]
+            recommendations.sort(key=lambda x: x[1], reverse=True)
+            
+            # Add randomness for cold-start users to ensure diversity
+            import random
+            if len(recommendations) > n*2:
+                # Take top 30% deterministically
+                top_items = recommendations[:int(n*0.3)]
+                # Randomly select from the rest
+                remaining = recommendations[int(n*0.3):n*3]
+                random.shuffle(remaining)
+                random_items = remaining[:n-len(top_items)]
+                recommendations = top_items + random_items
+                recommendations.sort(key=lambda x: x[1], reverse=True)
+            
+            return recommendations[:n]
+        
+        # If no context or metadata, return random selection of popular items
+        import random
+        random.shuffle(popular_items)
+        return [(item_id, 0.5) for item_id in popular_items[:n]]
+
+    def _apply_contextual_adjustments(self, scores, context_data):
+        """
+        Apply contextual adjustments to recommendation scores.
+        
+        Args:
+            scores: Dictionary of item_id -> score
+            context_data: Contextual data
             
         Returns:
-            list: List of (item_id, score) tuples
+            Updated scores dictionary
         """
-        logger.info(f"Getting recommendations for user {user_id}")
+        if not context_data:
+            return scores
+            
+        # Create a copy to avoid modifying the original
+        adjusted_scores = scores.copy()
         
-        # Initialize exclude_items if None
+        try:
+            # Load item metadata if available
+            item_metadata = {}
+            item_ids = list(scores.keys())
+            
+            if not item_ids:
+                return scores
+                
+            try:
+                # Get item details from database
+                from src.database.database import get_db_connection
+                conn = get_db_connection()
+                cursor = conn.cursor()
+                
+                # Get metadata for all items in batches
+                batch_size = 100
+                all_items = []
+                
+                for i in range(0, len(item_ids), batch_size):
+                    batch_ids = item_ids[i:i+batch_size]
+                    placeholders = ','.join(['?' for _ in batch_ids])
+                    cursor.execute(f"SELECT * FROM items WHERE item_id IN ({placeholders})", batch_ids)
+                    batch_items = cursor.fetchall()
+                    all_items.extend(batch_items)
+                
+                conn.close()
+                
+                for item in all_items:
+                    item_metadata[item['item_id']] = {
+                        'genres': item.get('genres', ''),
+                        'language': item.get('language', ''),
+                        'release_year': item.get('release_year'),
+                    }
+            except Exception as e:
+                if hasattr(self, 'logger'):
+                    self.logger.error(f"Error getting item metadata for contextual adjustment: {e}")
+                else:
+                    logging.error(f"Error getting item metadata for contextual adjustment: {e}")
+            
+            # Apply adjustments based on available context
+            for item_id, score in adjusted_scores.items():
+                metadata = item_metadata.get(item_id, {})
+                adjustment = 0.0
+                
+                # Mood-based adjustments
+                if context_data.get('mood') and metadata.get('genres'):
+                    genres = str(metadata.get('genres', '')).lower()
+                    mood = str(context_data['mood']).lower()
+                    
+                    # Define genre preferences for each mood
+                    mood_genre_map = {
+                        'happy': ['comedy', 'animation', 'adventure', 'family'],
+                        'sad': ['drama', 'romance'],
+                        'excited': ['action', 'adventure', 'sci-fi'],
+                        'relaxed': ['documentary', 'drama', 'family'],
+                        'bored': ['thriller', 'mystery', 'action'],
+                        'stressed': ['comedy', 'animation', 'family'],
+                        'curious': ['documentary', 'mystery', 'sci-fi'],
+                        'neutral': [],  # No specific preference
+                    }
+                    
+                    # Check if any preferred genres match
+                    preferred_genres = mood_genre_map.get(mood, [])
+                    for genre in preferred_genres:
+                        if genre in genres:
+                            adjustment += 0.08  # Cumulative adjustment for multiple matches
+                            break
+                
+                # Time-based adjustments
+                if context_data.get('time_of_day') and metadata.get('genres'):
+                    genres = str(metadata.get('genres', '')).lower()
+                    time = str(context_data['time_of_day']).lower()
+                    
+                    # Define genre preferences for each time
+                    time_genre_map = {
+                        'morning': ['comedy', 'animation', 'family', 'documentary'],
+                        'afternoon': ['action', 'adventure', 'comedy'],
+                        'evening': ['drama', 'thriller', 'romance'],
+                        'night': ['horror', 'thriller', 'mystery', 'sci-fi'],
+                    }
+                    
+                    # Check if any preferred genres match
+                    preferred_genres = time_genre_map.get(time, [])
+                    for genre in preferred_genres:
+                        if genre in genres:
+                            adjustment += 0.06
+                            break
+                
+                # Weather-based adjustments
+                if context_data.get('weather') and metadata.get('genres'):
+                    genres = str(metadata.get('genres', '')).lower()
+                    weather = str(context_data['weather']).lower()
+                    
+                    # Define genre preferences for each weather
+                    weather_genre_map = {
+                        'sunny': ['comedy', 'adventure', 'action'],
+                        'rainy': ['drama', 'thriller', 'romance'],
+                        'cloudy': ['drama', 'mystery', 'thriller'],
+                        'snowy': ['family', 'drama', 'romance'],
+                        'stormy': ['horror', 'thriller', 'mystery'],
+                        'windy': ['action', 'adventure', 'comedy'],
+                        'foggy': ['horror', 'mystery', 'thriller'],
+                        'clear': ['sci-fi', 'adventure', 'action'],
+                    }
+                    
+                    # Check if any preferred genres match
+                    preferred_genres = weather_genre_map.get(weather, [])
+                    for genre in preferred_genres:
+                        if genre in genres:
+                            adjustment += 0.05
+                            break
+                
+                # Language preference adjustments - increased weight
+                if context_data.get('language') and metadata.get('language'):
+                    if context_data['language'] == metadata.get('language'):
+                        adjustment += 0.35  # Significantly increased from 0.15
+                    
+                # Age-based adjustments - strengthen them
+                if context_data.get('age') and metadata.get('genres'):
+                    genres = str(metadata.get('genres', '')).lower()
+                    age = context_data.get('age')
+                    
+                    if age is not None:
+                        if age < 13:  # Kids
+                            if any(g in genres for g in ['family', 'animation', 'children']):
+                                adjustment += 0.3
+                            if any(g in genres for g in ['horror', 'thriller', 'violent']):
+                                adjustment -= 0.4  # Stronger negative adjustment
+                        elif age < 18:  # Teens
+                            if any(g in genres for g in ['adventure', 'sci-fi']):
+                                adjustment += 0.25
+                        elif age < 30:  # Young adults
+                            if any(g in genres for g in ['action', 'comedy']):
+                                adjustment += 0.2
+                        elif age < 50:  # Adults
+                            if any(g in genres for g in ['drama', 'thriller']):
+                                adjustment += 0.2
+                        else:  # Seniors
+                            if any(g in genres for g in ['documentary', 'drama', 'history']):
+                                adjustment += 0.25
+                
+                # Location-based adjustments
+                if context_data.get('location') and metadata.get('genres'):
+                    genres = str(metadata.get('genres', '')).lower()
+                    location = str(context_data.get('location', '')).lower()
+                    
+                    # Different content for different locations
+                    if 'india' in location:
+                        if 'bollywood' in genres:
+                            adjustment += 0.3
+                    elif 'japan' in location:
+                        if any(g in genres for g in ['anime', 'japanese']):
+                            adjustment += 0.3
+                    elif 'korea' in location:
+                        if 'korean' in genres:
+                            adjustment += 0.3
+                            
+                # Check for user's preferred genres
+                if context_data.get('preferred_genres') and metadata.get('genres'):
+                    genres = str(metadata.get('genres', '')).lower()
+                    preferred_genres = context_data.get('preferred_genres', [])
+                    
+                    for genre in preferred_genres:
+                        if genre.lower() in genres:
+                            adjustment += 0.25
+                            break
+                
+                # Apply the total adjustment
+                adjusted_scores[item_id] = min(1.0, max(0.1, score + adjustment))
+            
+            # Add small random variations to create diversity between users
+            import random
+            for item_id in adjusted_scores:
+                random_factor = (random.random() * 0.1) - 0.05  # -0.05 to +0.05
+                adjusted_scores[item_id] = min(1.0, max(0.1, adjusted_scores[item_id] + random_factor))
+            
+            return adjusted_scores
+            
+        except Exception as e:
+            if hasattr(self, 'logger'):
+                self.logger.error(f"Error applying contextual adjustments: {e}")
+            else:
+                logging.error(f"Error applying contextual adjustments: {e}")
+            return scores  # Return original scores on error
+    
+    def get_recommendations(self, user_id, n=10, context_data=None, exclude_items=None):
+        """
+        Get personalized recommendations for a user with optional context.
+        
+        Args:
+            user_id: User ID
+            n: Number of recommendations to return
+            context_data: Contextual data (mood, time, etc.)
+            exclude_items: Items to exclude
+            
+        Returns:
+            List of (item_id, score) tuples
+        """
+        # Log request
+        self.logger.info(f"Getting recommendations for user {user_id}")
+        
         if exclude_items is None:
             exclude_items = []
         
-        # Get the user's interaction history to exclude watched items
+        # Get user index
         user_idx = self.user_id_to_idx.get(user_id)
-        if user_idx is not None and self.user_item_matrix is not None:
-            user_items = self.user_item_matrix[user_idx]
-            interacted_indices = np.where(user_items > 0)[0]
+        
+        # If user not found, use content-based recommendations
+        if user_idx is None:
+            self.logger.warning(f"User {user_id} not found in training data")
+            return self._get_content_based_recommendations(user_id, n, context_data, exclude_items)
+        
+        try:
+            # Get basic user preferences - recent items, interactions, etc.
+            user_vectors = self._get_user_vectors(user_idx, user_id)
             
-            # Add all interacted items to exclude_items
-            for idx in interacted_indices:
-                if idx < len(self.item_ids):
-                    item_id = self.item_ids[idx]
-                    if item_id not in exclude_items:
-                        exclude_items.append(item_id)
-        
-        # Get collaborative filtering recommendations
-        cf_recs = self._get_cf_recommendations(user_id, n=n*2, exclude_items=exclude_items)
-        
-        # Get content-based recommendations
-        cb_recs = self._get_cb_recommendations(user_id, n=n*2, exclude_items=exclude_items)
-        
-        # Combine CF and CB scores
-        item_scores = {}
-        
-        for item_id, score in cf_recs:
-            item_scores[item_id] = self.cf_weight * score
-        
-        for item_id, score in cb_recs:
-            if item_id in item_scores:
-                item_scores[item_id] += self.cb_weight * score
+            # Add randomness to user vectors to ensure variation between different recommendation calls
+            import numpy as np
+            import random
+            
+            # Apply small noise to the user vector (0.05 standard deviation)
+            if hasattr(user_vectors, 'toarray'):
+                user_vector_array = user_vectors.toarray()
+                random_noise = np.random.normal(0, 0.05, user_vector_array.shape)
+                user_vector_array = user_vector_array + random_noise
+                user_vectors = np.array(user_vector_array)
+            elif isinstance(user_vectors, np.ndarray):
+                # If it's already a NumPy array, add noise directly
+                random_noise = np.random.normal(0, 0.05, user_vectors.shape)
+                user_vectors = user_vectors + random_noise
+            
+            # Calculate similarity scores
+            scores = {}
+            
+            # Get predicted scores from matrix factorization (SVD)
+            if hasattr(self, 'svd_user_factors') and hasattr(self, 'svd_item_factors') and self.svd_user_factors is not None and self.svd_item_factors is not None:
+                preds = self._get_mf_predictions(user_idx)
+                for item_id, score in preds:
+                    if exclude_items and item_id in exclude_items:
+                        continue
+                    scores[item_id] = score
             else:
-                item_scores[item_id] = self.cb_weight * score
-        
-        # Convert to list of (item_id, score) tuples
-        recommendations = [(item_id, score) for item_id, score in item_scores.items()]
-        
-        # Sort by score and take the top N
-        recommendations.sort(key=lambda x: x[1], reverse=True)
-        recommendations = recommendations[:n*2]  # Get more to allow for filtering
-        
-        # Apply contextual adjustment if context data is provided
-        if context_data:
-            recommendations = self._apply_context_adjustment(recommendations, context_data)
+                # Fallback if MF model not available
+                self.logger.warning("Matrix factorization models not available, using fallback")
+                # Fall back to content-based recommendations
+                return self._get_content_based_recommendations(user_id, n, context_data, exclude_items)
             
-            # Log the context for debugging
-            logger.info(f"Applied contextual adjustment with: mood={context_data.get('mood')}, " +
-                       f"time={context_data.get('time_of_day')}, day={context_data.get('day_of_week')}, " +
-                       f"weather={context_data.get('weather')}, age={context_data.get('age')}")
-        
-        # Double check to make sure no watched items are in recommendations
-        recommendations = [(item_id, score) for item_id, score in recommendations if item_id not in exclude_items]
-        
-        # Take the top N recommendations
-        return recommendations[:n]
+            # Apply contextual adjustments
+            if context_data:
+                scores = self._apply_contextual_adjustments(scores, context_data)
+            
+            # Sort by score and return top n
+            sorted_scores = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+            
+            # Add randomness to ensure different results each time
+            # Take more candidates than needed and randomly select from them
+            top_candidates = sorted_scores[:min(n*3, len(sorted_scores))]
+            
+            if len(top_candidates) > n:
+                # Select top n/3 items deterministically
+                top_n_fixed = top_candidates[:n//3]
+                
+                # Select the rest randomly from remaining candidates
+                remaining = top_candidates[n//3:]
+                random.shuffle(remaining)
+                random_selection = remaining[:n - len(top_n_fixed)]
+                
+                # Combine and sort again
+                final_selection = top_n_fixed + random_selection
+                final_selection.sort(key=lambda x: x[1], reverse=True)
+                
+                return final_selection
+            
+            return top_candidates[:n]
+            
+        except Exception as e:
+            self.logger.error(f"Error getting recommendations: {e}")
+            self.logger.warning(f"Falling back to content-based recommendations for user {user_id}")
+            return self._get_content_based_recommendations(user_id, n, context_data, exclude_items)
     
     def record_interaction(self, user_id, item_id, sentiment_score, context_data=None):
         """
@@ -1174,3 +1574,84 @@ class RecommendationEngine:
         except Exception as e:
             logger.error(f"Error in load_models: {e}")
             return False
+
+    def _get_user_vectors(self, user_idx, user_id):
+        """
+        Get user vectors for recommendations.
+        
+        Args:
+            user_idx: User index
+            user_id: User ID
+            
+        Returns:
+            User vector for recommendations
+        """
+        try:
+            # Get user interactions
+            if self.user_item_matrix is not None and user_idx < self.user_item_matrix.shape[0]:
+                user_vector = self.user_item_matrix[user_idx]
+                return user_vector
+            
+            # Fallback to user factors if available
+            if hasattr(self, 'svd_user_factors') and self.svd_user_factors is not None:
+                if user_idx < len(self.svd_user_factors) and len(self.svd_user_factors) > 0:
+                    return self.svd_user_factors[user_idx]
+            
+            # If no user vector available, return empty
+            return np.zeros(self.item_content_matrix.shape[1]) if self.item_content_matrix is not None else None
+            
+        except Exception as e:
+            self.logger.error(f"Error getting user vectors: {e}")
+            return None
+
+    def _get_mf_predictions(self, user_idx):
+        """
+        Get predictions using matrix factorization (SVD).
+        
+        Args:
+            user_idx: User index
+            
+        Returns:
+            List of (item_id, score) tuples
+        """
+        try:
+            import numpy as np
+            
+            if not hasattr(self, 'svd_user_factors') or not hasattr(self, 'svd_item_factors'):
+                self.logger.warning("Matrix factorization models not available")
+                return []
+                
+            if self.svd_user_factors is None or self.svd_item_factors is None:
+                self.logger.warning("Matrix factorization factors are None")
+                return []
+                
+            if user_idx >= len(self.svd_user_factors):
+                self.logger.warning(f"User index {user_idx} out of bounds for SVD model")
+                return []
+            
+            # Get user factors
+            user_factors = self.svd_user_factors[user_idx]
+            
+            # Calculate predictions
+            predictions = []
+            
+            # For each item, calculate the predicted rating
+            for item_idx in range(len(self.svd_item_factors)):
+                item_factors = self.svd_item_factors[item_idx]
+                
+                # Calculate predicted rating
+                predicted_rating = np.dot(user_factors, item_factors)
+                
+                # Map item index back to item ID
+                if item_idx in self.idx_to_item_id:
+                    item_id = self.idx_to_item_id[item_idx]
+                    predictions.append((item_id, float(predicted_rating)))
+            
+            # Sort by predicted rating (descending)
+            predictions.sort(key=lambda x: x[1], reverse=True)
+            
+            return predictions
+            
+        except Exception as e:
+            self.logger.error(f"Error in _get_mf_predictions: {e}")
+            return []

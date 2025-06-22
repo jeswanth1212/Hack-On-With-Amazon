@@ -12,6 +12,8 @@ from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 from pathlib import Path
 import traceback
+import json
+import random
 
 # Add the project root to the path to import our modules
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
@@ -19,7 +21,9 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 from src.models.model import RecommendationEngine
 from src.database.database import (
     init_db, setup_database, add_user, add_interaction, get_user_interactions, 
-    get_db_connection, get_item_details, get_all_users, get_all_items, get_all_interactions
+    get_db_connection, get_item_details, get_all_users, get_all_items, get_all_interactions,
+    search_users, send_friend_request, respond_to_friend_request, 
+    get_pending_friend_requests, get_friends, get_friend_activities
 )
 from src.utils.context_utils import (
     get_current_time_of_day, get_current_day_of_week,
@@ -59,8 +63,8 @@ app.add_middleware(
 # Create a queue for processing interactions
 interaction_queue = Queue()
 
-# Initialize recommendation engine
-engine = RecommendationEngine()
+# Initialize recommendation engine with strengthened contextual factor weights
+engine = RecommendationEngine(cf_weight=0.6, cb_weight=0.4, context_alpha=0.5)
 
 # Pydantic models for API
 class InteractionCreate(BaseModel):
@@ -118,6 +122,52 @@ class UserProfileResponse(BaseModel):
     location: Optional[str] = None
     language_preference: Optional[str] = None
     preferred_genres: Optional[List[str]] = None
+
+# Friend system models
+class FriendRequest(BaseModel):
+    sender_id: str
+    receiver_id: str
+
+class FriendRequestResponse(BaseModel):
+    request_id: int
+    sender_id: str
+    receiver_id: str
+    status: str
+    created_at: str
+    updated_at: Optional[str] = None
+    # Additional sender info
+    age: Optional[int] = None
+    location: Optional[str] = None
+    language_preference: Optional[str] = None
+
+class FriendResponse(BaseModel):
+    user_id: str
+    age: Optional[int] = None
+    age_group: Optional[str] = None
+    location: Optional[str] = None
+    language_preference: Optional[str] = None
+    preferred_genres: Optional[List[str]] = None
+    friendship_date: str
+
+class FriendActivityResponse(BaseModel):
+    friend_id: str
+    item_id: str
+    title: str
+    timestamp: str
+    genres: Optional[str] = None
+    release_year: Optional[int] = None
+    sentiment_score: Optional[float] = None
+
+class NotificationCountResponse(BaseModel):
+    friend_requests: int
+    friend_activities: int
+    total: int
+
+class SearchUserRequest(BaseModel):
+    query: str
+
+class FriendRequestAction(BaseModel):
+    status: str
 
 # Background thread for processing interactions
 def process_interactions():
@@ -257,182 +307,211 @@ async def get_recommendations(
     user_id: str = Query(..., description="User ID"),
     n: int = Query(10, ge=1, le=50, description="Number of recommendations"),
     context: ContextData = Depends(get_context_data),
-    include_local_language: bool = Query(True, description="Whether to include local language recommendations")
+    include_local_language: bool = Query(True, description="Whether to include local language recommendations"),
+    language_weight: float = Query(0.95, ge=0.0, le=1.0, description="Weight for language preference"),
+    ensure_language_diversity: bool = Query(True, description="Whether to ensure language diversity"),
+    preferred_languages: str = Query(None, description="Comma-separated list of preferred languages"),
+    _uuid: str = Query(None, description="Unique request identifier for cache busting"),
+    _t: int = Query(None, description="Timestamp for cache busting")
 ):
     """
-    Get recommendations for a user.
+    Get personalized recommendations for a user.
     
     Args:
-        user_id (str): User ID
-        n (int): Number of recommendations
-        context (ContextData): Contextual data
-        include_local_language (bool): Whether to include local language recommendations
+        user_id: User ID
+        n: Number of recommendations
+        context: Contextual data
+        include_local_language: Whether to include local language recommendations
+        language_weight: Weight for language preference (0-1)
+        ensure_language_diversity: Whether to ensure language diversity
+        preferred_languages: Comma-separated list of preferred languages
+        _uuid: Cache-busting unique ID (ignored in processing)
+        _t: Cache-busting timestamp (ignored in processing)
         
     Returns:
         List[RecommendationResponse]: List of recommendations
     """
-    # Check if engine is loaded
-    if engine is None:
-        raise HTTPException(status_code=503, detail="Recommendation engine not loaded")
-    
-    # Get user profile data including preferred genres
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM UserProfiles WHERE user_id = ?', (user_id,))
-    user_profile = cursor.fetchone()
-    conn.close()
-    
-    # Initialise variable to avoid UnboundLocalError later
-    preferred_genres = None
-    
-    # If user profile exists, add data to context
-    if user_profile:
-        # Handle context as either dict or object
-        if isinstance(context, dict):
-            if user_profile['age'] and not context.get('age'):
-                context['age'] = user_profile['age']
-                
-            if user_profile['language_preference'] and not context.get('language'):
-                context['language'] = user_profile['language_preference']
-                
-            if user_profile['location'] and not context.get('location'):
-                context['location'] = user_profile['location']
-        else:
-            if user_profile['age'] and not context.age:
-                context.age = user_profile['age']
-                
-            if user_profile['language_preference'] and not context.language:
-                context.language = user_profile['language_preference']
-                
-            if user_profile['location'] and not context.location:
-                context.location = user_profile['location']
-            
-            # Get preferred genres if available
-            preferred_genres = None
-            if user_profile['preferred_genres']:
-                # Convert from pipe-separated string to list
-                preferred_genres = user_profile['preferred_genres'].split('|')
-                logger.info(f"Using user's preferred genres: {preferred_genres}")
-    
-    # Get base recommendations
-    recommendations = engine.get_recommendations(
-        user_id=user_id,
-        n=n,
-        context_data=context,
-        exclude_items=None
-    )
-    
-    # Prepare response
-    response = []
-    
-    # Map to store item IDs that have been included in response
-    included_item_ids = set()
-    
-    # Process standard recommendations
-    for item_id, score in recommendations:
-        # Get item details
-        item_details = get_item_details(item_id)
+    try:
+        # Completely disable caching - always generate fresh recommendations
         
-        if item_details:
-            # Boost score for items matching user's preferred genres
-            boost_factor = 1.0
-            if preferred_genres and item_details.get("genres"):
-                item_genres = item_details["genres"].lower().split("|")
-                matches = [g for g in preferred_genres if g.lower() in item_genres or 
-                          any(g.lower() in genre.lower() for genre in item_genres)]
-                if matches:
-                    # Add a boost based on number of matching genres
-                    boost_factor = 1.0 + (0.1 * len(matches))
-                    logger.info(f"Boosting item {item_id} by factor {boost_factor} due to genre match")
-            
-            response.append(
-                RecommendationResponse(
-                    item_id=item_id,
-                    title=item_details["title"],
-                    score=float(score * boost_factor),
-                    genres=item_details.get("genres"),
-                    release_year=item_details.get("release_year"),
-                    overview=item_details.get("overview")
-                )
-            )
-            included_item_ids.add(item_id)
-    
-    # If we should include local language recommendations and location is provided
-    # Check if context is a dict or a Pydantic model
-    context_location = context.get('location') if isinstance(context, dict) else context.location
-    
-    if include_local_language and context_location:
-        # Determine language based on location (simplified mapping)
-        local_language = None
-        
-        # Map some Indian cities to languages
-        location = context_location.lower() if context_location else ""
-        
-        if any(city in location for city in ["mumbai", "pune"]):
-            local_language = "hi"  # Hindi (could also be Marathi)
-        elif any(city in location for city in ["delhi", "lucknow", "jaipur"]):
-            local_language = "hi"  # Hindi
-        elif any(city in location for city in ["chennai", "coimbatore"]):
-            local_language = "ta"  # Tamil
-        elif any(city in location for city in ["hyderabad"]):
-            local_language = "te"  # Telugu
-        elif any(city in location for city in ["bangalore", "bengaluru"]):
-            local_language = "kn"  # Kannada
-        elif any(city in location for city in ["kochi", "thiruvananthapuram", "kerala"]):
-            local_language = "ml"  # Malayalam
-        elif any(city in location for city in ["kolkata", "patna"]):
-            local_language = "bn"  # Bengali
-        elif any(city in location for city in ["ahmedabad", "surat"]):
-            local_language = "gu"  # Gujarati
-        
-        # If language determined or explicitly provided in context, find local language movies
-        context_language = context.get('language') if isinstance(context, dict) else context.language
-        target_language = context_language or local_language
-        
-        if target_language:
-            # Get local language movies (5 movies)
+        # Get user profile
+        user_profile = None
+        try:
             conn = get_db_connection()
             cursor = conn.cursor()
+            cursor.execute("SELECT * FROM UserProfiles WHERE user_id = ?", (user_id,))
+            user_row = cursor.fetchone()
+            if user_row:
+                user_profile = dict(user_row)
+        except Exception as e:
+            logger.warning(f"Error fetching user profile: {e}")
+        
+        # Parse preferred languages if provided
+        language_prefs = []
+        if preferred_languages:
+            language_prefs = preferred_languages.split(',')
+        elif user_profile and user_profile.get('language_preference'):
+            language_prefs = [user_profile.get('language_preference')]
             
-            # Get popular movies in target language that user hasn't seen
-            cursor.execute('''
-            SELECT i.* FROM Items i
-            WHERE i.language = ? AND i.item_id NOT IN (
-                SELECT item_id FROM Interactions WHERE user_id = ?
-            )
-            ORDER BY i.popularity DESC, i.vote_average DESC
-            LIMIT 5
-            ''', (target_language, user_id))
+        # Improve the contextual data with weather location correlations
+        if context.get('location') and not context.get('weather'):
+            # Randomize weather to add variety to recommendations
+            context['weather'] = simulate_weather(context['location'])
             
-            local_movies = cursor.fetchall()
-            conn.close()
+        # If mood is not provided, randomize it for diversity
+        if not context.get('mood'):
+            context['mood'] = simulate_mood()
             
-            # Add these movies to the recommendations with a boosted score
-            for movie in local_movies:
-                item_id = movie['item_id']
+        # Build full context dictionary with user profile data
+        context_dict = {
+            "mood": context.get('mood'),
+            "time_of_day": context.get('time_of_day'),
+            "day_of_week": context.get('day_of_week'),
+            "weather": context.get('weather'),
+            "age": context.get('age') or (user_profile.get('age') if user_profile else None),
+            "location": context.get('location') or (user_profile.get('location') if user_profile else None),
+            "language": context.get('language') or (user_profile.get('language_preference') if user_profile else None)
+        }
+        
+        # Add user's preferred genres from profile if available
+        if user_profile and user_profile.get('preferred_genres'):
+            preferred_genres = user_profile.get('preferred_genres')
+            if isinstance(preferred_genres, str) and '|' in preferred_genres:
+                context_dict["preferred_genres"] = preferred_genres.split('|')
+            else:
+                context_dict["preferred_genres"] = [preferred_genres]
+        
+        logger.info(f"Getting fresh recommendations for user {user_id} with context: {context_dict}")
+        
+        # Get recommendations from recommendation engine
+        recommendations = engine.get_recommendations(
+            user_id=user_id,
+            n=n * 2,  # Get more recommendations than needed to ensure diversity
+            context_data=context_dict,
+            exclude_items=None
+        )
+        
+        # Apply language filtering if requested
+        filtered_recs = recommendations
+        if include_local_language and (context.get('language') or language_prefs):
+            # Sort recommendations by language preference
+            item_language_map = {}
+            language_matches = []
+            language_mismatches = []
+            
+            # Get language information for items
+            try:
+                # Get all item_ids
+                item_ids = [item_id for item_id, _ in recommendations]
+                if item_ids:
+                    # Fetch item details for all items in recommendations
+                    conn = get_db_connection()
+                    cursor = conn.cursor()
+                    
+                    # Get details in batches
+                    batch_size = 50
+                    for i in range(0, len(item_ids), batch_size):
+                        batch = item_ids[i:i+batch_size]
+                        placeholders = ','.join(['?' for _ in batch])
+                        cursor.execute(f"SELECT item_id, language FROM Items WHERE item_id IN ({placeholders})", batch)
+                        for row in cursor.fetchall():
+                            item_language_map[row['item_id']] = row['language']
+                    conn.close()
+            except Exception as e:
+                logger.error(f"Error fetching language information: {e}")
+            
+            # Determine user's preferred languages
+            user_languages = set(language_prefs) if language_prefs else set()
+            if context.get('language'):
+                user_languages.add(context.get('language'))
+            
+            # Sort recommendations into matches and mismatches
+            for item_id, score in recommendations:
+                if item_id in item_language_map:
+                    item_lang = item_language_map[item_id]
+                    if item_lang and item_lang in user_languages:
+                        # Boost score for language match
+                        boosted_score = min(1.0, score * language_weight)
+                        language_matches.append((item_id, boosted_score))
+                    else:
+                        language_mismatches.append((item_id, score))
+                else:
+                    language_mismatches.append((item_id, score))
+            
+            # Ensure language diversity if requested
+            if ensure_language_diversity:
+                # Take more matches first, then add mismatches if needed
+                filtered_recs = language_matches + language_mismatches
+            else:
+                # Prioritize language matches completely
+                filtered_recs = language_matches
                 
-                # Skip if already included
-                if item_id in included_item_ids:
-                    continue
-                
-                # Add to response with a somewhat high score
-                response.append(
-                    RecommendationResponse(
-                        item_id=item_id,
-                        title=movie["title"],
-                        score=0.85,  # Give local language movies a high score
-                        genres=movie.get("genres"),
-                        release_year=movie.get("release_year"),
-                        overview=movie.get("overview")
-                    )
-                )
-                included_item_ids.add(item_id)
-    
-    # Sort by score (highest first)
-    response.sort(key=lambda x: x.score, reverse=True)
-    
-    # Limit to requested number
-    return response[:n]
+                # Only add mismatches if we don't have enough matches
+                if len(language_matches) < n:
+                    filtered_recs.extend(language_mismatches)
+            
+        # Get item details for recommendations and add some randomness
+        recommendation_objects = []
+        seen_genres = set()
+        
+        # Add some randomization to the recommendation order to ensure variety
+        random.shuffle(filtered_recs)
+        
+        # Process recommendations
+        for item_id, score in filtered_recs:
+            try:
+                item_details = get_item_details(item_id)
+                if item_details:
+                    # Add small random factor to scores for variety
+                    adjusted_score = min(1.0, max(0.0, score * (0.9 + random.random() * 0.2)))
+                    
+                    # Try to diversify by genre while respecting user preferences
+                    genres = item_details.get("genres", "")
+                    if genres:
+                        # Extract all genres for this item
+                        all_genres = genres.split("|") if "|" in genres else [genres]
+                        main_genre = all_genres[0] if all_genres else ""
+                        
+                        # Check if this is a preferred genre for the user
+                        is_preferred = False
+                        if user_profile and user_profile.get('preferred_genres'):
+                            user_prefs = user_profile.get('preferred_genres')
+                            if isinstance(user_prefs, str):
+                                user_prefs = user_prefs.split('|')
+                            
+                            # Check if any of the item's genres match user preferences
+                            is_preferred = any(genre in user_prefs for genre in all_genres)
+                        
+                        # Skip only if we've seen this genre before AND it's not preferred AND random check passes
+                        if main_genre in seen_genres and not is_preferred and random.random() < 0.4:
+                            continue
+                        
+                        # Always add preferred genres to recommendations, but still track them for diversity
+                        seen_genres.add(main_genre)
+                    
+                    recommendation_objects.append({
+                        "item_id": item_id,
+                        "title": item_details.get("title", "Unknown Title"),
+                        "score": float(adjusted_score),
+                        "genres": item_details.get("genres"),
+                        "release_year": item_details.get("release_year"),
+                        "overview": item_details.get("overview")
+                    })
+                    
+                    # Stop once we have enough recommendations
+                    if len(recommendation_objects) >= n:
+                        break
+            except Exception as e:
+                logger.error(f"Error getting item details: {e}")
+        
+        # Sort by score for final order
+        recommendation_objects.sort(key=lambda x: x["score"], reverse=True)
+        
+        # Return only the requested number
+        return recommendation_objects[:n]
+    except Exception as e:
+        logger.error(f"Error in recommendations: {traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail=f"Error generating recommendations: {str(e)}")
 
 @app.get("/user/{user_id}/history", response_model=List[Dict[str, Any]])
 async def get_user_history(
@@ -646,9 +725,280 @@ async def shutdown_event():
         except Exception as e:
             logger.error(f"Error saving recommendation engine models: {e}")
 
+def cache_recommendations(cache_key, recommendations, ttl_seconds=1800):
+    """
+    Cache recommendations in the database.
+    
+    Args:
+        cache_key: Unique key for the cache entry
+        recommendations: List of recommendation objects
+        ttl_seconds: Time-to-live in seconds (default: 30 minutes)
+    """
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # Store recommendations as JSON string
+        recommendations_json = json.dumps(recommendations)
+        created_at = datetime.datetime.now().isoformat()
+        
+        # Insert or replace cache entry
+        cursor.execute(
+            "INSERT OR REPLACE INTO recommendation_cache (cache_key, recommendations, created_at) VALUES (?, ?, ?)",
+            (cache_key, recommendations_json, created_at)
+        )
+        
+        conn.commit()
+        conn.close()
+        logger.info(f"Cached recommendations for key: {cache_key}")
+    except Exception as e:
+        logger.error(f"Failed to cache recommendations: {e}")
+
 def start():
     """Start the API server."""
     uvicorn.run("src.api.main:app", host="0.0.0.0", port=8080, reload=True)
+
+# Friend system endpoints
+@app.post("/friends/search", response_model=List[UserProfileResponse], tags=["Friends"])
+async def search_for_users(search_request: SearchUserRequest, user_id: str = Query(..., description="The current user's ID")):
+    """
+    Search for users by partial username match.
+    
+    Args:
+        search_request: Search query
+        user_id: The current user's ID
+        
+    Returns:
+        List of matching user profiles
+    """
+    results = search_users(search_request.query, user_id)
+    
+    # Process preferred_genres if present
+    for result in results:
+        if result.get("preferred_genres"):
+            result["preferred_genres"] = result["preferred_genres"].split("|") if result["preferred_genres"] else []
+            
+    return results
+
+@app.post("/friends/request", status_code=201, tags=["Friends"])
+async def create_friend_request(request: FriendRequest):
+    """
+    Send a friend request from one user to another.
+    
+    Args:
+        request: Friend request details
+        
+    Returns:
+        Success status
+    """
+    success = send_friend_request(request.sender_id, request.receiver_id)
+    
+    if not success:
+        raise HTTPException(status_code=400, detail="Failed to send friend request")
+        
+    return {"status": "success", "message": "Friend request sent"}
+
+@app.get("/friends/requests/{user_id}", response_model=List[FriendRequestResponse], tags=["Friends"])
+async def get_friend_requests(user_id: str):
+    """
+    Get all pending friend requests for a user.
+    
+    Args:
+        user_id: User ID
+        
+    Returns:
+        List of pending friend requests
+    """
+    requests = get_pending_friend_requests(user_id)
+    return requests
+
+@app.put("/friends/requests/{request_id}", tags=["Friends"])
+async def update_friend_request(request_id: int, action: FriendRequestAction):
+    """
+    Accept or reject a friend request.
+    
+    Args:
+        request_id: Friend request ID
+        action: Action to take ('accepted' or 'rejected')
+        
+    Returns:
+        Success status
+    """
+    success = respond_to_friend_request(request_id, action.status)
+    
+    if not success:
+        raise HTTPException(status_code=400, detail=f"Failed to {action.status} friend request")
+        
+    return {"status": "success", "message": f"Friend request {action.status}"}
+
+@app.get("/friends/{user_id}", response_model=List[FriendResponse], tags=["Friends"])
+async def get_user_friends(user_id: str):
+    """
+    Get all friends of a user.
+    
+    Args:
+        user_id: User ID
+        
+    Returns:
+        List of friend profiles
+    """
+    friends = get_friends(user_id)
+    
+    # Process preferred_genres if present
+    for friend in friends:
+        if friend.get("preferred_genres"):
+            friend["preferred_genres"] = friend["preferred_genres"].split("|") if friend["preferred_genres"] else []
+            
+    return friends
+
+@app.get("/friends/{user_id}/activities", response_model=List[FriendActivityResponse], tags=["Friends"])
+async def get_friend_activity(user_id: str, limit: int = Query(20, ge=1, le=100)):
+    """
+    Get recent activities (interactions) of a user's friends.
+    
+    Args:
+        user_id: User ID
+        limit: Maximum number of activities to return
+        
+    Returns:
+        List of friend activities
+    """
+    activities = get_friend_activities(user_id, limit)
+    return activities
+
+@app.get("/friends/{user_id}/notifications", response_model=NotificationCountResponse, tags=["Friends"])
+async def get_notification_count(
+    user_id: str, 
+    since_timestamp: Optional[str] = Query(None, description="Only count activities after this timestamp")
+):
+    """Get notification counts for friend requests and activities."""
+    try:
+        # Get pending friend requests
+        requests = get_pending_friend_requests(user_id)
+        request_count = len(requests)
+        
+        # Get friend activities
+        activities = get_friend_activities(user_id, 50)  # Get recent activities
+        
+        # Filter activities by timestamp if provided
+        if since_timestamp:
+            try:
+                # Parse the provided timestamp
+                from datetime import datetime
+                since_dt = datetime.fromisoformat(since_timestamp.replace('Z', '+00:00'))
+                
+                # Filter activities that are newer than the provided timestamp
+                activities = [
+                    a for a in activities 
+                    if datetime.fromisoformat(a["timestamp"].replace('Z', '+00:00')) > since_dt
+                ]
+            except (ValueError, AttributeError) as e:
+                logger.error(f"Error parsing timestamp: {e}")
+                # If timestamp format is invalid, return all activities
+                pass
+                
+        activity_count = len(activities)
+        
+        return {
+            "friend_requests": request_count,
+            "friend_activities": activity_count,
+            "total": request_count + activity_count
+        }
+    except Exception as e:
+        logger.error(f"Error getting notification counts: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/friends/recommendations/{user_id}", response_model=List[RecommendationResponse], tags=["Friends"])
+async def get_friend_recommendations(
+    user_id: str, 
+    n: int = Query(5, ge=1, le=20, description="Number of recommendations")
+):
+    """
+    Get recommendations based on what friends are watching.
+    
+    This endpoint returns items that friends have interacted with positively,
+    but the user hasn't watched yet.
+    
+    Args:
+        user_id: User ID
+        n: Number of recommendations to return
+        
+    Returns:
+        List of recommendations from friends
+    """
+    try:
+        # Get friend activities
+        friend_activities = get_friend_activities(user_id, limit=100)
+        
+        # Create a set of items the user has already watched
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('SELECT item_id FROM Interactions WHERE user_id = ?', (user_id,))
+        user_items = {row['item_id'] for row in cursor.fetchall()}
+        conn.close()
+        
+        # Filter for positive interactions (score > 0.6) from friends
+        # that the user hasn't watched yet
+        friend_recommendations = {}
+        
+        for activity in friend_activities:
+            item_id = activity['item_id']
+            
+            # Skip if user already watched this
+            if item_id in user_items:
+                continue
+                
+            # Only consider positive interactions
+            if activity.get('sentiment_score', 0) > 0.6:
+                # If multiple friends watched the same item, increase its score
+                if item_id in friend_recommendations:
+                    friend_recommendations[item_id]['score'] += 0.1
+                    friend_recommendations[item_id]['friends'].append(activity['friend_id'])
+                else:
+                    item_details = get_item_details(item_id)
+                    if item_details:
+                        friend_recommendations[item_id] = {
+                            "item_id": item_id,
+                            "title": item_details.get("title", "Unknown"),
+                            "score": 0.7,  # Base score
+                            "genres": item_details.get("genres"),
+                            "release_year": item_details.get("release_year"),
+                            "overview": item_details.get("overview"),
+                            "friends": [activity['friend_id']]
+                        }
+        
+        # Convert to list and sort by score
+        recommendations = list(friend_recommendations.values())
+        recommendations.sort(key=lambda x: x['score'], reverse=True)
+        
+        # Return top N recommendations
+        result = recommendations[:n]
+        
+        # If we don't have enough recommendations, pad with regular recommendations
+        if len(result) < n and engine is not None:
+            additional_needed = n - len(result)
+            regular_recs = engine.get_recommendations(user_id, n=additional_needed)
+            
+            # Convert to the required format and add to results
+            for item_id, score in regular_recs:
+                if item_id not in friend_recommendations:
+                    item_details = get_item_details(item_id)
+                    if item_details:
+                        result.append({
+                            "item_id": item_id,
+                            "title": item_details.get("title", "Unknown"),
+                            "score": score,
+                            "genres": item_details.get("genres"),
+                            "release_year": item_details.get("release_year"),
+                            "overview": item_details.get("overview")
+                        })
+        
+        # Return the recommendations
+        return result
+        
+    except Exception as e:
+        logger.error(f"Error getting friend recommendations: {e}")
+        raise HTTPException(status_code=500, detail="Error getting friend recommendations")
 
 if __name__ == "__main__":
     start() 

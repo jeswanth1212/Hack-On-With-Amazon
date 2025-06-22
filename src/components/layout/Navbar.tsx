@@ -7,7 +7,7 @@ import SearchOverlay from '@/components/ui/SearchOverlay';
 import LoginDialog from '@/components/ui/LoginDialog';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useAuth } from '@/lib/hooks';
+import { useAuth, useNotifications } from '@/lib/hooks';
 import {
   User,
   Tv2,
@@ -25,6 +25,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 
 interface NavItemProps {
   icon: React.ReactNode;
@@ -32,6 +33,7 @@ interface NavItemProps {
   href?: string;
   onClick?: () => void;
   isActive?: boolean;
+  badge?: number;
 }
 
 interface NavbarProps {
@@ -39,19 +41,26 @@ interface NavbarProps {
   onSearchClose?: () => void;
 }
 
-const NavItem = ({ icon, label, href, onClick, isActive }: NavItemProps) => {
+const NavItem = ({ icon, label, href, onClick, isActive, badge }: NavItemProps) => {
   const [showLabel, setShowLabel] = useState(false);
 
   const content = (
     <div
       className={cn(
-        "nav-item",
+        "nav-item relative",
         isActive && "bg-white/10 rounded-lg"
       )}
       onMouseEnter={() => setShowLabel(true)}
       onMouseLeave={() => setShowLabel(false)}
       onClick={onClick}
     >
+      {badge !== undefined && badge > 0 && (
+        <Badge 
+          className="absolute -top-2 -right-1 bg-primary text-primary-foreground text-xs min-w-5 h-5 flex items-center justify-center rounded-full z-10"
+        >
+          {badge > 99 ? '99+' : badge}
+        </Badge>
+      )}
       <div className={cn(
         "flex items-center px-3 py-2 rounded-lg transition-all duration-300",
         (showLabel || isActive) ? "bg-white/10" : "bg-transparent"
@@ -90,6 +99,7 @@ export default function Navbar({ onSearchOpen, onSearchClose }: NavbarProps = {}
   const [searchOpen, setSearchOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const { user, logout } = useAuth();
+  const { totalCount, markActivityAsRead } = useNotifications();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -104,6 +114,13 @@ export default function Navbar({ onSearchOpen, onSearchClose }: NavbarProps = {}
       window.removeEventListener('scroll', handleScroll);
     };
   }, [scrolled]);
+
+  useEffect(() => {
+    // Mark notifications as read when visiting the friends page
+    if (pathname === '/friends') {
+      markActivityAsRead();
+    }
+  }, [pathname, markActivityAsRead]);
 
   const handleSearchClick = () => {
     setSearchOpen(true);
@@ -180,6 +197,7 @@ export default function Navbar({ onSearchOpen, onSearchClose }: NavbarProps = {}
               label="Friends" 
               href="/friends"
               isActive={pathname === '/friends'}
+              badge={user ? totalCount : undefined}
             />
             <NavItem icon={<Heart size={24} className="text-white" />} label="My List" />
           </div>

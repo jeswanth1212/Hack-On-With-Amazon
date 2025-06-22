@@ -1,131 +1,172 @@
-import { useState } from "react";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+'use client';
+
+import { useState, useEffect } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { ThumbsUp, MessageCircle, Share } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { getFriendActivities, FriendActivity } from '@/lib/utils';
+import { useAuth } from '@/lib/hooks';
 
-export interface Activity {
+interface FormattedActivity {
   id: string;
-  username: string;
-  avatar?: string;
-  content: string; // post content or message
-  timestamp: number; // epoch ms
-  actionLabel?: string;
-  likes?: number;
-  liked?: boolean;
-  comments?: number;
-  shares?: number;
+  friendId: string;
+  itemId: string;
+  title: string;
+  message: string;
+  timestamp: number;
+  friendInitials: string;
 }
 
-interface Props {
-  currentUser: { username: string; avatar?: string };
-  activities: Activity[];
-  onAddPost: (content: string) => void;
+interface ActivityViewProps {
+  currentUser: {
+    username: string;
+    avatar?: string;
+  };
 }
 
-export default function ActivityView({ currentUser, activities, onAddPost }: Props) {
-  const [newPost, setNewPost] = useState("");
+export default function ActivityView({ currentUser }: ActivityViewProps) {
+  const [activities, setActivities] = useState<FormattedActivity[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newPost.trim()) return;
-    onAddPost(newPost.trim());
-    setNewPost("");
+  // Current user ID from auth context
+  const currentUserId = user?.user_id || "guest";
+
+  useEffect(() => {
+    const loadActivities = async () => {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+      
+      try {
+        const friendActivities = await getFriendActivities(currentUserId, 50);
+        
+        // Format the activities for display
+        const formatted = friendActivities.map(activity => {
+          // Create a message based on the activity
+          const sentimentText = getSentimentText(activity.sentiment_score);
+          const message = `watched "${activity.title}" ${sentimentText}`;
+          
+          return {
+            id: `${activity.friend_id}-${activity.item_id}-${activity.timestamp}`,
+            friendId: activity.friend_id,
+            itemId: activity.item_id,
+            title: activity.title,
+            message: message,
+            timestamp: new Date(activity.timestamp).getTime(),
+            friendInitials: activity.friend_id.substring(0, 2).toUpperCase(),
+          };
+        });
+        
+        // Sort by timestamp (newest first)
+        formatted.sort((a, b) => b.timestamp - a.timestamp);
+        
+        setActivities(formatted);
+      } catch (error) {
+        console.error('Error loading friend activities:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadActivities();
+  }, [currentUserId, user]);
+
+  const getSentimentText = (score?: number): string => {
+    if (!score) return '';
+    
+    if (score > 0.8) return 'and absolutely loved it!';
+    if (score > 0.6) return 'and enjoyed it';
+    if (score > 0.4) return '';
+    if (score > 0.2) return 'but was not impressed';
+    return 'and did not like it';
   };
 
-  const relativeTime = (ts: number) => {
-    const diff = Date.now() - ts;
-    const mins = Math.floor(diff / 60000);
-    if (mins < 1) return "just now";
-    if (mins < 60) return `${mins}m ago`;
-    const hrs = Math.floor(mins / 60);
-    if (hrs < 24) return `${hrs}h ago`;
-    const days = Math.floor(hrs / 24);
-    return `${days}d ago`;
+  const formatTimeAgo = (timestamp: number) => {
+    const seconds = Math.floor((Date.now() - timestamp) / 1000);
+    
+    let interval = Math.floor(seconds / 31536000);
+    if (interval > 1) return interval + " years ago";
+    
+    interval = Math.floor(seconds / 2592000);
+    if (interval > 1) return interval + " months ago";
+    
+    interval = Math.floor(seconds / 86400);
+    if (interval > 1) return interval + " days ago";
+    
+    interval = Math.floor(seconds / 3600);
+    if (interval > 1) return interval + " hours ago";
+    
+    interval = Math.floor(seconds / 60);
+    if (interval > 1) return interval + " minutes ago";
+    
+    return Math.floor(seconds) + " seconds ago";
   };
+
+  const handleWatchMovie = (itemId: string) => {
+    // In a real app, this would navigate to the movie page
+    window.location.href = `/movie/${itemId}`;
+  };
+
+  if (!user) {
+    return (
+      <div className="py-12 text-center">
+        <p className="text-muted-foreground">Please log in to see friend activity</p>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="py-12 text-center">
+        <p className="text-muted-foreground">Loading activities...</p>
+      </div>
+    );
+  }
+
+  if (activities.length === 0) {
+    return (
+      <div className="py-12 text-center">
+        <p className="text-muted-foreground">No recent friend activity</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-6">
-      {/* Feed */}
-      {activities.length === 0 ? (
-        <div className="text-center text-gray-400">No recent activity.</div>
-      ) : (
-        <div className="space-y-4">
-          {activities
-            .sort((a, b) => b.timestamp - a.timestamp)
-            .map((act) => {
-              const [liked, setLiked] = useState(act.liked || false);
-              const [likes, setLikes] = useState(act.likes || 0);
-              const comments = act.comments || Math.floor(Math.random()*5);
-              const shares = act.shares || Math.floor(Math.random()*3);
-
-              const toggleLike = () => {
-                if (liked) {
-                  setLikes(likes - 1);
-                } else {
-                  setLikes(likes + 1);
-                }
-                setLiked(!liked);
-              };
-
-              return (
-                <div key={act.id} className="bg-white/5 p-4 rounded-xl space-y-3">
-                  <div className="flex items-center gap-3">
-                    <Avatar className="size-10">
-                      {act.avatar ? (
-                        <AvatarImage src={act.avatar} alt={act.username} />
-                      ) : (
-                        <AvatarFallback>{act.username[0]}</AvatarFallback>
-                      )}
-                    </Avatar>
-                    <div className="flex-1 text-white">
-                      <span className="font-semibold">@{act.username}</span>
-                      <span className="ml-2 text-gray-400 text-xs">{relativeTime(act.timestamp)}</span>
-                    </div>
+    <div className="py-6">
+      <h2 className="text-2xl font-bold mb-6">Friend Activity</h2>
+      <div className="space-y-4">
+        {activities.map((activity) => (
+          <Card key={activity.id} className="bg-gray-950/60">
+            <CardContent className="p-6">
+              <div className="flex gap-4">
+                <Avatar className="h-12 w-12">
+                  <AvatarFallback className="bg-primary/20">{activity.friendInitials}</AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <div className="flex justify-between items-start">
+                    <p className="font-medium">
+                      <span className="text-primary">{activity.friendId}</span> {activity.message}
+                    </p>
+                    <Badge variant="outline" className="text-xs">
+                      {formatTimeAgo(activity.timestamp)}
+                    </Badge>
                   </div>
-                  <div className="text-white whitespace-pre-wrap">{act.content}</div>
-
-                  {/* Actions */}
-                  <div className="flex gap-8 pt-2 text-gray-400 text-sm">
-                    <button className="flex items-center gap-1 hover:text-primary" onClick={toggleLike} type="button">
-                      <ThumbsUp size={16} className={liked ? 'fill-primary text-primary' : ''} /> {likes}
-                    </button>
-                    <button className="flex items-center gap-1 hover:text-secondary" type="button">
-                      <MessageCircle size={16} /> {comments}
-                    </button>
-                    <button className="flex items-center gap-1 hover:text-secondary" type="button">
-                      <Share size={16} /> {shares}
-                    </button>
+                  
+                  <div className="mt-4 flex justify-end">
+                    <Button size="sm" onClick={() => handleWatchMovie(activity.itemId)}>
+                      Watch This
+                    </Button>
                   </div>
                 </div>
-              );
-            })}
-        </div>
-      )}
-
-      {/* Composer sticky at bottom */}
-      <form onSubmit={handleSubmit} className="bg-white/5 backdrop-blur sticky bottom-0 left-0 right-0 p-4 flex flex-col gap-3">
-        <div className="flex items-start gap-3">
-          <Avatar className="size-10">
-            {currentUser.avatar ? (
-              <AvatarImage src={currentUser.avatar} alt={currentUser.username} />
-            ) : (
-              <AvatarFallback>{currentUser.username[0]}</AvatarFallback>
-            )}
-          </Avatar>
-          <textarea
-            className="flex-1 bg-transparent resize-none focus:outline-none text-white placeholder:text-gray-400"
-            placeholder="Share something with your friends..."
-            rows={2}
-            value={newPost}
-            onChange={(e) => setNewPost(e.target.value)}
-          />
-        </div>
-        <div className="flex justify-end">
-          <Button size="sm" type="submit" disabled={!newPost.trim()}>
-            Post
-          </Button>
-        </div>
-      </form>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 } 

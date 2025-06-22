@@ -3,10 +3,12 @@
 import { ReactNode } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import React from 'react';
+import ContentCard from './ContentCard';
 
 interface ContentCarouselProps {
-  title: string;
-  children: ReactNode;
+  title?: string;
+  children?: ReactNode;
+  items?: any[];
   slidesToShow?: number;
   autoplay?: boolean;
   className?: string;
@@ -16,6 +18,7 @@ interface ContentCarouselProps {
 export default function ContentCarousel({
   title,
   children,
+  items,
   slidesToShow = 5.5,
   autoplay = false,
   className,
@@ -33,7 +36,31 @@ export default function ContentCarousel({
           className="w-full relative"
         >
           <CarouselContent className="ml-0">
-            {Array.isArray(children)
+            {items ? (
+              items.map((item, index) => (
+                <CarouselItem
+                  key={`item-${index}-${item.id}`}
+                  className={`${compact ? 'app-carousel-item' : 'movie-carousel-item'} pr-1`}
+                  style={{
+                    flex: `0 0 ${100 / slidesToShow}%`,
+                    maxWidth: `${100 / slidesToShow}%`,
+                  }}
+                >
+                  <div className={`h-full flex items-center justify-center ${compact ? '' : 'py-2'}`}>
+                    <ContentCard
+                      id={item.id}
+                      title={item.title}
+                      imageUrl={item.posterUrl || item.imageUrl}
+                      rating={item.rating ? item.rating.toString() : undefined}
+                      source={item.source}
+                      year={item.releaseDate ? new Date(item.releaseDate).getFullYear().toString() : undefined}
+                      type={item.mediaType}
+                      badge={item.badge}
+                    />
+                  </div>
+                </CarouselItem>
+              ))
+            ) : Array.isArray(children)
               ? children.map((child, index) => (
                   <CarouselItem
                     key={index}
