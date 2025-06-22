@@ -34660,3 +34660,128 @@ ValueError: The truth value of an array with more than one element is ambiguous.
 2025-06-22 21:47:40,290 - src.api.main - INFO - Cleaning up resources...
 2025-06-22 21:47:41,299 - src.api.main - INFO - API server shutdown complete
 2025-06-22 21:47:41,300 - engineio.server - INFO - service task canceled
+2025-06-22 22:01:33,488 - __main__ - INFO - Environment setup complete
+2025-06-22 22:01:33,489 - __main__ - INFO - Running data preprocessing...
+2025-06-22 22:01:41,056 - src.database.download - INFO - Starting dataset downloads
+2025-06-22 22:01:41,058 - src.database.download - INFO - Data directories created.
+2025-06-22 22:01:41,060 - src.database.download - INFO - TMDB data already exists, skipping download
+2025-06-22 22:01:48,197 - src.database.preprocess - INFO - Starting data preprocessing...
+2025-06-22 22:01:48,199 - src.database.preprocess - INFO - Created necessary directories
+2025-06-22 22:01:48,199 - src.database.preprocess - INFO - Processing TMDB dataset...
+2025-06-22 22:01:53,913 - src.database.preprocess - INFO - Loaded 8214 movies from TMDB JSON
+2025-06-22 22:01:54,739 - src.database.preprocess - INFO - Processed 8214 TMDB movies
+2025-06-22 22:01:55,002 - src.database.preprocess - INFO - Creating users dataframe with demographics...
+2025-06-22 22:01:55,585 - src.database.preprocess - INFO - Created 5000 users
+2025-06-22 22:01:55,587 - src.database.preprocess - INFO - Creating simulated interactions...
+2025-06-22 22:05:13,147 - src.database.preprocess - INFO - Created 500742 interactions
+2025-06-22 22:05:13,481 - __main__ - INFO - Data preprocessing complete
+2025-06-22 22:05:13,482 - __main__ - INFO - Training recommendation models...
+2025-06-22 22:05:20,727 - src.models.train_models - INFO - Starting model training...
+2025-06-22 22:05:20,728 - src.models.train_models - INFO - Loading data...
+2025-06-22 22:05:21,835 - src.models.train_models - INFO - Loaded 8214 movies, 5000 users, and 500742 interactions
+2025-06-22 22:05:21,836 - src.models.train_models - INFO - Training recommendation models...
+2025-06-22 22:05:21,883 - src.models.model - INFO - Loaded SVD model
+2025-06-22 22:05:22,019 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 22:05:22,021 - src.models.model - INFO - Loaded context model
+2025-06-22 22:05:22,030 - src.models.model - INFO - Loaded item features
+2025-06-22 22:05:22,171 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 22:05:22,250 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 22:05:22,304 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 22:05:22,312 - src.models.model - INFO - Loaded user factors
+2025-06-22 22:05:22,319 - src.models.model - INFO - Loaded item factors
+2025-06-22 22:05:22,811 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 22:05:22,812 - src.models.model - INFO - Loaded 5000 user IDs
+2025-06-22 22:05:22,813 - src.models.model - INFO - Loaded 7695 item IDs
+2025-06-22 22:05:22,814 - src.models.train_models - INFO - Preparing context features...
+2025-06-22 22:06:43,757 - src.models.train_models - INFO - Prepared 500742 context features with 30 dimensions
+2025-06-22 22:06:44,332 - src.models.model - INFO - Training recommendation engine...
+2025-06-22 22:06:44,332 - src.models.model - INFO - Preparing user-item matrix...
+2025-06-22 22:07:47,714 - src.models.model - INFO - Created user-item matrix with shape (5000, 7695)
+2025-06-22 22:07:47,744 - src.models.model - INFO - Training collaborative filtering model...
+2025-06-22 22:07:51,943 - src.models.model - INFO - Trained SVD model with 50 components
+2025-06-22 22:07:51,944 - src.models.model - INFO - Training content-based filtering model...
+2025-06-22 22:07:52,946 - src.models.model - INFO - Trained TF-IDF vectorizer with 5000 features
+2025-06-22 22:07:52,947 - src.models.model - INFO - Training context model...
+2025-06-22 22:07:54,459 - src.models.model - INFO - Trained context model
+2025-06-22 22:07:54,460 - src.models.model - INFO - Recommendation engine training complete
+2025-06-22 22:07:55,914 - src.models.model - INFO - Saved all models to disk
+2025-06-22 22:07:55,917 - src.models.train_models - INFO - Models trained and saved successfully
+2025-06-22 22:07:55,945 - src.models.train_models - INFO - Testing recommendations...
+2025-06-22 22:07:55,950 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 22:07:55,952 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 22:07:55,952 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 22:07:56,933 - src.models.train_models - INFO - Top 5 recommendations for user 1 (without context):
+2025-06-22 22:07:56,936 - src.models.train_models - INFO -   - Item 755836: 0.5000
+2025-06-22 22:07:56,937 - src.models.train_models - INFO -   - Item 20968: 0.5000
+2025-06-22 22:07:56,937 - src.models.train_models - INFO -   - Item 107800: 0.5000
+2025-06-22 22:07:56,937 - src.models.train_models - INFO -   - Item 362140: 0.5000
+2025-06-22 22:07:56,938 - src.models.train_models - INFO -   - Item 504080: 0.5000
+2025-06-22 22:07:56,938 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 22:07:56,938 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 22:07:56,938 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 22:07:57,043 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 22:07:57,043 - src.models.train_models - INFO - Top 5 recommendations for user 1 (with context - happy, evening):
+2025-06-22 22:07:57,044 - src.models.train_models - INFO -   - Item 75656: 0.5996
+2025-06-22 22:07:57,044 - src.models.train_models - INFO -   - Item 362045: 0.5974
+2025-06-22 22:07:57,044 - src.models.train_models - INFO -   - Item 668340: 0.5889
+2025-06-22 22:07:57,045 - src.models.train_models - INFO -   - Item 493623: 0.5864
+2025-06-22 22:07:57,045 - src.models.train_models - INFO -   - Item 82825: 0.5823
+2025-06-22 22:07:57,045 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 22:07:57,047 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 22:07:57,047 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 22:07:57,135 - src.models.train_models - INFO - Top 5 recommendations for user 2 (without context):
+2025-06-22 22:07:57,136 - src.models.train_models - INFO -   - Item 590351: 0.5000
+2025-06-22 22:07:57,136 - src.models.train_models - INFO -   - Item 22609: 0.5000
+2025-06-22 22:07:57,137 - src.models.train_models - INFO -   - Item 19657: 0.5000
+2025-06-22 22:07:57,138 - src.models.train_models - INFO -   - Item 20968: 0.5000
+2025-06-22 22:07:57,138 - src.models.train_models - INFO -   - Item 638507: 0.5000
+2025-06-22 22:07:57,138 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 22:07:57,139 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 22:07:57,139 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 22:07:57,229 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 22:07:57,230 - src.models.train_models - INFO - Top 5 recommendations for user 2 (with context - happy, evening):
+2025-06-22 22:07:57,230 - src.models.train_models - INFO -   - Item 1043887: 0.5977
+2025-06-22 22:07:57,231 - src.models.train_models - INFO -   - Item 1093971: 0.5971
+2025-06-22 22:07:57,232 - src.models.train_models - INFO -   - Item 362045: 0.5952
+2025-06-22 22:07:57,232 - src.models.train_models - INFO -   - Item 45316: 0.5807
+2025-06-22 22:07:57,234 - src.models.train_models - INFO -   - Item 590351: 0.5779
+2025-06-22 22:07:57,234 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 22:07:57,235 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 22:07:57,236 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 22:07:57,343 - src.models.train_models - INFO - Top 5 recommendations for user 3 (without context):
+2025-06-22 22:07:57,343 - src.models.train_models - INFO -   - Item 658412: 0.5000
+2025-06-22 22:07:57,344 - src.models.train_models - INFO -   - Item 553347: 0.5000
+2025-06-22 22:07:57,344 - src.models.train_models - INFO -   - Item 41517: 0.5000
+2025-06-22 22:07:57,344 - src.models.train_models - INFO -   - Item 638507: 0.5000
+2025-06-22 22:07:57,345 - src.models.train_models - INFO -   - Item 107800: 0.5000
+2025-06-22 22:07:57,345 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 22:07:57,347 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 22:07:57,347 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 22:07:57,484 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 22:07:57,485 - src.models.train_models - INFO - Top 5 recommendations for user 3 (with context - happy, evening):
+2025-06-22 22:07:57,486 - src.models.train_models - INFO -   - Item 901315: 0.5998
+2025-06-22 22:07:57,486 - src.models.train_models - INFO -   - Item 25638: 0.5976
+2025-06-22 22:07:57,487 - src.models.train_models - INFO -   - Item 22609: 0.5925
+2025-06-22 22:07:57,487 - src.models.train_models - INFO -   - Item 4435: 0.5839
+2025-06-22 22:07:57,488 - src.models.train_models - INFO -   - Item 25519: 0.5812
+2025-06-22 22:07:57,488 - src.models.train_models - INFO - Model training completed successfully
+2025-06-22 22:07:57,646 - __main__ - INFO - Model training complete
+2025-06-22 22:07:57,650 - __main__ - INFO - Database schema setup complete
+2025-06-22 22:07:57,655 - __main__ - INFO - Cleaned recommendation cache
+2025-06-22 22:07:57,657 - __main__ - INFO - Setting up test watch party data...
+2025-06-22 22:07:57,662 - __main__ - INFO - Creating test watch party...
+2025-06-22 22:07:57,678 - src.database.database - INFO - Watch party 1 created by user1 for movie 299536
+2025-06-22 22:07:57,678 - __main__ - INFO - Created test watch party with ID: 1
+2025-06-22 22:07:57,694 - src.database.database - INFO - User user2 accepted party 1
+2025-06-22 22:07:57,695 - __main__ - INFO - User2 accepted invitation to party 1
+2025-06-22 22:07:57,710 - src.database.database - INFO - Watch party 2 created by user2 for movie 24428
+2025-06-22 22:07:57,711 - __main__ - INFO - Created test watch party with ID: 2
+2025-06-22 22:07:57,732 - src.database.database - INFO - Watch party 3 created by user3 for movie 299534
+2025-06-22 22:07:57,732 - __main__ - INFO - Created test watch party with ID: 3
+2025-06-22 22:07:57,732 - __main__ - INFO - Test watch party data setup complete.
+2025-06-22 22:07:57,776 - kill_port - INFO - Looking for processes using port 8080...
+2025-06-22 22:07:57,957 - kill_port - ERROR - Error killing process on port 8080: Command 'netstat -ano | findstr :8080' returned non-zero exit status 1.
+2025-06-22 22:07:57,958 - __main__ - INFO - Starting API server with WebSocket support...
+2025-06-22 22:07:57,959 - __main__ - INFO - Server will be available at http://localhost:8080
+2025-06-22 22:07:57,959 - __main__ - INFO - WebSocket will be available at ws://localhost:8080/socket.io/
+2025-06-22 22:08:01,025 - __main__ - ERROR - Error starting API server: No module named 'socketio'

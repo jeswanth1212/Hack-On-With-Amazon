@@ -180,12 +180,15 @@ export async function discoverMoviesByLanguageGenre(
     if (id) genreIds.push(id);
   }
 
-  // Build discover URL
+  // Choose a random page (TMDB allows up to 500). Limiting to first 5 pages keeps results relevant
+  const randomPage = Math.floor(Math.random() * 5) + 1; // 1 – 5
+
+  // Build discover URL (use randomPage for variety on every reload)
   let url = `${BASE_URL}/discover/movie?api_key=${API_KEY}` +
             `&with_original_language=${language}` +
             `&sort_by=popularity.desc` +
             `&primary_release_date.gte=2020-01-01` +
-            `&page=1`;
+            `&page=${randomPage}`;
 
   if (genreIds.length > 0) {
     url += `&with_genres=${genreIds.join(',')}`;
@@ -198,7 +201,11 @@ export async function discoverMoviesByLanguageGenre(
   }
 
   const data = await response.json();
-  const results = Array.isArray(data.results) ? data.results.slice(0, count) : [];
+  // Shuffle results for extra randomness, then take the requested count
+  const shuffled = Array.isArray(data.results)
+    ? [...data.results].sort(() => Math.random() - 0.5)
+    : [];
+  const results = shuffled.slice(0, count);
 
   return results.map((item: any) => {
     const title = item.title || item.name;
