@@ -16,8 +16,8 @@ A full-stack, AI-powered companion for Fire TV that turns solitary streaming int
 | **Front-End (Next JS 14 / React 18)** | • Regional "Trending this week" with Netflix-style ❶❷❸ overlay  
 • Personalised "Recommended for you" row (language & mood aware)  
 • *FOMO Driven Recommendation* – shows what friends loved  
-• Genre rows (Action, Comedy, etc.) filtered to avoid trending duplicates  
-• Profile dashboard with: badges, yearly heat-map, recent-watch carousel  
+• Genre rails (Action, Comedy, etc.) filtered to avoid trending duplicates  
+• **LeetCode-inspired profile** — yearly yellow heat-map + hex-badge milestones + recently watched carousel  
 • Friends page (search, requests, activity, watch-party invites) |
 | **Watch Party** | • WebRTC (simple-peer) synchronous playback  
 • Real-time chat & presence via Socket.IO  
@@ -82,12 +82,9 @@ npm run dev        # http://localhost:3000
 
 ## 👥 Team
 **Last Minutes** — Team 97
-*   Alice ⚡ — Context engine & data science  
-*   Bob 📺 — Fire TV UX & front-end  
-*   Carol 🤝 — Social graph & watch party  
-*   Dave 🙂 — Emotion recognition & WebRTC
+*   Jeswanth S 
+*   Rohith Krishna
+*   Surjith Khannan
 
 ---
 
-## 📄 License
-MIT
