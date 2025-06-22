@@ -34785,3 +34785,630 @@ ValueError: The truth value of an array with more than one element is ambiguous.
 2025-06-22 22:07:57,959 - __main__ - INFO - Server will be available at http://localhost:8080
 2025-06-22 22:07:57,959 - __main__ - INFO - WebSocket will be available at ws://localhost:8080/socket.io/
 2025-06-22 22:08:01,025 - __main__ - ERROR - Error starting API server: No module named 'socketio'
+2025-06-22 22:10:53,971 - __main__ - INFO - Environment setup complete
+2025-06-22 22:10:53,972 - __main__ - INFO - Running data preprocessing...
+2025-06-22 22:10:59,736 - src.database.download - INFO - Starting dataset downloads
+2025-06-22 22:10:59,738 - src.database.download - INFO - Data directories created.
+2025-06-22 22:10:59,738 - src.database.download - INFO - TMDB data already exists, skipping download
+2025-06-22 22:11:05,738 - src.database.preprocess - INFO - Starting data preprocessing...
+2025-06-22 22:11:05,740 - src.database.preprocess - INFO - Created necessary directories
+2025-06-22 22:11:05,741 - src.database.preprocess - INFO - Processing TMDB dataset...
+2025-06-22 22:11:11,288 - src.database.preprocess - INFO - Loaded 8214 movies from TMDB JSON
+2025-06-22 22:11:11,782 - src.database.preprocess - INFO - Processed 8214 TMDB movies
+2025-06-22 22:11:12,024 - src.database.preprocess - INFO - Creating users dataframe with demographics...
+2025-06-22 22:11:12,502 - src.database.preprocess - INFO - Created 5000 users
+2025-06-22 22:11:12,504 - src.database.preprocess - INFO - Creating simulated interactions...
+2025-06-22 22:13:59,688 - src.database.preprocess - INFO - Created 500468 interactions
+2025-06-22 22:14:00,043 - __main__ - INFO - Data preprocessing complete
+2025-06-22 22:14:00,044 - __main__ - INFO - Training recommendation models...
+2025-06-22 22:14:07,536 - src.models.train_models - INFO - Starting model training...
+2025-06-22 22:14:07,537 - src.models.train_models - INFO - Loading data...
+2025-06-22 22:14:08,620 - src.models.train_models - INFO - Loaded 8214 movies, 5000 users, and 500468 interactions
+2025-06-22 22:14:08,621 - src.models.train_models - INFO - Training recommendation models...
+2025-06-22 22:14:08,630 - src.models.model - INFO - Loaded SVD model
+2025-06-22 22:14:08,764 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 22:14:08,769 - src.models.model - INFO - Loaded context model
+2025-06-22 22:14:08,779 - src.models.model - INFO - Loaded item features
+2025-06-22 22:14:08,945 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 22:14:09,027 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 22:14:09,063 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 22:14:09,070 - src.models.model - INFO - Loaded user factors
+2025-06-22 22:14:09,079 - src.models.model - INFO - Loaded item factors
+2025-06-22 22:14:09,541 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 22:14:09,541 - src.models.model - INFO - Loaded 5000 user IDs
+2025-06-22 22:14:09,542 - src.models.model - INFO - Loaded 7695 item IDs
+2025-06-22 22:14:09,542 - src.models.train_models - INFO - Preparing context features...
+2025-06-22 22:15:06,591 - src.models.train_models - INFO - Prepared 500468 context features with 30 dimensions
+2025-06-22 22:15:07,170 - src.models.model - INFO - Training recommendation engine...
+2025-06-22 22:15:07,171 - src.models.model - INFO - Preparing user-item matrix...
+2025-06-22 22:15:55,393 - src.models.model - INFO - Created user-item matrix with shape (5000, 7695)
+2025-06-22 22:15:55,441 - src.models.model - INFO - Training collaborative filtering model...
+2025-06-22 22:15:59,338 - src.models.model - INFO - Trained SVD model with 50 components
+2025-06-22 22:15:59,339 - src.models.model - INFO - Training content-based filtering model...
+2025-06-22 22:16:00,207 - src.models.model - INFO - Trained TF-IDF vectorizer with 5000 features
+2025-06-22 22:16:00,209 - src.models.model - INFO - Training context model...
+2025-06-22 22:16:01,663 - src.models.model - INFO - Trained context model
+2025-06-22 22:16:01,664 - src.models.model - INFO - Recommendation engine training complete
+2025-06-22 22:16:03,009 - src.models.model - INFO - Saved all models to disk
+2025-06-22 22:16:03,009 - src.models.train_models - INFO - Models trained and saved successfully
+2025-06-22 22:16:03,025 - src.models.train_models - INFO - Testing recommendations...
+2025-06-22 22:16:03,028 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 22:16:03,029 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 22:16:03,030 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 22:16:04,032 - src.models.train_models - INFO - Top 5 recommendations for user 1 (without context):
+2025-06-22 22:16:04,033 - src.models.train_models - INFO -   - Item 1233575: 0.5000
+2025-06-22 22:16:04,033 - src.models.train_models - INFO -   - Item 17478: 0.5000
+2025-06-22 22:16:04,033 - src.models.train_models - INFO -   - Item 339274: 0.5000
+2025-06-22 22:16:04,035 - src.models.train_models - INFO -   - Item 4435: 0.5000
+2025-06-22 22:16:04,035 - src.models.train_models - INFO -   - Item 20494: 0.5000
+2025-06-22 22:16:04,036 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 22:16:04,036 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 22:16:04,036 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 22:16:04,229 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 22:16:04,230 - src.models.train_models - INFO - Top 5 recommendations for user 1 (with context - happy, evening):
+2025-06-22 22:16:04,231 - src.models.train_models - INFO -   - Item 17478: 0.5935
+2025-06-22 22:16:04,231 - src.models.train_models - INFO -   - Item 82825: 0.5865
+2025-06-22 22:16:04,231 - src.models.train_models - INFO -   - Item 41518: 0.5800
+2025-06-22 22:16:04,233 - src.models.train_models - INFO -   - Item 799155: 0.5755
+2025-06-22 22:16:04,234 - src.models.train_models - INFO -   - Item 45001: 0.5676
+2025-06-22 22:16:04,234 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 22:16:04,236 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 22:16:04,237 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 22:16:04,472 - src.models.train_models - INFO - Top 5 recommendations for user 2 (without context):
+2025-06-22 22:16:04,473 - src.models.train_models - INFO -   - Item 337876: 0.5000
+2025-06-22 22:16:04,473 - src.models.train_models - INFO -   - Item 890116: 0.5000
+2025-06-22 22:16:04,473 - src.models.train_models - INFO -   - Item 668340: 0.5000
+2025-06-22 22:16:04,474 - src.models.train_models - INFO -   - Item 695962: 0.5000
+2025-06-22 22:16:04,474 - src.models.train_models - INFO -   - Item 799155: 0.5000
+2025-06-22 22:16:04,474 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 22:16:04,475 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 22:16:04,475 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 22:16:04,569 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 22:16:04,570 - src.models.train_models - INFO - Top 5 recommendations for user 2 (with context - happy, evening):
+2025-06-22 22:16:04,571 - src.models.train_models - INFO -   - Item 911645: 0.5988
+2025-06-22 22:16:04,571 - src.models.train_models - INFO -   - Item 339274: 0.5921
+2025-06-22 22:16:04,571 - src.models.train_models - INFO -   - Item 158519: 0.5919
+2025-06-22 22:16:04,571 - src.models.train_models - INFO -   - Item 45002: 0.5702
+2025-06-22 22:16:04,572 - src.models.train_models - INFO -   - Item 1020376: 0.5677
+2025-06-22 22:16:04,572 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 22:16:04,572 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 22:16:04,574 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 22:16:04,700 - src.models.train_models - INFO - Top 5 recommendations for user 3 (without context):
+2025-06-22 22:16:04,701 - src.models.train_models - INFO -   - Item 353429: 0.5000
+2025-06-22 22:16:04,702 - src.models.train_models - INFO -   - Item 1148172: 0.5000
+2025-06-22 22:16:04,702 - src.models.train_models - INFO -   - Item 20968: 0.5000
+2025-06-22 22:16:04,704 - src.models.train_models - INFO -   - Item 496527: 0.5000
+2025-06-22 22:16:04,705 - src.models.train_models - INFO -   - Item 1083590: 0.5000
+2025-06-22 22:16:04,706 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 22:16:04,707 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 22:16:04,707 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 22:16:04,852 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 22:16:04,853 - src.models.train_models - INFO - Top 5 recommendations for user 3 (with context - happy, evening):
+2025-06-22 22:16:04,853 - src.models.train_models - INFO -   - Item 590351: 0.5991
+2025-06-22 22:16:04,853 - src.models.train_models - INFO -   - Item 250551: 0.5949
+2025-06-22 22:16:04,853 - src.models.train_models - INFO -   - Item 1195430: 0.5880
+2025-06-22 22:16:04,855 - src.models.train_models - INFO -   - Item 761226: 0.5825
+2025-06-22 22:16:04,855 - src.models.train_models - INFO -   - Item 259720: 0.5790
+2025-06-22 22:16:04,856 - src.models.train_models - INFO - Model training completed successfully
+2025-06-22 22:16:04,899 - __main__ - INFO - Model training complete
+2025-06-22 22:16:04,901 - __main__ - INFO - Database schema setup complete
+2025-06-22 22:16:04,903 - __main__ - INFO - Cleaned recommendation cache
+2025-06-22 22:16:04,903 - __main__ - INFO - Setting up test watch party data...
+2025-06-22 22:16:04,905 - __main__ - INFO - Watch parties already exist in database (3 parties).
+2025-06-22 22:16:04,907 - kill_port - INFO - Looking for processes using port 8080...
+2025-06-22 22:16:05,015 - kill_port - ERROR - Error killing process on port 8080: Command 'netstat -ano | findstr :8080' returned non-zero exit status 1.
+2025-06-22 22:16:05,016 - __main__ - INFO - Starting API server with WebSocket support...
+2025-06-22 22:16:05,018 - __main__ - INFO - Server will be available at http://localhost:8080
+2025-06-22 22:16:05,018 - __main__ - INFO - WebSocket will be available at ws://localhost:8080/socket.io/
+2025-06-22 22:16:07,109 - engineio.server - INFO - Server initialized for asgi.
+2025-06-22 22:16:07,134 - src.models.model - INFO - Loaded SVD model
+2025-06-22 22:16:07,312 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 22:16:07,314 - src.models.model - INFO - Loaded context model
+2025-06-22 22:16:07,320 - src.models.model - INFO - Loaded item features
+2025-06-22 22:16:07,500 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 22:16:07,624 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 22:16:07,649 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 22:16:07,653 - src.models.model - INFO - Loaded user factors
+2025-06-22 22:16:07,657 - src.models.model - INFO - Loaded item factors
+2025-06-22 22:16:07,959 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 22:16:07,959 - src.models.model - INFO - Loaded 5000 user IDs
+2025-06-22 22:16:07,961 - src.models.model - INFO - Loaded 7695 item IDs
+2025-06-22 22:16:08,059 - src.api.main - INFO - Starting interaction processing thread
+2025-06-22 22:16:08,111 - src.api.main - INFO - Starting API server...
+2025-06-22 22:16:08,111 - src.database.database - INFO - Initializing database...
+2025-06-22 22:16:08,116 - src.database.database - INFO - Database initialized successfully.
+2025-06-22 22:16:08,117 - src.database.database - INFO - Loading data from CSV files into the database...
+2025-06-22 22:16:08,254 - src.database.database - INFO - Loaded 8214 movies from CSV
+2025-06-22 22:16:09,816 - src.database.database - INFO - Movies data loaded into database
+2025-06-22 22:16:11,119 - src.database.database - INFO - Loaded 500468 interactions from CSV
+2025-06-22 22:16:11,122 - src.database.database - INFO - Processing interactions batch 1 to 1000 of 500468
+2025-06-22 22:16:12,104 - src.database.database - INFO - Processing interactions batch 1001 to 2000 of 500468
+2025-06-22 22:16:12,789 - src.database.database - INFO - Processing interactions batch 2001 to 3000 of 500468
+2025-06-22 22:16:13,434 - src.database.database - INFO - Processing interactions batch 3001 to 4000 of 500468
+2025-06-22 22:16:14,133 - src.database.database - INFO - Processing interactions batch 4001 to 5000 of 500468
+2025-06-22 22:16:14,671 - src.database.database - INFO - Processing interactions batch 5001 to 6000 of 500468
+2025-06-22 22:16:15,130 - src.database.database - INFO - Processing interactions batch 6001 to 7000 of 500468
+2025-06-22 22:16:15,460 - src.database.database - INFO - Processing interactions batch 7001 to 8000 of 500468
+2025-06-22 22:16:15,961 - src.database.database - INFO - Processing interactions batch 8001 to 9000 of 500468
+2025-06-22 22:16:16,579 - src.database.database - INFO - Processing interactions batch 9001 to 10000 of 500468
+2025-06-22 22:16:17,246 - src.database.database - INFO - Processing interactions batch 10001 to 11000 of 500468
+2025-06-22 22:16:17,760 - src.database.database - INFO - Processing interactions batch 11001 to 12000 of 500468
+2025-06-22 22:16:18,387 - src.database.database - INFO - Processing interactions batch 12001 to 13000 of 500468
+2025-06-22 22:16:19,477 - src.database.database - INFO - Processing interactions batch 13001 to 14000 of 500468
+2025-06-22 22:16:20,638 - src.database.database - INFO - Processing interactions batch 14001 to 15000 of 500468
+2025-06-22 22:16:21,435 - src.database.database - INFO - Processing interactions batch 15001 to 16000 of 500468
+2025-06-22 22:16:21,951 - src.database.database - INFO - Processing interactions batch 16001 to 17000 of 500468
+2025-06-22 22:16:22,511 - src.database.database - INFO - Processing interactions batch 17001 to 18000 of 500468
+2025-06-22 22:16:23,147 - src.database.database - INFO - Processing interactions batch 18001 to 19000 of 500468
+2025-06-22 22:16:23,769 - src.database.database - INFO - Processing interactions batch 19001 to 20000 of 500468
+2025-06-22 22:16:24,336 - src.database.database - INFO - Processing interactions batch 20001 to 21000 of 500468
+2025-06-22 22:16:24,854 - src.database.database - INFO - Processing interactions batch 21001 to 22000 of 500468
+2025-06-22 22:16:25,396 - src.database.database - INFO - Processing interactions batch 22001 to 23000 of 500468
+2025-06-22 22:16:25,910 - src.database.database - INFO - Processing interactions batch 23001 to 24000 of 500468
+2025-06-22 22:16:26,497 - src.database.database - INFO - Processing interactions batch 24001 to 25000 of 500468
+2025-06-22 22:16:27,001 - src.database.database - INFO - Processing interactions batch 25001 to 26000 of 500468
+2025-06-22 22:16:27,504 - src.database.database - INFO - Processing interactions batch 26001 to 27000 of 500468
+2025-06-22 22:16:28,201 - src.database.database - INFO - Processing interactions batch 27001 to 28000 of 500468
+2025-06-22 22:16:29,119 - src.database.database - INFO - Processing interactions batch 28001 to 29000 of 500468
+2025-06-22 22:16:29,764 - src.database.database - INFO - Processing interactions batch 29001 to 30000 of 500468
+2025-06-22 22:16:30,327 - src.database.database - INFO - Processing interactions batch 30001 to 31000 of 500468
+2025-06-22 22:16:30,715 - src.database.database - INFO - Processing interactions batch 31001 to 32000 of 500468
+2025-06-22 22:16:31,221 - src.database.database - INFO - Processing interactions batch 32001 to 33000 of 500468
+2025-06-22 22:16:31,733 - src.database.database - INFO - Processing interactions batch 33001 to 34000 of 500468
+2025-06-22 22:16:32,296 - src.database.database - INFO - Processing interactions batch 34001 to 35000 of 500468
+2025-06-22 22:16:32,842 - src.database.database - INFO - Processing interactions batch 35001 to 36000 of 500468
+2025-06-22 22:16:33,549 - src.database.database - INFO - Processing interactions batch 36001 to 37000 of 500468
+2025-06-22 22:16:34,029 - src.database.database - INFO - Processing interactions batch 37001 to 38000 of 500468
+2025-06-22 22:16:34,643 - src.database.database - INFO - Processing interactions batch 38001 to 39000 of 500468
+2025-06-22 22:16:35,285 - src.database.database - INFO - Processing interactions batch 39001 to 40000 of 500468
+2025-06-22 22:16:35,961 - src.database.database - INFO - Processing interactions batch 40001 to 41000 of 500468
+2025-06-22 22:16:36,593 - src.database.database - INFO - Processing interactions batch 41001 to 42000 of 500468
+2025-06-22 22:16:37,049 - src.database.database - INFO - Processing interactions batch 42001 to 43000 of 500468
+2025-06-22 22:16:37,532 - src.database.database - INFO - Processing interactions batch 43001 to 44000 of 500468
+2025-06-22 22:16:38,116 - src.database.database - INFO - Processing interactions batch 44001 to 45000 of 500468
+2025-06-22 22:16:38,725 - src.database.database - INFO - Processing interactions batch 45001 to 46000 of 500468
+2025-06-22 22:16:39,257 - src.database.database - INFO - Processing interactions batch 46001 to 47000 of 500468
+2025-06-22 22:16:39,754 - src.database.database - INFO - Processing interactions batch 47001 to 48000 of 500468
+2025-06-22 22:16:40,377 - src.database.database - INFO - Processing interactions batch 48001 to 49000 of 500468
+2025-06-22 22:16:40,877 - src.database.database - INFO - Processing interactions batch 49001 to 50000 of 500468
+2025-06-22 22:16:41,330 - src.database.database - INFO - Processing interactions batch 50001 to 51000 of 500468
+2025-06-22 22:16:41,955 - src.database.database - INFO - Processing interactions batch 51001 to 52000 of 500468
+2025-06-22 22:16:42,424 - src.database.database - INFO - Processing interactions batch 52001 to 53000 of 500468
+2025-06-22 22:16:43,147 - src.database.database - INFO - Processing interactions batch 53001 to 54000 of 500468
+2025-06-22 22:16:43,595 - src.database.database - INFO - Processing interactions batch 54001 to 55000 of 500468
+2025-06-22 22:16:43,947 - src.database.database - INFO - Processing interactions batch 55001 to 56000 of 500468
+2025-06-22 22:16:44,502 - src.database.database - INFO - Processing interactions batch 56001 to 57000 of 500468
+2025-06-22 22:16:44,976 - src.database.database - INFO - Processing interactions batch 57001 to 58000 of 500468
+2025-06-22 22:16:45,595 - src.database.database - INFO - Processing interactions batch 58001 to 59000 of 500468
+2025-06-22 22:16:46,152 - src.database.database - INFO - Processing interactions batch 59001 to 60000 of 500468
+2025-06-22 22:16:46,634 - src.database.database - INFO - Processing interactions batch 60001 to 61000 of 500468
+2025-06-22 22:16:46,986 - src.database.database - INFO - Processing interactions batch 61001 to 62000 of 500468
+2025-06-22 22:16:47,374 - src.database.database - INFO - Processing interactions batch 62001 to 63000 of 500468
+2025-06-22 22:16:47,904 - src.database.database - INFO - Processing interactions batch 63001 to 64000 of 500468
+2025-06-22 22:16:48,623 - src.database.database - INFO - Processing interactions batch 64001 to 65000 of 500468
+2025-06-22 22:16:49,330 - src.database.database - INFO - Processing interactions batch 65001 to 66000 of 500468
+2025-06-22 22:16:50,014 - src.database.database - INFO - Processing interactions batch 66001 to 67000 of 500468
+2025-06-22 22:16:50,529 - src.database.database - INFO - Processing interactions batch 67001 to 68000 of 500468
+2025-06-22 22:16:51,111 - src.database.database - INFO - Processing interactions batch 68001 to 69000 of 500468
+2025-06-22 22:16:51,789 - src.database.database - INFO - Processing interactions batch 69001 to 70000 of 500468
+2025-06-22 22:16:52,385 - src.database.database - INFO - Processing interactions batch 70001 to 71000 of 500468
+2025-06-22 22:16:52,907 - src.database.database - INFO - Processing interactions batch 71001 to 72000 of 500468
+2025-06-22 22:16:53,432 - src.database.database - INFO - Processing interactions batch 72001 to 73000 of 500468
+2025-06-22 22:16:53,898 - src.database.database - INFO - Processing interactions batch 73001 to 74000 of 500468
+2025-06-22 22:16:54,395 - src.database.database - INFO - Processing interactions batch 74001 to 75000 of 500468
+2025-06-22 22:16:54,812 - src.database.database - INFO - Processing interactions batch 75001 to 76000 of 500468
+2025-06-22 22:16:55,439 - src.database.database - INFO - Processing interactions batch 76001 to 77000 of 500468
+2025-06-22 22:16:55,914 - src.database.database - INFO - Processing interactions batch 77001 to 78000 of 500468
+2025-06-22 22:16:56,426 - src.database.database - INFO - Processing interactions batch 78001 to 79000 of 500468
+2025-06-22 22:16:56,910 - src.database.database - INFO - Processing interactions batch 79001 to 80000 of 500468
+2025-06-22 22:16:57,369 - src.database.database - INFO - Processing interactions batch 80001 to 81000 of 500468
+2025-06-22 22:16:58,155 - src.database.database - INFO - Processing interactions batch 81001 to 82000 of 500468
+2025-06-22 22:16:58,540 - src.database.database - INFO - Processing interactions batch 82001 to 83000 of 500468
+2025-06-22 22:16:58,879 - src.database.database - INFO - Processing interactions batch 83001 to 84000 of 500468
+2025-06-22 22:16:59,359 - src.database.database - INFO - Processing interactions batch 84001 to 85000 of 500468
+2025-06-22 22:17:00,045 - src.database.database - INFO - Processing interactions batch 85001 to 86000 of 500468
+2025-06-22 22:17:00,606 - src.database.database - INFO - Processing interactions batch 86001 to 87000 of 500468
+2025-06-22 22:17:01,217 - src.database.database - INFO - Processing interactions batch 87001 to 88000 of 500468
+2025-06-22 22:17:01,629 - src.database.database - INFO - Processing interactions batch 88001 to 89000 of 500468
+2025-06-22 22:17:02,001 - src.database.database - INFO - Processing interactions batch 89001 to 90000 of 500468
+2025-06-22 22:17:02,459 - src.database.database - INFO - Processing interactions batch 90001 to 91000 of 500468
+2025-06-22 22:17:02,881 - src.database.database - INFO - Processing interactions batch 91001 to 92000 of 500468
+2025-06-22 22:17:03,301 - src.database.database - INFO - Processing interactions batch 92001 to 93000 of 500468
+2025-06-22 22:17:03,842 - src.database.database - INFO - Processing interactions batch 93001 to 94000 of 500468
+2025-06-22 22:17:04,401 - src.database.database - INFO - Processing interactions batch 94001 to 95000 of 500468
+2025-06-22 22:17:05,017 - src.database.database - INFO - Processing interactions batch 95001 to 96000 of 500468
+2025-06-22 22:17:05,437 - src.database.database - INFO - Processing interactions batch 96001 to 97000 of 500468
+2025-06-22 22:17:05,981 - src.database.database - INFO - Processing interactions batch 97001 to 98000 of 500468
+2025-06-22 22:17:06,723 - src.database.database - INFO - Processing interactions batch 98001 to 99000 of 500468
+2025-06-22 22:17:07,192 - src.database.database - INFO - Processing interactions batch 99001 to 100000 of 500468
+2025-06-22 22:17:07,816 - src.database.database - INFO - Processing interactions batch 100001 to 101000 of 500468
+2025-06-22 22:17:08,399 - src.database.database - INFO - Processing interactions batch 101001 to 102000 of 500468
+2025-06-22 22:17:09,062 - src.database.database - INFO - Processing interactions batch 102001 to 103000 of 500468
+2025-06-22 22:17:09,861 - src.database.database - INFO - Processing interactions batch 103001 to 104000 of 500468
+2025-06-22 22:17:10,396 - src.database.database - INFO - Processing interactions batch 104001 to 105000 of 500468
+2025-06-22 22:17:10,932 - src.database.database - INFO - Processing interactions batch 105001 to 106000 of 500468
+2025-06-22 22:17:11,328 - src.database.database - INFO - Processing interactions batch 106001 to 107000 of 500468
+2025-06-22 22:17:11,949 - src.database.database - INFO - Processing interactions batch 107001 to 108000 of 500468
+2025-06-22 22:17:12,586 - src.database.database - INFO - Processing interactions batch 108001 to 109000 of 500468
+2025-06-22 22:17:13,271 - src.database.database - INFO - Processing interactions batch 109001 to 110000 of 500468
+2025-06-22 22:17:13,823 - src.database.database - INFO - Processing interactions batch 110001 to 111000 of 500468
+2025-06-22 22:17:14,643 - src.database.database - INFO - Processing interactions batch 111001 to 112000 of 500468
+2025-06-22 22:17:15,274 - src.database.database - INFO - Processing interactions batch 112001 to 113000 of 500468
+2025-06-22 22:17:15,978 - src.database.database - INFO - Processing interactions batch 113001 to 114000 of 500468
+2025-06-22 22:17:16,519 - src.database.database - INFO - Processing interactions batch 114001 to 115000 of 500468
+2025-06-22 22:17:17,162 - src.database.database - INFO - Processing interactions batch 115001 to 116000 of 500468
+2025-06-22 22:17:17,759 - src.database.database - INFO - Processing interactions batch 116001 to 117000 of 500468
+2025-06-22 22:17:18,325 - src.database.database - INFO - Processing interactions batch 117001 to 118000 of 500468
+2025-06-22 22:17:18,780 - src.database.database - INFO - Processing interactions batch 118001 to 119000 of 500468
+2025-06-22 22:17:19,525 - src.database.database - INFO - Processing interactions batch 119001 to 120000 of 500468
+2025-06-22 22:17:20,342 - src.database.database - INFO - Processing interactions batch 120001 to 121000 of 500468
+2025-06-22 22:17:20,804 - src.database.database - INFO - Processing interactions batch 121001 to 122000 of 500468
+2025-06-22 22:17:22,406 - src.database.database - INFO - Processing interactions batch 122001 to 123000 of 500468
+2025-06-22 22:17:23,722 - src.database.database - INFO - Processing interactions batch 123001 to 124000 of 500468
+2025-06-22 22:17:25,036 - src.database.database - INFO - Processing interactions batch 124001 to 125000 of 500468
+2025-06-22 22:17:25,884 - src.database.database - INFO - Processing interactions batch 125001 to 126000 of 500468
+2025-06-22 22:17:26,828 - src.database.database - INFO - Processing interactions batch 126001 to 127000 of 500468
+2025-06-22 22:17:27,926 - src.database.database - INFO - Processing interactions batch 127001 to 128000 of 500468
+2025-06-22 22:17:29,090 - src.database.database - INFO - Processing interactions batch 128001 to 129000 of 500468
+2025-06-22 22:17:30,151 - src.database.database - INFO - Processing interactions batch 129001 to 130000 of 500468
+2025-06-22 22:17:31,487 - src.database.database - INFO - Processing interactions batch 130001 to 131000 of 500468
+2025-06-22 22:17:32,581 - src.database.database - INFO - Processing interactions batch 131001 to 132000 of 500468
+2025-06-22 22:17:34,067 - src.database.database - INFO - Processing interactions batch 132001 to 133000 of 500468
+2025-06-22 22:17:35,667 - src.database.database - INFO - Processing interactions batch 133001 to 134000 of 500468
+2025-06-22 22:17:36,900 - src.database.database - INFO - Processing interactions batch 134001 to 135000 of 500468
+2025-06-22 22:17:38,571 - src.database.database - INFO - Processing interactions batch 135001 to 136000 of 500468
+2025-06-22 22:17:39,877 - src.database.database - INFO - Processing interactions batch 136001 to 137000 of 500468
+2025-06-22 22:17:41,412 - src.database.database - INFO - Processing interactions batch 137001 to 138000 of 500468
+2025-06-22 22:17:42,545 - src.database.database - INFO - Processing interactions batch 138001 to 139000 of 500468
+2025-06-22 22:17:43,863 - src.database.database - INFO - Processing interactions batch 139001 to 140000 of 500468
+2025-06-22 22:17:45,068 - src.database.database - INFO - Processing interactions batch 140001 to 141000 of 500468
+2025-06-22 22:17:45,938 - src.database.database - INFO - Processing interactions batch 141001 to 142000 of 500468
+2025-06-22 22:17:46,641 - src.database.database - INFO - Processing interactions batch 142001 to 143000 of 500468
+2025-06-22 22:17:47,292 - src.database.database - INFO - Processing interactions batch 143001 to 144000 of 500468
+2025-06-22 22:17:47,965 - src.database.database - INFO - Processing interactions batch 144001 to 145000 of 500468
+2025-06-22 22:17:48,652 - src.database.database - INFO - Processing interactions batch 145001 to 146000 of 500468
+2025-06-22 22:17:49,356 - src.database.database - INFO - Processing interactions batch 146001 to 147000 of 500468
+2025-06-22 22:17:50,053 - src.database.database - INFO - Processing interactions batch 147001 to 148000 of 500468
+2025-06-22 22:17:50,810 - src.database.database - INFO - Processing interactions batch 148001 to 149000 of 500468
+2025-06-22 22:17:51,429 - src.database.database - INFO - Processing interactions batch 149001 to 150000 of 500468
+2025-06-22 22:17:52,082 - src.database.database - INFO - Processing interactions batch 150001 to 151000 of 500468
+2025-06-22 22:17:52,613 - src.database.database - INFO - Processing interactions batch 151001 to 152000 of 500468
+2025-06-22 22:17:53,247 - src.database.database - INFO - Processing interactions batch 152001 to 153000 of 500468
+2025-06-22 22:17:53,943 - src.database.database - INFO - Processing interactions batch 153001 to 154000 of 500468
+2025-06-22 22:17:54,699 - src.database.database - INFO - Processing interactions batch 154001 to 155000 of 500468
+2025-06-22 22:17:55,746 - src.database.database - INFO - Processing interactions batch 155001 to 156000 of 500468
+2025-06-22 22:17:56,812 - src.database.database - INFO - Processing interactions batch 156001 to 157000 of 500468
+2025-06-22 22:17:57,658 - src.database.database - INFO - Processing interactions batch 157001 to 158000 of 500468
+2025-06-22 22:17:58,349 - src.database.database - INFO - Processing interactions batch 158001 to 159000 of 500468
+2025-06-22 22:17:59,005 - src.database.database - INFO - Processing interactions batch 159001 to 160000 of 500468
+2025-06-22 22:17:59,777 - src.database.database - INFO - Processing interactions batch 160001 to 161000 of 500468
+2025-06-22 22:18:00,310 - src.database.database - INFO - Processing interactions batch 161001 to 162000 of 500468
+2025-06-22 22:18:00,881 - src.database.database - INFO - Processing interactions batch 162001 to 163000 of 500468
+2025-06-22 22:18:01,595 - src.database.database - INFO - Processing interactions batch 163001 to 164000 of 500468
+2025-06-22 22:18:02,160 - src.database.database - INFO - Processing interactions batch 164001 to 165000 of 500468
+2025-06-22 22:18:02,681 - src.database.database - INFO - Processing interactions batch 165001 to 166000 of 500468
+2025-06-22 22:18:03,112 - src.database.database - INFO - Processing interactions batch 166001 to 167000 of 500468
+2025-06-22 22:18:04,092 - src.database.database - INFO - Processing interactions batch 167001 to 168000 of 500468
+2025-06-22 22:18:05,193 - src.database.database - INFO - Processing interactions batch 168001 to 169000 of 500468
+2025-06-22 22:18:05,758 - src.database.database - INFO - Processing interactions batch 169001 to 170000 of 500468
+2025-06-22 22:18:06,575 - src.database.database - INFO - Processing interactions batch 170001 to 171000 of 500468
+2025-06-22 22:18:07,073 - src.database.database - INFO - Processing interactions batch 171001 to 172000 of 500468
+2025-06-22 22:18:07,684 - src.database.database - INFO - Processing interactions batch 172001 to 173000 of 500468
+2025-06-22 22:18:08,328 - src.database.database - INFO - Processing interactions batch 173001 to 174000 of 500468
+2025-06-22 22:18:08,791 - src.database.database - INFO - Processing interactions batch 174001 to 175000 of 500468
+2025-06-22 22:18:09,311 - src.database.database - INFO - Processing interactions batch 175001 to 176000 of 500468
+2025-06-22 22:18:09,760 - src.database.database - INFO - Processing interactions batch 176001 to 177000 of 500468
+2025-06-22 22:18:10,262 - src.database.database - INFO - Processing interactions batch 177001 to 178000 of 500468
+2025-06-22 22:18:10,817 - src.database.database - INFO - Processing interactions batch 178001 to 179000 of 500468
+2025-06-22 22:18:11,740 - src.database.database - INFO - Processing interactions batch 179001 to 180000 of 500468
+2025-06-22 22:18:12,639 - src.database.database - INFO - Processing interactions batch 180001 to 181000 of 500468
+2025-06-22 22:18:13,286 - src.database.database - INFO - Processing interactions batch 181001 to 182000 of 500468
+2025-06-22 22:18:13,858 - src.database.database - INFO - Processing interactions batch 182001 to 183000 of 500468
+2025-06-22 22:18:14,339 - src.database.database - INFO - Processing interactions batch 183001 to 184000 of 500468
+2025-06-22 22:18:15,264 - src.database.database - INFO - Processing interactions batch 184001 to 185000 of 500468
+2025-06-22 22:18:16,185 - src.database.database - INFO - Processing interactions batch 185001 to 186000 of 500468
+2025-06-22 22:18:16,765 - src.database.database - INFO - Processing interactions batch 186001 to 187000 of 500468
+2025-06-22 22:18:17,427 - src.database.database - INFO - Processing interactions batch 187001 to 188000 of 500468
+2025-06-22 22:18:17,984 - src.database.database - INFO - Processing interactions batch 188001 to 189000 of 500468
+2025-06-22 22:18:18,543 - src.database.database - INFO - Processing interactions batch 189001 to 190000 of 500468
+2025-06-22 22:18:19,423 - src.database.database - INFO - Processing interactions batch 190001 to 191000 of 500468
+2025-06-22 22:18:20,513 - src.database.database - INFO - Processing interactions batch 191001 to 192000 of 500468
+2025-06-22 22:18:20,999 - src.database.database - INFO - Processing interactions batch 192001 to 193000 of 500468
+2025-06-22 22:18:21,571 - src.database.database - INFO - Processing interactions batch 193001 to 194000 of 500468
+2025-06-22 22:18:22,097 - src.database.database - INFO - Processing interactions batch 194001 to 195000 of 500468
+2025-06-22 22:18:22,776 - src.database.database - INFO - Processing interactions batch 195001 to 196000 of 500468
+2025-06-22 22:18:23,554 - src.database.database - INFO - Processing interactions batch 196001 to 197000 of 500468
+2025-06-22 22:18:24,235 - src.database.database - INFO - Processing interactions batch 197001 to 198000 of 500468
+2025-06-22 22:18:25,295 - src.database.database - INFO - Processing interactions batch 198001 to 199000 of 500468
+2025-06-22 22:18:26,287 - src.database.database - INFO - Processing interactions batch 199001 to 200000 of 500468
+2025-06-22 22:18:27,360 - src.database.database - INFO - Processing interactions batch 200001 to 201000 of 500468
+2025-06-22 22:18:28,321 - src.database.database - INFO - Processing interactions batch 201001 to 202000 of 500468
+2025-06-22 22:18:29,193 - src.database.database - INFO - Processing interactions batch 202001 to 203000 of 500468
+2025-06-22 22:18:30,244 - src.database.database - INFO - Processing interactions batch 203001 to 204000 of 500468
+2025-06-22 22:18:31,378 - src.database.database - INFO - Processing interactions batch 204001 to 205000 of 500468
+2025-06-22 22:18:32,471 - src.database.database - INFO - Processing interactions batch 205001 to 206000 of 500468
+2025-06-22 22:18:33,171 - src.database.database - INFO - Processing interactions batch 206001 to 207000 of 500468
+2025-06-22 22:18:33,806 - src.database.database - INFO - Processing interactions batch 207001 to 208000 of 500468
+2025-06-22 22:18:34,556 - src.database.database - INFO - Processing interactions batch 208001 to 209000 of 500468
+2025-06-22 22:18:35,705 - src.database.database - INFO - Processing interactions batch 209001 to 210000 of 500468
+2025-06-22 22:18:36,523 - src.database.database - INFO - Processing interactions batch 210001 to 211000 of 500468
+2025-06-22 22:18:37,610 - src.database.database - INFO - Processing interactions batch 211001 to 212000 of 500468
+2025-06-22 22:18:38,405 - src.database.database - INFO - Processing interactions batch 212001 to 213000 of 500468
+2025-06-22 22:18:38,975 - src.database.database - INFO - Processing interactions batch 213001 to 214000 of 500468
+2025-06-22 22:18:39,657 - src.database.database - INFO - Processing interactions batch 214001 to 215000 of 500468
+2025-06-22 22:18:40,147 - src.database.database - INFO - Processing interactions batch 215001 to 216000 of 500468
+2025-06-22 22:18:40,709 - src.database.database - INFO - Processing interactions batch 216001 to 217000 of 500468
+2025-06-22 22:18:41,770 - src.database.database - INFO - Processing interactions batch 217001 to 218000 of 500468
+2025-06-22 22:18:42,696 - src.database.database - INFO - Processing interactions batch 218001 to 219000 of 500468
+2025-06-22 22:18:43,365 - src.database.database - INFO - Processing interactions batch 219001 to 220000 of 500468
+2025-06-22 22:18:44,054 - src.database.database - INFO - Processing interactions batch 220001 to 221000 of 500468
+2025-06-22 22:18:45,012 - src.database.database - INFO - Processing interactions batch 221001 to 222000 of 500468
+2025-06-22 22:18:45,627 - src.database.database - INFO - Processing interactions batch 222001 to 223000 of 500468
+2025-06-22 22:18:46,249 - src.database.database - INFO - Processing interactions batch 223001 to 224000 of 500468
+2025-06-22 22:18:46,963 - src.database.database - INFO - Processing interactions batch 224001 to 225000 of 500468
+2025-06-22 22:18:47,619 - src.database.database - INFO - Processing interactions batch 225001 to 226000 of 500468
+2025-06-22 22:18:48,283 - src.database.database - INFO - Processing interactions batch 226001 to 227000 of 500468
+2025-06-22 22:18:49,102 - src.database.database - INFO - Processing interactions batch 227001 to 228000 of 500468
+2025-06-22 22:18:50,057 - src.database.database - INFO - Processing interactions batch 228001 to 229000 of 500468
+2025-06-22 22:18:50,722 - src.database.database - INFO - Processing interactions batch 229001 to 230000 of 500468
+2025-06-22 22:18:51,322 - src.database.database - INFO - Processing interactions batch 230001 to 231000 of 500468
+2025-06-22 22:18:51,961 - src.database.database - INFO - Processing interactions batch 231001 to 232000 of 500468
+2025-06-22 22:18:52,600 - src.database.database - INFO - Processing interactions batch 232001 to 233000 of 500468
+2025-06-22 22:18:53,158 - src.database.database - INFO - Processing interactions batch 233001 to 234000 of 500468
+2025-06-22 22:18:53,776 - src.database.database - INFO - Processing interactions batch 234001 to 235000 of 500468
+2025-06-22 22:18:54,820 - src.database.database - INFO - Processing interactions batch 235001 to 236000 of 500468
+2025-06-22 22:18:56,104 - src.database.database - INFO - Processing interactions batch 236001 to 237000 of 500468
+2025-06-22 22:18:57,168 - src.database.database - INFO - Processing interactions batch 237001 to 238000 of 500468
+2025-06-22 22:18:58,325 - src.database.database - INFO - Processing interactions batch 238001 to 239000 of 500468
+2025-06-22 22:18:59,177 - src.database.database - INFO - Processing interactions batch 239001 to 240000 of 500468
+2025-06-22 22:18:59,806 - src.database.database - INFO - Processing interactions batch 240001 to 241000 of 500468
+2025-06-22 22:19:00,778 - src.database.database - INFO - Processing interactions batch 241001 to 242000 of 500468
+2025-06-22 22:19:01,703 - src.database.database - INFO - Processing interactions batch 242001 to 243000 of 500468
+2025-06-22 22:19:02,803 - src.database.database - INFO - Processing interactions batch 243001 to 244000 of 500468
+2025-06-22 22:19:03,795 - src.database.database - INFO - Processing interactions batch 244001 to 245000 of 500468
+2025-06-22 22:19:04,371 - src.database.database - INFO - Processing interactions batch 245001 to 246000 of 500468
+2025-06-22 22:19:05,379 - src.database.database - INFO - Processing interactions batch 246001 to 247000 of 500468
+2025-06-22 22:19:06,392 - src.database.database - INFO - Processing interactions batch 247001 to 248000 of 500468
+2025-06-22 22:19:07,059 - src.database.database - INFO - Processing interactions batch 248001 to 249000 of 500468
+2025-06-22 22:19:08,041 - src.database.database - INFO - Processing interactions batch 249001 to 250000 of 500468
+2025-06-22 22:19:08,716 - src.database.database - INFO - Processing interactions batch 250001 to 251000 of 500468
+2025-06-22 22:19:09,296 - src.database.database - INFO - Processing interactions batch 251001 to 252000 of 500468
+2025-06-22 22:19:10,111 - src.database.database - INFO - Processing interactions batch 252001 to 253000 of 500468
+2025-06-22 22:19:11,053 - src.database.database - INFO - Processing interactions batch 253001 to 254000 of 500468
+2025-06-22 22:19:12,114 - src.database.database - INFO - Processing interactions batch 254001 to 255000 of 500468
+2025-06-22 22:19:13,231 - src.database.database - INFO - Processing interactions batch 255001 to 256000 of 500468
+2025-06-22 22:19:13,818 - src.database.database - INFO - Processing interactions batch 256001 to 257000 of 500468
+2025-06-22 22:19:14,536 - src.database.database - INFO - Processing interactions batch 257001 to 258000 of 500468
+2025-06-22 22:19:15,243 - src.database.database - INFO - Processing interactions batch 258001 to 259000 of 500468
+2025-06-22 22:19:15,893 - src.database.database - INFO - Processing interactions batch 259001 to 260000 of 500468
+2025-06-22 22:19:16,435 - src.database.database - INFO - Processing interactions batch 260001 to 261000 of 500468
+2025-06-22 22:19:17,245 - src.database.database - INFO - Processing interactions batch 261001 to 262000 of 500468
+2025-06-22 22:19:18,011 - src.database.database - INFO - Processing interactions batch 262001 to 263000 of 500468
+2025-06-22 22:19:18,534 - src.database.database - INFO - Processing interactions batch 263001 to 264000 of 500468
+2025-06-22 22:19:19,413 - src.database.database - INFO - Processing interactions batch 264001 to 265000 of 500468
+2025-06-22 22:19:20,384 - src.database.database - INFO - Processing interactions batch 265001 to 266000 of 500468
+2025-06-22 22:19:21,019 - src.database.database - INFO - Processing interactions batch 266001 to 267000 of 500468
+2025-06-22 22:19:21,976 - src.database.database - INFO - Processing interactions batch 267001 to 268000 of 500468
+2025-06-22 22:19:23,200 - src.database.database - INFO - Processing interactions batch 268001 to 269000 of 500468
+2025-06-22 22:19:24,060 - src.database.database - INFO - Processing interactions batch 269001 to 270000 of 500468
+2025-06-22 22:19:25,212 - src.database.database - INFO - Processing interactions batch 270001 to 271000 of 500468
+2025-06-22 22:19:26,166 - src.database.database - INFO - Processing interactions batch 271001 to 272000 of 500468
+2025-06-22 22:19:26,999 - src.database.database - INFO - Processing interactions batch 272001 to 273000 of 500468
+2025-06-22 22:19:27,671 - src.database.database - INFO - Processing interactions batch 273001 to 274000 of 500468
+2025-06-22 22:19:28,625 - src.database.database - INFO - Processing interactions batch 274001 to 275000 of 500468
+2025-06-22 22:19:29,513 - src.database.database - INFO - Processing interactions batch 275001 to 276000 of 500468
+2025-06-22 22:19:30,361 - src.database.database - INFO - Processing interactions batch 276001 to 277000 of 500468
+2025-06-22 22:19:31,310 - src.database.database - INFO - Processing interactions batch 277001 to 278000 of 500468
+2025-06-22 22:19:32,051 - src.database.database - INFO - Processing interactions batch 278001 to 279000 of 500468
+2025-06-22 22:19:33,033 - src.database.database - INFO - Processing interactions batch 279001 to 280000 of 500468
+2025-06-22 22:19:33,703 - src.database.database - INFO - Processing interactions batch 280001 to 281000 of 500468
+2025-06-22 22:19:34,444 - src.database.database - INFO - Processing interactions batch 281001 to 282000 of 500468
+2025-06-22 22:19:35,661 - src.database.database - INFO - Processing interactions batch 282001 to 283000 of 500468
+2025-06-22 22:19:36,561 - src.database.database - INFO - Processing interactions batch 283001 to 284000 of 500468
+2025-06-22 22:19:37,739 - src.database.database - INFO - Processing interactions batch 284001 to 285000 of 500468
+2025-06-22 22:19:38,791 - src.database.database - INFO - Processing interactions batch 285001 to 286000 of 500468
+2025-06-22 22:19:39,604 - src.database.database - INFO - Processing interactions batch 286001 to 287000 of 500468
+2025-06-22 22:19:41,045 - src.database.database - INFO - Processing interactions batch 287001 to 288000 of 500468
+2025-06-22 22:19:42,301 - src.database.database - INFO - Processing interactions batch 288001 to 289000 of 500468
+2025-06-22 22:19:43,494 - src.database.database - INFO - Processing interactions batch 289001 to 290000 of 500468
+2025-06-22 22:19:44,179 - src.database.database - INFO - Processing interactions batch 290001 to 291000 of 500468
+2025-06-22 22:19:44,796 - src.database.database - INFO - Processing interactions batch 291001 to 292000 of 500468
+2025-06-22 22:19:45,240 - src.database.database - INFO - Processing interactions batch 292001 to 293000 of 500468
+2025-06-22 22:19:45,760 - src.database.database - INFO - Processing interactions batch 293001 to 294000 of 500468
+2025-06-22 22:19:46,314 - src.database.database - INFO - Processing interactions batch 294001 to 295000 of 500468
+2025-06-22 22:19:47,102 - src.database.database - INFO - Processing interactions batch 295001 to 296000 of 500468
+2025-06-22 22:19:47,967 - src.database.database - INFO - Processing interactions batch 296001 to 297000 of 500468
+2025-06-22 22:19:48,491 - src.database.database - INFO - Processing interactions batch 297001 to 298000 of 500468
+2025-06-22 22:19:49,006 - src.database.database - INFO - Processing interactions batch 298001 to 299000 of 500468
+2025-06-22 22:19:49,473 - src.database.database - INFO - Processing interactions batch 299001 to 300000 of 500468
+2025-06-22 22:19:50,050 - src.database.database - INFO - Processing interactions batch 300001 to 301000 of 500468
+2025-06-22 22:19:50,619 - src.database.database - INFO - Processing interactions batch 301001 to 302000 of 500468
+2025-06-22 22:19:51,113 - src.database.database - INFO - Processing interactions batch 302001 to 303000 of 500468
+2025-06-22 22:19:51,947 - src.database.database - INFO - Processing interactions batch 303001 to 304000 of 500468
+2025-06-22 22:19:52,766 - src.database.database - INFO - Processing interactions batch 304001 to 305000 of 500468
+2025-06-22 22:19:53,522 - src.database.database - INFO - Processing interactions batch 305001 to 306000 of 500468
+2025-06-22 22:19:54,152 - src.database.database - INFO - Processing interactions batch 306001 to 307000 of 500468
+2025-06-22 22:19:54,981 - src.database.database - INFO - Processing interactions batch 307001 to 308000 of 500468
+2025-06-22 22:19:55,721 - src.database.database - INFO - Processing interactions batch 308001 to 309000 of 500468
+2025-06-22 22:19:56,502 - src.database.database - INFO - Processing interactions batch 309001 to 310000 of 500468
+2025-06-22 22:19:57,134 - src.database.database - INFO - Processing interactions batch 310001 to 311000 of 500468
+2025-06-22 22:19:57,691 - src.database.database - INFO - Processing interactions batch 311001 to 312000 of 500468
+2025-06-22 22:19:58,214 - src.database.database - INFO - Processing interactions batch 312001 to 313000 of 500468
+2025-06-22 22:19:58,767 - src.database.database - INFO - Processing interactions batch 313001 to 314000 of 500468
+2025-06-22 22:19:59,263 - src.database.database - INFO - Processing interactions batch 314001 to 315000 of 500468
+2025-06-22 22:19:59,720 - src.database.database - INFO - Processing interactions batch 315001 to 316000 of 500468
+2025-06-22 22:20:00,178 - src.database.database - INFO - Processing interactions batch 316001 to 317000 of 500468
+2025-06-22 22:20:00,618 - src.database.database - INFO - Processing interactions batch 317001 to 318000 of 500468
+2025-06-22 22:20:00,962 - src.database.database - INFO - Processing interactions batch 318001 to 319000 of 500468
+2025-06-22 22:20:01,349 - src.database.database - INFO - Processing interactions batch 319001 to 320000 of 500468
+2025-06-22 22:20:01,743 - src.database.database - INFO - Processing interactions batch 320001 to 321000 of 500468
+2025-06-22 22:20:02,216 - src.database.database - INFO - Processing interactions batch 321001 to 322000 of 500468
+2025-06-22 22:20:02,642 - src.database.database - INFO - Processing interactions batch 322001 to 323000 of 500468
+2025-06-22 22:20:03,119 - src.database.database - INFO - Processing interactions batch 323001 to 324000 of 500468
+2025-06-22 22:20:03,798 - src.database.database - INFO - Processing interactions batch 324001 to 325000 of 500468
+2025-06-22 22:20:04,238 - src.database.database - INFO - Processing interactions batch 325001 to 326000 of 500468
+2025-06-22 22:20:04,813 - src.database.database - INFO - Processing interactions batch 326001 to 327000 of 500468
+2025-06-22 22:20:05,226 - src.database.database - INFO - Processing interactions batch 327001 to 328000 of 500468
+2025-06-22 22:20:05,878 - src.database.database - INFO - Processing interactions batch 328001 to 329000 of 500468
+2025-06-22 22:20:06,399 - src.database.database - INFO - Processing interactions batch 329001 to 330000 of 500468
+2025-06-22 22:20:06,975 - src.database.database - INFO - Processing interactions batch 330001 to 331000 of 500468
+2025-06-22 22:20:07,481 - src.database.database - INFO - Processing interactions batch 331001 to 332000 of 500468
+2025-06-22 22:20:07,967 - src.database.database - INFO - Processing interactions batch 332001 to 333000 of 500468
+2025-06-22 22:20:08,420 - src.database.database - INFO - Processing interactions batch 333001 to 334000 of 500468
+2025-06-22 22:20:09,007 - src.database.database - INFO - Processing interactions batch 334001 to 335000 of 500468
+2025-06-22 22:20:09,551 - src.database.database - INFO - Processing interactions batch 335001 to 336000 of 500468
+2025-06-22 22:20:10,132 - src.database.database - INFO - Processing interactions batch 336001 to 337000 of 500468
+2025-06-22 22:20:10,532 - src.database.database - INFO - Processing interactions batch 337001 to 338000 of 500468
+2025-06-22 22:20:11,096 - src.database.database - INFO - Processing interactions batch 338001 to 339000 of 500468
+2025-06-22 22:20:11,741 - src.database.database - INFO - Processing interactions batch 339001 to 340000 of 500468
+2025-06-22 22:20:12,390 - src.database.database - INFO - Processing interactions batch 340001 to 341000 of 500468
+2025-06-22 22:20:12,871 - src.database.database - INFO - Processing interactions batch 341001 to 342000 of 500468
+2025-06-22 22:20:13,459 - src.database.database - INFO - Processing interactions batch 342001 to 343000 of 500468
+2025-06-22 22:20:14,205 - src.database.database - INFO - Processing interactions batch 343001 to 344000 of 500468
+2025-06-22 22:20:14,785 - src.database.database - INFO - Processing interactions batch 344001 to 345000 of 500468
+2025-06-22 22:20:15,207 - src.database.database - INFO - Processing interactions batch 345001 to 346000 of 500468
+2025-06-22 22:20:15,793 - src.database.database - INFO - Processing interactions batch 346001 to 347000 of 500468
+2025-06-22 22:20:16,160 - src.database.database - INFO - Processing interactions batch 347001 to 348000 of 500468
+2025-06-22 22:20:16,578 - src.database.database - INFO - Processing interactions batch 348001 to 349000 of 500468
+2025-06-22 22:20:17,043 - src.database.database - INFO - Processing interactions batch 349001 to 350000 of 500468
+2025-06-22 22:20:18,038 - src.database.database - INFO - Processing interactions batch 350001 to 351000 of 500468
+2025-06-22 22:20:18,692 - src.database.database - INFO - Processing interactions batch 351001 to 352000 of 500468
+2025-06-22 22:20:19,389 - src.database.database - INFO - Processing interactions batch 352001 to 353000 of 500468
+2025-06-22 22:20:20,482 - src.database.database - INFO - Processing interactions batch 353001 to 354000 of 500468
+2025-06-22 22:20:21,132 - src.database.database - INFO - Processing interactions batch 354001 to 355000 of 500468
+2025-06-22 22:20:22,057 - src.database.database - INFO - Processing interactions batch 355001 to 356000 of 500468
+2025-06-22 22:20:22,948 - src.database.database - INFO - Processing interactions batch 356001 to 357000 of 500468
+2025-06-22 22:20:23,771 - src.database.database - INFO - Processing interactions batch 357001 to 358000 of 500468
+2025-06-22 22:20:24,587 - src.database.database - INFO - Processing interactions batch 358001 to 359000 of 500468
+2025-06-22 22:20:25,350 - src.database.database - INFO - Processing interactions batch 359001 to 360000 of 500468
+2025-06-22 22:20:26,009 - src.database.database - INFO - Processing interactions batch 360001 to 361000 of 500468
+2025-06-22 22:20:26,690 - src.database.database - INFO - Processing interactions batch 361001 to 362000 of 500468
+2025-06-22 22:20:27,415 - src.database.database - INFO - Processing interactions batch 362001 to 363000 of 500468
+2025-06-22 22:20:28,174 - src.database.database - INFO - Processing interactions batch 363001 to 364000 of 500468
+2025-06-22 22:20:28,911 - src.database.database - INFO - Processing interactions batch 364001 to 365000 of 500468
+2025-06-22 22:20:29,948 - src.database.database - INFO - Processing interactions batch 365001 to 366000 of 500468
+2025-06-22 22:20:30,942 - src.database.database - INFO - Processing interactions batch 366001 to 367000 of 500468
+2025-06-22 22:20:31,907 - src.database.database - INFO - Processing interactions batch 367001 to 368000 of 500468
+2025-06-22 22:20:33,010 - src.database.database - INFO - Processing interactions batch 368001 to 369000 of 500468
+2025-06-22 22:20:33,998 - src.database.database - INFO - Processing interactions batch 369001 to 370000 of 500468
+2025-06-22 22:20:35,017 - src.database.database - INFO - Processing interactions batch 370001 to 371000 of 500468
+2025-06-22 22:20:36,395 - src.database.database - INFO - Processing interactions batch 371001 to 372000 of 500468
+2025-06-22 22:20:37,641 - src.database.database - INFO - Processing interactions batch 372001 to 373000 of 500468
+2025-06-22 22:20:38,422 - src.database.database - INFO - Processing interactions batch 373001 to 374000 of 500468
+2025-06-22 22:20:39,482 - src.database.database - INFO - Processing interactions batch 374001 to 375000 of 500468
+2025-06-22 22:20:40,131 - src.database.database - INFO - Processing interactions batch 375001 to 376000 of 500468
+2025-06-22 22:20:41,181 - src.database.database - INFO - Processing interactions batch 376001 to 377000 of 500468
+2025-06-22 22:20:42,044 - src.database.database - INFO - Processing interactions batch 377001 to 378000 of 500468
+2025-06-22 22:20:42,876 - src.database.database - INFO - Processing interactions batch 378001 to 379000 of 500468
+2025-06-22 22:20:43,675 - src.database.database - INFO - Processing interactions batch 379001 to 380000 of 500468
+2025-06-22 22:20:44,613 - src.database.database - INFO - Processing interactions batch 380001 to 381000 of 500468
+2025-06-22 22:20:45,999 - src.database.database - INFO - Processing interactions batch 381001 to 382000 of 500468
+2025-06-22 22:20:47,055 - src.database.database - INFO - Processing interactions batch 382001 to 383000 of 500468
+2025-06-22 22:20:47,937 - src.database.database - INFO - Processing interactions batch 383001 to 384000 of 500468
+2025-06-22 22:20:48,988 - src.database.database - INFO - Processing interactions batch 384001 to 385000 of 500468
+2025-06-22 22:20:50,194 - src.database.database - INFO - Processing interactions batch 385001 to 386000 of 500468
+2025-06-22 22:20:51,437 - src.database.database - INFO - Processing interactions batch 386001 to 387000 of 500468
+2025-06-22 22:20:52,105 - src.database.database - INFO - Processing interactions batch 387001 to 388000 of 500468
+2025-06-22 22:20:52,980 - src.database.database - INFO - Processing interactions batch 388001 to 389000 of 500468
+2025-06-22 22:20:54,103 - src.database.database - INFO - Processing interactions batch 389001 to 390000 of 500468
+2025-06-22 22:20:54,985 - src.database.database - INFO - Processing interactions batch 390001 to 391000 of 500468
+2025-06-22 22:20:56,175 - src.database.database - INFO - Processing interactions batch 391001 to 392000 of 500468
+2025-06-22 22:20:56,870 - src.database.database - INFO - Processing interactions batch 392001 to 393000 of 500468
+2025-06-22 22:20:57,502 - src.database.database - INFO - Processing interactions batch 393001 to 394000 of 500468
+2025-06-22 22:20:58,615 - src.database.database - INFO - Processing interactions batch 394001 to 395000 of 500468
+2025-06-22 22:20:59,640 - src.database.database - INFO - Processing interactions batch 395001 to 396000 of 500468
+2025-06-22 22:21:00,565 - src.database.database - INFO - Processing interactions batch 396001 to 397000 of 500468
+2025-06-22 22:21:01,331 - src.database.database - INFO - Processing interactions batch 397001 to 398000 of 500468
+2025-06-22 22:21:02,567 - src.database.database - INFO - Processing interactions batch 398001 to 399000 of 500468
+2025-06-22 22:21:03,487 - src.database.database - INFO - Processing interactions batch 399001 to 400000 of 500468
+2025-06-22 22:21:04,260 - src.database.database - INFO - Processing interactions batch 400001 to 401000 of 500468
+2025-06-22 22:21:04,931 - src.database.database - INFO - Processing interactions batch 401001 to 402000 of 500468
+2025-06-22 22:21:05,484 - src.database.database - INFO - Processing interactions batch 402001 to 403000 of 500468
+2025-06-22 22:21:05,991 - src.database.database - INFO - Processing interactions batch 403001 to 404000 of 500468
+2025-06-22 22:21:06,349 - src.database.database - INFO - Processing interactions batch 404001 to 405000 of 500468
+2025-06-22 22:21:06,971 - src.database.database - INFO - Processing interactions batch 405001 to 406000 of 500468
+2025-06-22 22:21:07,459 - src.database.database - INFO - Processing interactions batch 406001 to 407000 of 500468
+2025-06-22 22:21:08,088 - src.database.database - INFO - Processing interactions batch 407001 to 408000 of 500468
+2025-06-22 22:21:08,474 - src.database.database - INFO - Processing interactions batch 408001 to 409000 of 500468
+2025-06-22 22:21:09,048 - src.database.database - INFO - Processing interactions batch 409001 to 410000 of 500468
+2025-06-22 22:21:09,609 - src.database.database - INFO - Processing interactions batch 410001 to 411000 of 500468
+2025-06-22 22:21:10,111 - src.database.database - INFO - Processing interactions batch 411001 to 412000 of 500468
+2025-06-22 22:21:10,562 - src.database.database - INFO - Processing interactions batch 412001 to 413000 of 500468
+2025-06-22 22:21:11,139 - src.database.database - INFO - Processing interactions batch 413001 to 414000 of 500468
+2025-06-22 22:21:11,725 - src.database.database - INFO - Processing interactions batch 414001 to 415000 of 500468
+2025-06-22 22:21:12,576 - src.database.database - INFO - Processing interactions batch 415001 to 416000 of 500468
+2025-06-22 22:21:13,465 - src.database.database - INFO - Processing interactions batch 416001 to 417000 of 500468
+2025-06-22 22:21:14,163 - src.database.database - INFO - Processing interactions batch 417001 to 418000 of 500468
+2025-06-22 22:21:14,712 - src.database.database - INFO - Processing interactions batch 418001 to 419000 of 500468
+2025-06-22 22:21:15,064 - src.database.database - INFO - Processing interactions batch 419001 to 420000 of 500468
+2025-06-22 22:21:15,614 - src.database.database - INFO - Processing interactions batch 420001 to 421000 of 500468
+2025-06-22 22:21:16,159 - src.database.database - INFO - Processing interactions batch 421001 to 422000 of 500468
+2025-06-22 22:21:16,651 - src.database.database - INFO - Processing interactions batch 422001 to 423000 of 500468
+2025-06-22 22:21:17,253 - src.database.database - INFO - Processing interactions batch 423001 to 424000 of 500468
+2025-06-22 22:21:17,824 - src.database.database - INFO - Processing interactions batch 424001 to 425000 of 500468
+2025-06-22 22:21:18,312 - src.database.database - INFO - Processing interactions batch 425001 to 426000 of 500468
+2025-06-22 22:21:18,960 - src.database.database - INFO - Processing interactions batch 426001 to 427000 of 500468
+2025-06-22 22:21:19,536 - src.database.database - INFO - Processing interactions batch 427001 to 428000 of 500468
+2025-06-22 22:21:20,545 - src.database.database - INFO - Processing interactions batch 428001 to 429000 of 500468
+2025-06-22 22:21:21,337 - src.database.database - INFO - Processing interactions batch 429001 to 430000 of 500468
+2025-06-22 22:21:21,984 - src.database.database - INFO - Processing interactions batch 430001 to 431000 of 500468
+2025-06-22 22:21:22,407 - src.database.database - INFO - Processing interactions batch 431001 to 432000 of 500468
+2025-06-22 22:21:22,829 - src.database.database - INFO - Processing interactions batch 432001 to 433000 of 500468
+2025-06-22 22:21:23,231 - src.database.database - INFO - Processing interactions batch 433001 to 434000 of 500468
+2025-06-22 22:21:24,072 - src.database.database - INFO - Processing interactions batch 434001 to 435000 of 500468
+2025-06-22 22:21:24,625 - src.database.database - INFO - Processing interactions batch 435001 to 436000 of 500468
+2025-06-22 22:21:25,423 - src.database.database - INFO - Processing interactions batch 436001 to 437000 of 500468
+2025-06-22 22:21:25,765 - src.database.database - INFO - Processing interactions batch 437001 to 438000 of 500468
+2025-06-22 22:21:26,155 - src.database.database - INFO - Processing interactions batch 438001 to 439000 of 500468
+2025-06-22 22:21:26,753 - src.database.database - INFO - Processing interactions batch 439001 to 440000 of 500468
+2025-06-22 22:21:27,182 - src.database.database - INFO - Processing interactions batch 440001 to 441000 of 500468
+2025-06-22 22:21:28,140 - src.database.database - INFO - Processing interactions batch 441001 to 442000 of 500468
+2025-06-22 22:21:28,936 - src.database.database - INFO - Processing interactions batch 442001 to 443000 of 500468
+2025-06-22 22:21:29,523 - src.database.database - INFO - Processing interactions batch 443001 to 444000 of 500468
+2025-06-22 22:21:30,067 - src.database.database - INFO - Processing interactions batch 444001 to 445000 of 500468
+2025-06-22 22:21:30,633 - src.database.database - INFO - Processing interactions batch 445001 to 446000 of 500468
+2025-06-22 22:21:31,245 - src.database.database - INFO - Processing interactions batch 446001 to 447000 of 500468
+2025-06-22 22:21:31,733 - src.database.database - INFO - Processing interactions batch 447001 to 448000 of 500468
+2025-06-22 22:21:32,161 - src.database.database - INFO - Processing interactions batch 448001 to 449000 of 500468
+2025-06-22 22:21:32,750 - src.database.database - INFO - Processing interactions batch 449001 to 450000 of 500468
+2025-06-22 22:21:33,318 - src.database.database - INFO - Processing interactions batch 450001 to 451000 of 500468
+2025-06-22 22:21:34,046 - src.database.database - INFO - Processing interactions batch 451001 to 452000 of 500468
+2025-06-22 22:21:34,577 - src.database.database - INFO - Processing interactions batch 452001 to 453000 of 500468
+2025-06-22 22:21:35,351 - src.database.database - INFO - Processing interactions batch 453001 to 454000 of 500468
+2025-06-22 22:21:36,287 - src.database.database - INFO - Processing interactions batch 454001 to 455000 of 500468
+2025-06-22 22:21:36,940 - src.database.database - INFO - Processing interactions batch 455001 to 456000 of 500468
+2025-06-22 22:21:37,490 - src.database.database - INFO - Processing interactions batch 456001 to 457000 of 500468
+2025-06-22 22:21:38,175 - src.database.database - INFO - Processing interactions batch 457001 to 458000 of 500468
+2025-06-22 22:21:38,893 - src.database.database - INFO - Processing interactions batch 458001 to 459000 of 500468
+2025-06-22 22:21:39,578 - src.database.database - INFO - Processing interactions batch 459001 to 460000 of 500468
+2025-06-22 22:21:40,522 - src.database.database - INFO - Processing interactions batch 460001 to 461000 of 500468
+2025-06-22 22:21:41,262 - src.database.database - INFO - Processing interactions batch 461001 to 462000 of 500468
+2025-06-22 22:21:42,422 - src.database.database - INFO - Processing interactions batch 462001 to 463000 of 500468
+2025-06-22 22:21:43,132 - src.database.database - INFO - Processing interactions batch 463001 to 464000 of 500468
+2025-06-22 22:21:43,984 - src.database.database - INFO - Processing interactions batch 464001 to 465000 of 500468
+2025-06-22 22:21:44,658 - src.database.database - INFO - Processing interactions batch 465001 to 466000 of 500468
+2025-06-22 22:21:45,421 - src.database.database - INFO - Processing interactions batch 466001 to 467000 of 500468
+2025-06-22 22:21:46,273 - src.database.database - INFO - Processing interactions batch 467001 to 468000 of 500468
+2025-06-22 22:21:47,338 - src.database.database - INFO - Processing interactions batch 468001 to 469000 of 500468
+2025-06-22 22:21:47,991 - src.database.database - INFO - Processing interactions batch 469001 to 470000 of 500468
+2025-06-22 22:21:48,732 - src.database.database - INFO - Processing interactions batch 470001 to 471000 of 500468
+2025-06-22 22:21:49,976 - src.database.database - INFO - Processing interactions batch 471001 to 472000 of 500468
+2025-06-22 22:21:51,204 - src.database.database - INFO - Processing interactions batch 472001 to 473000 of 500468
+2025-06-22 22:21:52,153 - src.database.database - INFO - Processing interactions batch 473001 to 474000 of 500468
+2025-06-22 22:21:53,089 - src.database.database - INFO - Processing interactions batch 474001 to 475000 of 500468
+2025-06-22 22:21:53,882 - src.database.database - INFO - Processing interactions batch 475001 to 476000 of 500468
+2025-06-22 22:21:54,940 - src.database.database - INFO - Processing interactions batch 476001 to 477000 of 500468
+2025-06-22 22:21:56,249 - src.database.database - INFO - Processing interactions batch 477001 to 478000 of 500468
+2025-06-22 22:21:57,418 - src.database.database - INFO - Processing interactions batch 478001 to 479000 of 500468
+2025-06-22 22:21:58,233 - src.database.database - INFO - Processing interactions batch 479001 to 480000 of 500468
+2025-06-22 22:21:58,896 - src.database.database - INFO - Processing interactions batch 480001 to 481000 of 500468
+2025-06-22 22:22:00,098 - src.database.database - INFO - Processing interactions batch 481001 to 482000 of 500468
+2025-06-22 22:22:01,239 - src.database.database - INFO - Processing interactions batch 482001 to 483000 of 500468
+2025-06-22 22:22:02,109 - src.database.database - INFO - Processing interactions batch 483001 to 484000 of 500468
+2025-06-22 22:22:02,987 - src.database.database - INFO - Processing interactions batch 484001 to 485000 of 500468
+2025-06-22 22:22:04,382 - src.database.database - INFO - Processing interactions batch 485001 to 486000 of 500468
+2025-06-22 22:22:05,505 - src.database.database - INFO - Processing interactions batch 486001 to 487000 of 500468
+2025-06-22 22:22:06,527 - src.database.database - INFO - Processing interactions batch 487001 to 488000 of 500468
+2025-06-22 22:22:07,193 - src.database.database - INFO - Processing interactions batch 488001 to 489000 of 500468
+2025-06-22 22:22:08,865 - src.database.database - INFO - Processing interactions batch 489001 to 490000 of 500468
+2025-06-22 22:22:09,631 - src.database.database - INFO - Processing interactions batch 490001 to 491000 of 500468

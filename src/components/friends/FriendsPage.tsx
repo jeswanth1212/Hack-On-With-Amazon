@@ -12,6 +12,7 @@ import WatchPartyRequestsView from './WatchPartyRequestsView';
 import { Badge } from '@/components/ui/badge';
 import { getFriendRequests } from '@/lib/utils';
 import { useAuth, useNotifications } from '@/lib/hooks';
+import ProfileView from './ProfileView';
 
 export default function FriendsPage() {
   const [pendingCount, setPendingCount] = useState(0);
@@ -62,11 +63,11 @@ export default function FriendsPage() {
   return (
     <MainLayout>
       <div className="max-w-5xl mx-auto px-6 pt-24 pb-16">
-        <Tabs defaultValue="search" className="w-full">
+        <Tabs defaultValue="profile" className="w-full">
           {/* Sticky header within Tabs */}
-          <div className="sticky top-20 z-20 bg-background/90 backdrop-blur pb-4">
-            <h1 className="text-4xl font-bold text-white mb-4">Friends</h1>
-            <TabsList className="w-full max-w-lg bg-background border border-gray-800">
+          <div className="sticky top-20 z-20 bg-background/90 backdrop-blur pb-4 flex justify-center">
+            <TabsList className="bg-background border border-gray-800 rounded-md">
+              <TabsTrigger value="profile" className="flex-1 py-3 data-[state=active]:bg-secondary">Profile</TabsTrigger>
               <TabsTrigger value="search" className="flex-1 py-3 data-[state=active]:bg-secondary">Search</TabsTrigger>
               <TabsTrigger value="requests" className="flex-1 py-3 data-[state=active]:bg-secondary flex items-center justify-center gap-2">
                 Requests {pendingCount > 0 && <Badge variant="secondary">{pendingCount}</Badge>}
@@ -76,16 +77,15 @@ export default function FriendsPage() {
               </TabsTrigger>
               <TabsTrigger value="friends" className="flex-1 py-3 data-[state=active]:bg-secondary">Friends</TabsTrigger>
               <TabsTrigger value="activity" className="flex-1 py-3 data-[state=active]:bg-secondary">Activity</TabsTrigger>
-              <TabsTrigger value="tiers" className="flex-1 py-3 data-[state=active]:bg-secondary">Tiers</TabsTrigger>
             </TabsList>
           </div>
 
+          <TabsContent value="profile"><ProfileView /></TabsContent>
           <TabsContent value="search"><SearchUsersView onSendRequest={handleSendRequest} /></TabsContent>
           <TabsContent value="requests"><RequestsView onAccept={handleAcceptRequest} onReject={handleRejectRequest} /></TabsContent>
           <TabsContent value="friends"><FriendsListView onRemove={handleRemoveFriend} /></TabsContent>
           <TabsContent value="wp"><WatchPartyRequestsView /></TabsContent>
           <TabsContent value="activity"><ActivityView currentUser={currentUser} /></TabsContent>
-          <TabsContent value="tiers"><TiersView currentPoints={100} /></TabsContent>
         </Tabs>
       </div>
     </MainLayout>
