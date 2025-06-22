@@ -173,7 +173,7 @@ def process_tmdb_dataset(tmdb_dir):
         logger.error(f"Error processing TMDB dataset: {e}")
         return None, None
 
-def create_users_df(n_users=500):
+def create_users_df(n_users=5000):
     """
     Create a DataFrame of users with demographic information.
     
@@ -192,7 +192,7 @@ def create_users_df(n_users=500):
     
     # Add demographic information
     users['age'] = np.random.normal(35, 12, size=len(users)).astype(int)
-    users['age'] = users['age'].clip(18, 80)  # Clip ages to a reasonable range
+    users['age'] = users['age'].clip(10, 80)  # Clip ages to a reasonable range
     
     # Add gender (binary for simplicity)
     users['gender'] = np.random.choice(['M', 'F'], size=len(users))
@@ -268,7 +268,7 @@ def create_users_df(n_users=500):
     
     return users
 
-def create_interactions(items_df, users_df, n_interactions_per_user=10, rating_bias=0.5):
+def create_interactions(items_df, users_df, n_interactions_per_user=100, rating_bias=0.5):
     """
     Create simulated user-movie interactions.
     
@@ -391,7 +391,7 @@ def preprocess_data(downloaded_data):
     items_df, _ = process_tmdb_dataset(tmdb_dir)
     
     # Create users
-    users_df = create_users_df(n_users=sample_size if sample_size else 500)
+    users_df = create_users_df(n_users=sample_size if sample_size else 5000)
     
     # Create interactions
     interactions_df = create_interactions(items_df, users_df)
