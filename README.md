@@ -45,6 +45,21 @@ A full-stack, AI-powered companion for Fire TV that turns solitary streaming int
 
 ---
 
+## 🛠️  Tech stack & architecture
+
+| Layer | Technologies |
+| ----- | ------------ |
+| **Backend API** | Python 3.9 · FastAPI · Uvicorn · python-socketio · SQLite (ACID mode) · Joblib model artefacts |
+| **ML / Recommender** | Scikit-learn SVD (matrix factorisation) · TF-IDF / Cosine similarity · Context-aware re-ranking (LightGBM-style weighted blending) |
+| **Front-End** | Next .js 14 (App Router) · React 18 · TypeScript · Tailwind CSS + Shadcn/ui · Zustand (state) |
+| **Real-time** | Socket.IO v4 (browser ↔ API) · WebRTC (simple-peer) for P2P media sync |
+| **AI on the Edge** | TensorFlow.js (BlazeFace + Emotion CNN) for client-side facial-expression inference |
+| **Tooling / Ops** | ESLint · Prettier · Husky + lint-staged · Docker · GitHub Actions CI |
+
+The system is **stateless** at the API layer—context is passed via JWT-like payloads, while long-term preferences live in the embedded SQLite DB shipped on Fire OS devices. Models are hot-swappable: new `*.joblib` snapshots are atomically loaded without downtime.
+
+---
+
 ## 🚀 Quick start
 ### Prerequisites
 * Node ≥ 18  
@@ -87,4 +102,3 @@ npm run dev        # http://localhost:3000
 *   Surjith Khannan
 
 ---
-
