@@ -19161,3 +19161,12 @@ ValueError: The truth value of an array with more than one element is ambiguous.
 2025-06-22 19:36:25,395 - src.models.model - WARNING - Matrix factorization models not available, using fallback
 2025-06-22 19:36:25,396 - src.models.model - WARNING - User 2 not found in training data
 2025-06-22 19:36:25,556 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 19:37:23,224 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 19:37:25,225 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 19:38:23,217 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 19:38:25,228 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 19:39:22,926 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 19:39:24,917 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 19:39:54,087 - src.api.main - INFO - Shutting down API server...
+2025-06-22 19:39:54,089 - src.models.model - ERROR - Error saving models: [Errno 2] No such file or directory: 'data\\processed\\models\\svd_model.joblib'
+2025-06-22 19:39:54,089 - src.api.main - INFO - Recommendation engine models saved
