@@ -35900,3 +35900,71 @@ ValueError: The truth value of an array with more than one element is ambiguous.
 2025-06-22 23:29:04,872 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet PING data None
 2025-06-22 23:29:04,874 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet PONG data 
 2025-06-22 23:29:15,523 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:29:19,934 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:29:20,558 - src.api.main - INFO - Getting fresh recommendations for user 5 with context: {'mood': 'neutral', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'snowy', 'age': 20, 'location': 'Canada', 'language': 'en', 'preferred_genres': ['action']}
+2025-06-22 23:29:20,558 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:29:20,560 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:29:20,560 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:29:22,669 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:29:29,887 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet PING data None
+2025-06-22 23:29:29,890 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet PONG data 
+2025-06-22 23:29:54,895 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet PING data None
+2025-06-22 23:29:54,897 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet PONG data 
+2025-06-22 23:30:19,888 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet PING data None
+2025-06-22 23:30:19,890 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet PONG data 
+2025-06-22 23:30:20,442 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:30:44,910 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet PING data None
+2025-06-22 23:30:44,912 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet PONG data 
+2025-06-22 23:30:54,753 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:30:54,778 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:30:54,787 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:31:09,938 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet PING data None
+2025-06-22 23:31:09,941 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet PONG data 
+2025-06-22 23:31:13,368 - src.api.main - INFO - Getting fresh recommendations for user 5 with context: {'mood': 'excited', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': 20, 'location': 'Canada', 'language': 'en', 'preferred_genres': ['action']}
+2025-06-22 23:31:13,369 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:31:13,372 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:31:13,373 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:31:14,331 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:31:16,697 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:31:16,706 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:31:16,909 - src.api.main - INFO - Getting fresh recommendations for user 5 with context: {'mood': 'sad', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'rainy', 'age': 20, 'location': 'Canada', 'language': 'en', 'preferred_genres': ['action']}
+2025-06-22 23:31:16,911 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:31:16,912 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:31:16,912 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:31:17,042 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:31:17,057 - src.api.main - INFO - Getting fresh recommendations for user 5 with context: {'mood': 'sad', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'rainy', 'age': 20, 'location': 'Canada', 'language': 'en', 'preferred_genres': ['action']}
+2025-06-22 23:31:17,059 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:31:17,060 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:31:17,061 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:31:17,185 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:31:27,177 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:31:27,598 - src.api.main - INFO - Getting fresh recommendations for user 4 with context: {'mood': 'excited', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['family']}
+2025-06-22 23:31:27,598 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 23:31:27,602 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:31:27,602 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 23:31:27,839 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:31:34,942 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet PING data None
+2025-06-22 23:31:34,943 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet PONG data 
+2025-06-22 23:31:47,463 - src.api.main - INFO - Client disconnected: bVnROJ8dGmHwl6KVAAAB
+2025-06-22 23:31:48,249 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:31:48,717 - src.api.main - INFO - Getting fresh recommendations for user 4 with context: {'mood': 'curious', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'cloudy', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['family']}
+2025-06-22 23:31:48,717 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 23:31:48,718 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:31:48,718 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 23:31:48,899 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:32:48,297 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:32:50,637 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:32:51,464 - src.api.main - INFO - Getting fresh recommendations for user 4 with context: {'mood': 'curious', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['family']}
+2025-06-22 23:32:51,464 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 23:32:51,466 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:32:51,466 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 23:32:54,165 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:33:51,439 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:34:51,426 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:35:51,439 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:36:51,421 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:37:51,427 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:38:51,454 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:40:49,196 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:42:48,433 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:44:49,172 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
