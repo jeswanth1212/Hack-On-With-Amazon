@@ -35412,3 +35412,491 @@ ValueError: The truth value of an array with more than one element is ambiguous.
 2025-06-22 22:22:07,193 - src.database.database - INFO - Processing interactions batch 488001 to 489000 of 500468
 2025-06-22 22:22:08,865 - src.database.database - INFO - Processing interactions batch 489001 to 490000 of 500468
 2025-06-22 22:22:09,631 - src.database.database - INFO - Processing interactions batch 490001 to 491000 of 500468
+2025-06-22 22:22:12,023 - src.database.database - INFO - Processing interactions batch 491001 to 492000 of 500468
+2025-06-22 22:22:12,993 - src.database.database - INFO - Processing interactions batch 492001 to 493000 of 500468
+2025-06-22 22:22:13,972 - src.database.database - INFO - Processing interactions batch 493001 to 494000 of 500468
+2025-06-22 22:22:15,220 - src.database.database - INFO - Processing interactions batch 494001 to 495000 of 500468
+2025-06-22 22:22:16,537 - src.database.database - INFO - Processing interactions batch 495001 to 496000 of 500468
+2025-06-22 22:22:17,732 - src.database.database - INFO - Processing interactions batch 496001 to 497000 of 500468
+2025-06-22 22:22:19,171 - src.database.database - INFO - Processing interactions batch 497001 to 498000 of 500468
+2025-06-22 22:22:21,371 - src.database.database - INFO - Processing interactions batch 498001 to 499000 of 500468
+2025-06-22 22:22:22,902 - src.database.database - INFO - Processing interactions batch 499001 to 500000 of 500468
+2025-06-22 22:22:24,210 - src.database.database - INFO - Processing interactions batch 500001 to 500468 of 500468
+2025-06-22 22:22:24,904 - src.database.database - INFO - Interactions data loaded into database
+2025-06-22 22:22:25,061 - src.database.database - INFO - Database setup completed successfully.
+2025-06-22 22:22:25,063 - src.api.main - INFO - Database initialized and data loaded successfully
+2025-06-22 22:22:25,126 - src.models.model - INFO - Loaded SVD model
+2025-06-22 22:22:25,333 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 22:22:25,348 - src.models.model - INFO - Loaded context model
+2025-06-22 22:22:25,382 - src.models.model - INFO - Loaded item features
+2025-06-22 22:22:25,834 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 22:22:26,085 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 22:22:26,323 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 22:22:26,352 - src.models.model - INFO - Loaded user factors
+2025-06-22 22:22:26,380 - src.models.model - INFO - Loaded item factors
+2025-06-22 22:22:28,875 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 22:22:28,878 - src.models.model - INFO - Loaded 5000 user IDs
+2025-06-22 22:22:28,879 - src.models.model - INFO - Loaded 7695 item IDs
+2025-06-22 22:37:33,607 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'bored', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': None, 'location': None, 'language': None}
+2025-06-22 22:37:33,620 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 22:37:33,623 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 22:37:33,632 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 22:37:35,991 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 22:37:36,836 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 22:37:36,837 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 22:37:36,837 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 22:50:19,082 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'curious', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': None, 'location': None, 'language': None}
+2025-06-22 22:50:19,088 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 22:50:19,089 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 22:50:19,091 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 22:50:20,094 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 22:50:20,120 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'relaxed', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'snowy', 'age': None, 'location': None, 'language': None}
+2025-06-22 22:50:20,121 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 22:50:20,121 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 22:50:20,122 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 22:50:20,235 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 22:50:20,930 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 22:50:20,931 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 22:50:20,931 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 22:50:21,078 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 22:50:21,078 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 22:50:21,078 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 22:51:13,098 - src.database.database - INFO - Added user: 4
+2025-06-22 22:51:13,102 - src.models.model - INFO - Recording interaction: user=4, item=initialization, score=0.0
+2025-06-22 22:51:14,009 - src.models.model - INFO - Updated user and item factors for user 4 and item initialization
+2025-06-22 22:51:14,361 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 22:51:15,034 - src.api.main - INFO - Getting fresh recommendations for user 4 with context: {'mood': 'happy', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'foggy', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['family']}
+2025-06-22 22:51:15,034 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 22:51:15,037 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 22:51:15,038 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 22:51:16,084 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 22:51:16,654 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 22:51:16,654 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 22:51:16,655 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 22:51:56,178 - src.api.main - INFO - Getting fresh recommendations for user 4 with context: {'mood': 'bored', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'cloudy', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['family']}
+2025-06-22 22:51:56,179 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 22:51:56,179 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 22:51:56,179 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 22:51:56,292 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 22:51:56,307 - src.api.main - INFO - Getting fresh recommendations for user 4 with context: {'mood': 'sad', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['family']}
+2025-06-22 22:51:56,308 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 22:51:56,308 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 22:51:56,309 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 22:51:56,425 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 22:51:56,921 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 22:51:56,922 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 22:51:56,923 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 22:51:57,045 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 22:51:57,046 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 22:51:57,046 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 22:56:15,847 - src.api.main - INFO - Getting fresh recommendations for user 4 with context: {'mood': 'excited', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'foggy', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['family']}
+2025-06-22 22:56:15,858 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 22:56:15,860 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 22:56:15,860 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 22:56:16,865 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 22:56:17,522 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 22:56:17,523 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 22:56:17,523 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 22:58:53,659 - src.api.main - INFO - Getting fresh recommendations for user 4 with context: {'mood': 'sad', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'snowy', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['family']}
+2025-06-22 22:58:53,661 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 22:58:53,664 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 22:58:53,665 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 22:58:53,850 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 22:58:54,505 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 22:58:54,505 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 22:58:54,506 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 23:00:50,200 - src.api.main - INFO - Getting fresh recommendations for user 4 with context: {'mood': 'stressed', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['family']}
+2025-06-22 23:00:50,204 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 23:00:50,211 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:00:50,212 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 23:00:50,500 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:01:00,214 - src.database.database - INFO - Added interaction: 4 - 1187512
+2025-06-22 23:01:00,224 - src.models.model - INFO - Recording interaction: user=4, item=1187512, score=1.0
+2025-06-22 23:01:01,179 - src.models.model - INFO - Updated user and item factors for user 4 and item 1187512
+2025-06-22 23:01:01,432 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 23:01:08,483 - src.api.main - INFO - Getting fresh recommendations for user 4 with context: {'mood': 'bored', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'rainy', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['family']}
+2025-06-22 23:01:08,484 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 23:01:08,484 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:01:08,484 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 23:01:08,638 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:01:08,659 - src.api.main - INFO - Getting fresh recommendations for user 4 with context: {'mood': 'stressed', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'rainy', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['family']}
+2025-06-22 23:01:08,660 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 23:01:08,661 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:01:08,663 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 23:01:08,825 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:01:09,264 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 23:01:09,269 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:01:09,271 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 23:01:09,425 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 23:01:09,427 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:01:09,429 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 23:03:35,752 - src.api.main - INFO - Getting fresh recommendations for user 4 with context: {'mood': 'curious', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'foggy', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['family']}
+2025-06-22 23:03:35,753 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 23:03:35,755 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:03:35,756 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 23:03:37,909 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:03:38,502 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 23:03:38,503 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:03:38,505 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 23:05:21,774 - src.api.main - INFO - Getting fresh recommendations for user 4 with context: {'mood': 'bored', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['family']}
+2025-06-22 23:05:21,775 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 23:05:21,777 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:05:21,778 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 23:05:21,927 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:05:21,951 - src.api.main - INFO - Getting fresh recommendations for user 4 with context: {'mood': 'sad', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'rainy', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['family']}
+2025-06-22 23:05:21,952 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 23:05:21,952 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:05:21,953 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 23:05:22,105 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:05:22,122 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 23:05:22,123 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:05:22,124 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 23:05:22,945 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 23:05:22,945 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:05:22,946 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 23:08:53,571 - src.database.database - INFO - Added user: 5
+2025-06-22 23:08:53,572 - src.models.model - INFO - Recording interaction: user=5, item=initialization, score=0.0
+2025-06-22 23:08:54,066 - src.models.model - INFO - Updated user and item factors for user 5 and item initialization
+2025-06-22 23:08:54,290 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 23:09:58,537 - src.api.main - INFO - Getting fresh recommendations for user 5 with context: {'mood': 'curious', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'snowy', 'age': 20, 'location': 'Canada', 'language': 'en', 'preferred_genres': ['action']}
+2025-06-22 23:09:58,537 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:09:58,581 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:09:58,582 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:09:59,608 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:09:59,689 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:09:59,690 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:09:59,690 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:11:59,379 - src.api.main - INFO - Getting fresh recommendations for user 5 with context: {'mood': 'bored', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'cloudy', 'age': 20, 'location': 'Canada', 'language': 'en', 'preferred_genres': ['action']}
+2025-06-22 23:11:59,383 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:11:59,459 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:11:59,459 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:12:00,927 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:12:01,488 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:12:01,494 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:12:01,497 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:13:13,351 - src.api.main - INFO - Getting fresh recommendations for user 5 with context: {'mood': 'bored', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'sunny', 'age': 20, 'location': 'Canada', 'language': 'en', 'preferred_genres': ['action']}
+2025-06-22 23:13:13,353 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:13:13,354 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:13:13,354 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:13:14,565 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:13:14,617 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:13:14,619 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:13:14,619 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:13:39,384 - src.api.main - INFO - Getting fresh recommendations for user 5 with context: {'mood': 'stressed', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'cloudy', 'age': 20, 'location': 'Canada', 'language': 'en', 'preferred_genres': ['action']}
+2025-06-22 23:13:39,385 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:13:39,387 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:13:39,387 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:13:39,829 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:13:39,893 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:13:39,894 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:13:39,894 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:15:26,591 - src.api.main - INFO - Getting fresh recommendations for user 4 with context: {'mood': 'bored', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'snowy', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['family']}
+2025-06-22 23:15:26,592 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 23:15:26,594 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:15:26,595 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 23:15:27,304 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:15:27,666 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 23:15:27,667 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:15:27,669 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 23:17:31,226 - src.api.main - INFO - Getting fresh recommendations for user 4 with context: {'mood': 'curious', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'foggy', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['family']}
+2025-06-22 23:17:31,227 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 23:17:31,229 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:17:31,230 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 23:17:32,687 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:17:33,120 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 23:17:33,123 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:17:33,124 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 23:20:09,291 - src.api.main - INFO - Getting fresh recommendations for user 4 with context: {'mood': 'happy', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'windy', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['family']}
+2025-06-22 23:20:09,291 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 23:20:09,293 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:20:09,293 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 23:20:21,936 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:20:22,203 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 23:20:22,205 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:20:22,206 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 23:20:30,345 - src.database.database - INFO - Friend request sent from 4 to 5
+2025-06-22 23:20:41,802 - src.api.main - INFO - Getting fresh recommendations for user 5 with context: {'mood': 'bored', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'rainy', 'age': 20, 'location': 'Canada', 'language': 'en', 'preferred_genres': ['action']}
+2025-06-22 23:20:41,803 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:20:41,806 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:20:41,807 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:20:42,341 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:20:42,686 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:20:42,686 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:20:42,687 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:20:48,427 - src.database.database - INFO - Friendship created between 4 and 5
+2025-06-22 23:20:48,439 - src.database.database - INFO - Friend request 1 accepted
+2025-06-22 23:21:15,307 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:21:15,707 - src.api.main - INFO - Getting fresh recommendations for user 5 with context: {'mood': 'happy', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'cloudy', 'age': 20, 'location': 'Canada', 'language': 'en', 'preferred_genres': ['action']}
+2025-06-22 23:21:15,708 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:21:15,709 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:21:15,710 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:21:17,742 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:21:18,785 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:21:18,810 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:21:18,848 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:21:24,496 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:21:24,507 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:21:26,557 - src.api.main - INFO - Getting fresh recommendations for user 5 with context: {'mood': 'happy', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'stormy', 'age': 20, 'location': 'Canada', 'language': 'en', 'preferred_genres': ['action']}
+2025-06-22 23:21:26,558 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:21:26,559 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:21:26,560 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:21:27,255 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:21:35,467 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:21:35,478 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:21:40,774 - src.database.database - INFO - Added interaction: 5 - 250551
+2025-06-22 23:21:40,785 - src.models.model - INFO - Recording interaction: user=5, item=250551, score=1.0
+2025-06-22 23:21:42,281 - src.models.model - INFO - Updated user and item factors for user 5 and item 250551
+2025-06-22 23:21:42,534 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 23:21:45,002 - src.database.database - INFO - Watch party 4 created by 5 for movie 250551
+2025-06-22 23:23:59,877 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:24:00,053 - src.api.main - INFO - Getting fresh recommendations for user 5 with context: {'mood': 'neutral', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'windy', 'age': 20, 'location': 'Canada', 'language': 'en', 'preferred_genres': ['action']}
+2025-06-22 23:24:00,055 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:24:00,164 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:24:00,167 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:24:02,408 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:24:15,055 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:24:15,065 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:24:16,125 - src.api.main - INFO - Getting fresh recommendations for user 5 with context: {'mood': 'curious', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'rainy', 'age': 20, 'location': 'Canada', 'language': 'en', 'preferred_genres': ['action']}
+2025-06-22 23:24:16,125 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:24:16,127 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:24:16,127 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:24:18,407 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:24:21,886 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:24:21,905 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:24:24,785 - src.database.database - INFO - Added interaction: 5 - 1353117
+2025-06-22 23:24:24,793 - src.models.model - INFO - Recording interaction: user=5, item=1353117, score=1.0
+2025-06-22 23:24:25,914 - src.api.main - ERROR - Error processing interaction: Unable to allocate 294. MiB for an array with shape (5002, 7699) and data type float64
+2025-06-22 23:24:40,201 - src.database.database - INFO - Added interaction: 5 - 1353117
+2025-06-22 23:24:40,202 - src.models.model - INFO - Recording interaction: user=5, item=1353117, score=1.0
+2025-06-22 23:24:40,203 - src.api.main - ERROR - Error processing interaction: index 7698 is out of bounds for axis 1 with size 7698
+2025-06-22 23:24:46,204 - src.database.database - INFO - Watch party 5 created by 5 for movie 1353117
+2025-06-22 23:24:54,623 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet OPEN data {'sid': '4cbSQ5zdBWwTkkKgAAAA', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 100000000.0}
+2025-06-22 23:24:54,633 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received request to upgrade to websocket
+2025-06-22 23:24:54,661 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Upgrade to websocket successful
+2025-06-22 23:24:55,412 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet MESSAGE data 0
+2025-06-22 23:24:55,447 - src.api.main - INFO - Client connected: bVnROJ8dGmHwl6KVAAAB
+2025-06-22 23:24:55,451 - src.api.main - INFO - Connection environ: http://localhost:3000 - Headers: h59NXHEfgj/muY3Fst+Hfw==
+2025-06-22 23:24:55,452 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet MESSAGE data 0{"sid":"bVnROJ8dGmHwl6KVAAAB"}
+2025-06-22 23:24:55,458 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet MESSAGE data 20["leave_watch_party",{"party_id":5,"user_id":"guest"}]
+2025-06-22 23:24:55,461 - socketio.server - INFO - received event "leave_watch_party" from bVnROJ8dGmHwl6KVAAAB [/]
+2025-06-22 23:24:55,462 - src.api.main - INFO - Leave watch party request: {'party_id': 5, 'user_id': 'guest'}
+2025-06-22 23:24:55,462 - src.api.main - ERROR - Invalid party ID in leave request: 5
+2025-06-22 23:24:55,475 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet MESSAGE data 30[{"success":false,"error":"Invalid party ID"}]
+2025-06-22 23:24:56,992 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet MESSAGE data 21["join_watch_party",{"party_id":5,"user_id":"5","username":"5"}]
+2025-06-22 23:24:56,994 - socketio.server - INFO - received event "join_watch_party" from bVnROJ8dGmHwl6KVAAAB [/]
+2025-06-22 23:24:56,996 - src.api.main - INFO - Join watch party request from bVnROJ8dGmHwl6KVAAAB: {'party_id': 5, 'user_id': '5', 'username': '5'}
+2025-06-22 23:24:56,996 - src.api.main - INFO - Created new watch party: 5
+2025-06-22 23:24:56,997 - src.api.main - INFO - User 5 (5) joined party 5 with SID bVnROJ8dGmHwl6KVAAAB
+2025-06-22 23:24:56,998 - socketio.server - INFO - bVnROJ8dGmHwl6KVAAAB is entering room party_5 [/]
+2025-06-22 23:24:57,004 - src.api.main - INFO - Broadcasting new participant to room party_5
+2025-06-22 23:24:57,007 - socketio.server - INFO - emitting event "participant_joined" to party_5 [/]
+2025-06-22 23:24:57,011 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet MESSAGE data 31[{"success":true,"participants":[{"sid":"bVnROJ8dGmHwl6KVAAAB","user_id":"5","username":"5"}],"video_state":{"playing":false,"currentTime":0,"tmdbId":null}}]
+2025-06-22 23:24:58,753 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:24:58,756 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:24:58,784 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet MESSAGE data 22["leave_watch_party",{"party_id":5,"user_id":"5"}]
+2025-06-22 23:24:58,786 - socketio.server - INFO - received event "leave_watch_party" from bVnROJ8dGmHwl6KVAAAB [/]
+2025-06-22 23:24:58,789 - src.api.main - INFO - Leave watch party request: {'party_id': 5, 'user_id': '5'}
+2025-06-22 23:24:58,796 - socketio.server - INFO - emitting event "participant_left" to party_5 [/]
+2025-06-22 23:24:58,803 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet MESSAGE data 2["participant_left",{"user_id":"5"}]
+2025-06-22 23:24:58,807 - socketio.server - INFO - bVnROJ8dGmHwl6KVAAAB is leaving room party_5 [/]
+2025-06-22 23:24:58,811 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet MESSAGE data 32[{"success":true}]
+2025-06-22 23:25:04,104 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:25:04,107 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:25:09,262 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:25:09,265 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:25:14,106 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:25:14,109 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:25:19,112 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:25:19,116 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:25:19,685 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet PING data None
+2025-06-22 23:25:19,705 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet PONG data 
+2025-06-22 23:25:24,117 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:25:24,122 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:25:28,801 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:25:28,803 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:25:32,329 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:25:33,450 - src.api.main - INFO - Getting fresh recommendations for user 5 with context: {'mood': 'bored', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'sunny', 'age': 20, 'location': 'Canada', 'language': 'en', 'preferred_genres': ['action']}
+2025-06-22 23:25:33,452 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:25:33,571 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:25:33,572 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:25:35,752 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:25:35,849 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:25:35,855 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:25:38,799 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:25:38,803 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:25:44,426 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:25:44,430 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:25:44,720 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet PING data None
+2025-06-22 23:25:44,725 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet PONG data 
+2025-06-22 23:25:49,422 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:25:49,427 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:25:54,441 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:25:54,449 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:25:59,117 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:25:59,122 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:26:05,066 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:26:05,073 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:26:09,113 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:26:09,119 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:26:09,735 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet PING data None
+2025-06-22 23:26:09,739 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet PONG data 
+2025-06-22 23:26:14,103 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:26:14,110 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:26:19,119 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:26:19,126 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:26:24,443 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:26:24,447 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:26:29,117 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:26:29,127 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:26:34,417 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:26:34,423 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:26:34,755 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet PING data None
+2025-06-22 23:26:34,761 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet PONG data 
+2025-06-22 23:26:39,367 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:26:39,370 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:26:42,491 - src.api.main - INFO - Getting fresh recommendations for user 2 with context: {'mood': 'happy', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'sunny', 'age': None, 'location': None, 'language': None}
+2025-06-22 23:26:42,492 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 23:26:42,492 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 23:26:42,493 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 23:26:44,131 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:26:44,427 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:26:44,430 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:26:44,918 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 23:26:44,918 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 23:26:44,918 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 23:26:49,110 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:26:49,114 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:26:50,788 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:26:51,459 - src.api.main - INFO - Getting fresh recommendations for user 4 with context: {'mood': 'happy', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'sunny', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['family']}
+2025-06-22 23:26:51,460 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 23:26:51,471 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:26:51,473 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 23:26:51,882 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:26:53,971 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:26:53,985 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:26:54,005 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:26:54,431 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:26:54,434 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:26:58,247 - src.database.database - INFO - User 4 accepted party 5
+2025-06-22 23:26:58,935 - engineio.server - INFO - UVlhctTpLm4s18NwAAAC: Sending packet OPEN data {'sid': 'UVlhctTpLm4s18NwAAAC', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 100000000.0}
+2025-06-22 23:26:58,947 - engineio.server - INFO - UVlhctTpLm4s18NwAAAC: Received request to upgrade to websocket
+2025-06-22 23:26:58,950 - engineio.server - INFO - UVlhctTpLm4s18NwAAAC: Upgrade to websocket successful
+2025-06-22 23:26:59,026 - engineio.server - INFO - UVlhctTpLm4s18NwAAAC: Received packet MESSAGE data 0
+2025-06-22 23:26:59,036 - src.api.main - INFO - Client connected: OJKKe91zYeTPABicAAAD
+2025-06-22 23:26:59,036 - src.api.main - INFO - Connection environ: http://localhost:3000 - Headers: HQxTeJsIZqfjMvicSe1qiQ==
+2025-06-22 23:26:59,038 - engineio.server - INFO - UVlhctTpLm4s18NwAAAC: Sending packet MESSAGE data 0{"sid":"OJKKe91zYeTPABicAAAD"}
+2025-06-22 23:26:59,043 - engineio.server - INFO - UVlhctTpLm4s18NwAAAC: Received packet MESSAGE data 20["leave_watch_party",{"party_id":5,"user_id":"4"}]
+2025-06-22 23:26:59,046 - socketio.server - INFO - received event "leave_watch_party" from OJKKe91zYeTPABicAAAD [/]
+2025-06-22 23:26:59,047 - src.api.main - INFO - Leave watch party request: {'party_id': 5, 'user_id': '4'}
+2025-06-22 23:26:59,047 - src.api.main - ERROR - Invalid party ID in leave request: 5
+2025-06-22 23:26:59,048 - engineio.server - INFO - UVlhctTpLm4s18NwAAAC: Sending packet MESSAGE data 30[{"success":false,"error":"Invalid party ID"}]
+2025-06-22 23:26:59,205 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:26:59,212 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:26:59,783 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet PING data None
+2025-06-22 23:26:59,788 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet PONG data 
+2025-06-22 23:27:02,970 - engineio.server - INFO - UVlhctTpLm4s18NwAAAC: Received packet MESSAGE data 21["join_watch_party",{"party_id":5,"user_id":"4","username":"4"}]
+2025-06-22 23:27:02,970 - socketio.server - INFO - received event "join_watch_party" from OJKKe91zYeTPABicAAAD [/]
+2025-06-22 23:27:02,971 - src.api.main - INFO - Join watch party request from OJKKe91zYeTPABicAAAD: {'party_id': 5, 'user_id': '4', 'username': '4'}
+2025-06-22 23:27:02,971 - src.api.main - INFO - Created new watch party: 5
+2025-06-22 23:27:02,972 - src.api.main - INFO - User 4 (4) joined party 5 with SID OJKKe91zYeTPABicAAAD
+2025-06-22 23:27:02,972 - socketio.server - INFO - OJKKe91zYeTPABicAAAD is entering room party_5 [/]
+2025-06-22 23:27:02,975 - src.api.main - INFO - Broadcasting new participant to room party_5
+2025-06-22 23:27:02,977 - socketio.server - INFO - emitting event "participant_joined" to party_5 [/]
+2025-06-22 23:27:02,979 - engineio.server - INFO - UVlhctTpLm4s18NwAAAC: Sending packet MESSAGE data 31[{"success":true,"participants":[{"sid":"OJKKe91zYeTPABicAAAD","user_id":"4","username":"4"}],"video_state":{"playing":false,"currentTime":0,"tmdbId":null}}]
+2025-06-22 23:27:04,279 - engineio.server - INFO - UVlhctTpLm4s18NwAAAC: Received packet MESSAGE data 22["join_watch_party",{"party_id":5,"user_id":"4","username":"4"}]
+2025-06-22 23:27:04,282 - socketio.server - INFO - received event "join_watch_party" from OJKKe91zYeTPABicAAAD [/]
+2025-06-22 23:27:04,284 - src.api.main - INFO - Join watch party request from OJKKe91zYeTPABicAAAD: {'party_id': 5, 'user_id': '4', 'username': '4'}
+2025-06-22 23:27:04,286 - src.api.main - INFO - User 4 reconnected with new SID OJKKe91zYeTPABicAAAD
+2025-06-22 23:27:04,286 - socketio.server - INFO - OJKKe91zYeTPABicAAAD is entering room party_5 [/]
+2025-06-22 23:27:04,291 - engineio.server - INFO - UVlhctTpLm4s18NwAAAC: Sending packet MESSAGE data 32[{"success":true,"participants":[{"sid":"OJKKe91zYeTPABicAAAD","user_id":"4","username":"4"}],"video_state":{"playing":false,"currentTime":0,"tmdbId":null}}]
+2025-06-22 23:27:04,432 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:27:04,438 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:27:05,518 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:27:05,525 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:27:05,629 - engineio.server - INFO - UVlhctTpLm4s18NwAAAC: Received packet MESSAGE data 23["leave_watch_party",{"party_id":5,"user_id":"4"}]
+2025-06-22 23:27:05,630 - socketio.server - INFO - received event "leave_watch_party" from OJKKe91zYeTPABicAAAD [/]
+2025-06-22 23:27:05,631 - src.api.main - INFO - Leave watch party request: {'party_id': 5, 'user_id': '4'}
+2025-06-22 23:27:05,632 - socketio.server - INFO - emitting event "participant_left" to party_5 [/]
+2025-06-22 23:27:05,633 - engineio.server - INFO - UVlhctTpLm4s18NwAAAC: Sending packet MESSAGE data 2["participant_left",{"user_id":"4"}]
+2025-06-22 23:27:05,638 - socketio.server - INFO - OJKKe91zYeTPABicAAAD is leaving room party_5 [/]
+2025-06-22 23:27:05,643 - engineio.server - INFO - UVlhctTpLm4s18NwAAAC: Sending packet MESSAGE data 33[{"success":true}]
+2025-06-22 23:27:08,793 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:27:08,798 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:27:10,650 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:27:10,656 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:27:14,107 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:27:14,114 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:27:15,656 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:27:15,660 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:27:18,803 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:27:18,806 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:27:20,655 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:27:20,659 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:27:23,945 - engineio.server - INFO - UVlhctTpLm4s18NwAAAC: Sending packet PING data None
+2025-06-22 23:27:23,947 - engineio.server - INFO - UVlhctTpLm4s18NwAAAC: Received packet PONG data 
+2025-06-22 23:27:24,118 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:27:24,119 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:27:24,812 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet PING data None
+2025-06-22 23:27:24,816 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet PONG data 
+2025-06-22 23:27:28,960 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:27:28,965 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:27:29,107 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:27:29,111 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:27:30,820 - src.api.main - INFO - Client disconnected: OJKKe91zYeTPABicAAAD
+2025-06-22 23:27:34,111 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:27:34,112 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:27:39,116 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:27:39,117 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:27:44,118 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:27:44,122 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:27:48,796 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:27:48,799 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:27:49,495 - src.database.database - INFO - Watch party 5 ended
+2025-06-22 23:27:49,499 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet MESSAGE data 23["leave_watch_party",{"party_id":5,"user_id":"5"}]
+2025-06-22 23:27:49,501 - socketio.server - INFO - received event "leave_watch_party" from bVnROJ8dGmHwl6KVAAAB [/]
+2025-06-22 23:27:49,502 - src.api.main - INFO - Leave watch party request: {'party_id': 5, 'user_id': '5'}
+2025-06-22 23:27:49,503 - src.api.main - ERROR - Invalid party ID in leave request: 5
+2025-06-22 23:27:49,503 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet MESSAGE data 33[{"success":false,"error":"Invalid party ID"}]
+2025-06-22 23:27:49,843 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet PING data None
+2025-06-22 23:27:49,845 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet PONG data 
+2025-06-22 23:27:53,803 - src.api.main - INFO - Fetching details for watch party ID: 5
+2025-06-22 23:27:53,810 - src.api.main - INFO - Successfully retrieved watch party details for ID 5
+2025-06-22 23:27:54,438 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet MESSAGE data 24["leave_watch_party",{"party_id":5,"user_id":"5"}]
+2025-06-22 23:27:54,440 - socketio.server - INFO - received event "leave_watch_party" from bVnROJ8dGmHwl6KVAAAB [/]
+2025-06-22 23:27:54,441 - src.api.main - INFO - Leave watch party request: {'party_id': 5, 'user_id': '5'}
+2025-06-22 23:27:54,441 - src.api.main - ERROR - Invalid party ID in leave request: 5
+2025-06-22 23:27:54,442 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet MESSAGE data 34[{"success":false,"error":"Invalid party ID"}]
+2025-06-22 23:27:54,467 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:27:54,476 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:27:54,837 - src.api.main - INFO - Getting fresh recommendations for user 5 with context: {'mood': 'curious', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'sunny', 'age': 20, 'location': 'Canada', 'language': 'en', 'preferred_genres': ['action']}
+2025-06-22 23:27:54,837 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:27:54,839 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:27:54,841 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:27:55,940 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:27:55,957 - src.api.main - INFO - Getting fresh recommendations for user 5 with context: {'mood': 'curious', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'sunny', 'age': 20, 'location': 'Canada', 'language': 'en', 'preferred_genres': ['action']}
+2025-06-22 23:27:55,957 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:27:55,957 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:27:55,958 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:27:56,102 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:28:02,210 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:28:02,235 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:28:02,267 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:28:14,853 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet PING data None
+2025-06-22 23:28:14,858 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet PONG data 
+2025-06-22 23:28:15,255 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:28:15,286 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 23:28:15,293 - src.api.main - INFO - Getting fresh recommendations for user 5 with context: {'mood': 'relaxed', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'windy', 'age': 20, 'location': 'Canada', 'language': 'en', 'preferred_genres': ['action']}
+2025-06-22 23:28:15,294 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:28:15,295 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:28:15,296 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:28:15,444 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:28:15,459 - src.api.main - INFO - Getting fresh recommendations for user 5 with context: {'mood': 'neutral', 'time_of_day': 'night', 'day_of_week': 'Sunday', 'weather': 'rainy', 'age': 20, 'location': 'Canada', 'language': 'en', 'preferred_genres': ['action']}
+2025-06-22 23:28:15,459 - src.models.model - INFO - Getting recommendations for user 5
+2025-06-22 23:28:15,460 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 23:28:15,460 - src.models.model - WARNING - User 5 not found in training data
+2025-06-22 23:28:15,592 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 23:28:39,844 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet PING data None
+2025-06-22 23:28:39,849 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet PONG data 
+2025-06-22 23:29:04,872 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Sending packet PING data None
+2025-06-22 23:29:04,874 - engineio.server - INFO - 4cbSQ5zdBWwTkkKgAAAA: Received packet PONG data 
+2025-06-22 23:29:15,523 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes

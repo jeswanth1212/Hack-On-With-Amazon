@@ -228,4 +228,72 @@ export async function discoverMoviesByLanguageGenre(
       genres: mappedGenres,
     } as DiscoveredMovie;
   });
+}
+
+// Function to fetch trending data for the week for a specific region (country code)
+export async function fetchTrendingWeekByRegion(region: string) {
+  if (!region) region = 'US';
+  const response = await fetch(
+    `${BASE_URL}/trending/all/week?api_key=${API_KEY}&language=en-US&region=${region}`
+  );
+  if (!response.ok) {
+    console.error('Failed to fetch region-based trending');
+    return fetchTrendingWeek(); // fallback
+  }
+  const data = await response.json();
+  return data.results.map((item: any) => {
+    const title = item.title || item.name;
+    const imageUrl = `${IMAGE_BASE_URL}/original${item.backdrop_path}`;
+    const posterUrl = `${IMAGE_BASE_URL}/w500${item.poster_path}`;
+    let genres: string[] = [];
+    if (Array.isArray(item.genre_ids)) {
+      genres = item.genre_ids.map((id: number) => GENRE_MAP[id]).filter(Boolean);
+    }
+    return {
+      id: item.id,
+      title,
+      description: item.overview,
+      imageUrl,
+      posterUrl,
+      mediaType: item.media_type,
+      releaseDate: item.release_date || item.first_air_date,
+      rating: item.vote_average,
+      provider: item.media_type === 'movie' ? 'Movie' : 'TV Show',
+      genres,
+    };
+  });
+}
+
+// Fetch trending TV shows for the week for a region
+export async function fetchTrendingTvWeekByRegion(region: string) {
+  if (!region) region = 'US';
+  const response = await fetch(
+    `${BASE_URL}/trending/tv/week?api_key=${API_KEY}&language=en-US&region=${region}`
+  );
+  if (!response.ok) {
+    console.error('Failed to fetch trending TV');
+    return [];
+  }
+  const data = await response.json();
+  return data.results.map((item: any) => {
+    const title = item.name;
+    const imageUrl = `${IMAGE_BASE_URL}/original${item.backdrop_path}`;
+    const posterUrl = `${IMAGE_BASE_URL}/w500${item.poster_path}`;
+    let genres: string[] = [];
+    if (Array.isArray(item.genre_ids)) {
+      genres = item.genre_ids.map((id: number) => GENRE_MAP[id]).filter(Boolean);
+    }
+    return {
+      id: item.id,
+      title,
+      description: item.overview,
+      imageUrl,
+      posterUrl,
+      mediaType: 'tv',
+      releaseDate: item.first_air_date,
+      rating: item.vote_average,
+      provider: 'TV Show',
+      genres,
+    };
+  });
 } 

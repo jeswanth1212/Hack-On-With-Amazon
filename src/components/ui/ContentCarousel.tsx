@@ -26,7 +26,7 @@ export default function ContentCarousel({
 }: ContentCarouselProps) {
   return (
     <div className={`mb-10 ${className}`}>
-      {title && <h2 className="text-2xl font-bold mb-4 pl-8 text-white">{title}</h2>}
+      {title && <h2 className="text-xl md:text-2xl font-bold mb-5 pl-8 text-white">{title}</h2>}
       <div className="relative w-full">
         <Carousel
           opts={{
