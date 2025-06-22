@@ -120,13 +120,87 @@ def run_api():
         # Clean recommendation cache
         clean_recommendation_cache()
         
-        # Import and start the API
-        from src.api.main import start
-        logger.info("Starting API server...")
-        start()
+        # Set up test watch party data for debugging
+        test_watch_party_setup()
+        
+        # Check if port 8080 is in use and try to free it
+        try:
+            # Try to import and run the kill_port function
+            from kill_port import kill_process_on_port
+            kill_process_on_port(8080)
+        except ImportError:
+            logger.warning("kill_port.py not found. Cannot automatically free port 8080.")
+            # Fallback to socket check
+            import socket
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            result = sock.connect_ex(('127.0.0.1', 8080))
+            if result == 0:
+                logger.warning("Port 8080 is already in use. Please stop any other services using this port.")
+                logger.warning("Use 'netstat -ano | findstr :8080' to identify the process, then stop it.")
+                # Continue anyway
+            sock.close()
+        
+        # Start the API server with WebSocket support
+        logger.info("Starting API server with WebSocket support...")
+        logger.info("Server will be available at http://localhost:8080")
+        logger.info("WebSocket will be available at ws://localhost:8080/socket.io/")
+        
+        import uvicorn
+        
+        # Configure and run uvicorn with explicit host and port
+        uvicorn.run(
+            "src.api.main:app", 
+            host="0.0.0.0", 
+            port=8080, 
+            reload=False,  # Set to False to avoid conflicts with multiple processes
+            ws_max_size=16777216,  # 16MB max WebSocket message size
+            ws_ping_interval=20.0,  # Send pings to client every 20 seconds
+            ws_ping_timeout=30.0,   # Wait up to 30 seconds for pings
+            log_level="info"
+        )
     except Exception as e:
         logger.error(f"Error starting API server: {e}")
         sys.exit(1)
+
+def test_watch_party_setup():
+    """Set up test watch party data for debugging."""
+    logger.info("Setting up test watch party data...")
+    
+    try:
+        from src.database.database import get_db_connection, create_watch_party, accept_watch_party
+        
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # Check if we already have watch parties
+        cursor.execute("SELECT COUNT(*) FROM WatchParties")
+        count = cursor.fetchone()[0]
+        
+        if count == 0:
+            # Create a test party with ID 1
+            logger.info("Creating test watch party...")
+            party_id = create_watch_party("user1", 299536, ["user2", "user3"])  # Avengers: Infinity War
+            logger.info(f"Created test watch party with ID: {party_id}")
+            
+            # Accept invitations
+            accept_watch_party(party_id, "user2")
+            logger.info(f"User2 accepted invitation to party {party_id}")
+            
+            # Create another test party with ID 2
+            party_id2 = create_watch_party("user2", 24428, ["user1", "user3"])  # The Avengers
+            logger.info(f"Created test watch party with ID: {party_id2}")
+            
+            # Create a party with ID 3
+            party_id3 = create_watch_party("user3", 299534, ["user1", "user2"])  # Avengers: Endgame
+            logger.info(f"Created test watch party with ID: {party_id3}")
+            
+            logger.info("Test watch party data setup complete.")
+        else:
+            logger.info(f"Watch parties already exist in database ({count} parties).")
+        
+        conn.close()
+    except Exception as e:
+        logger.error(f"Error setting up test watch party data: {e}")
 
 def main():
     """Main function to run the recommendation system."""

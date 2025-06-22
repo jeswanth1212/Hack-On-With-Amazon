@@ -777,19 +777,38 @@ def accept_watch_party(party_id: int, user_id: str):
 
 
 def get_watch_party_details(party_id: int):
+    """
+    Get details of a watch party including participants.
+    
+    Args:
+        party_id (int): ID of the watch party
+        
+    Returns:
+        dict: Watch party details or None if not found
+    """
     conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('SELECT * FROM WatchParties WHERE party_id = ?', (party_id,))
-    party = cur.fetchone()
-    if not party:
-        conn.close()
+    try:
+        cur = conn.cursor()
+        # Get watch party details
+        cur.execute('SELECT * FROM WatchParties WHERE party_id = ?', (party_id,))
+        party = cur.fetchone()
+        if not party:
+            return None
+            
+        # Convert to dictionary
+        party_dict = dict(party)
+        
+        # Get participants
+        cur.execute('SELECT user_id, joined, joined_at FROM WatchPartyParticipants WHERE party_id = ?', (party_id,))
+        participants = [dict(r) for r in cur.fetchall()]
+        party_dict['participants'] = participants
+        
+        return party_dict
+    except Exception as e:
+        print(f"Error getting watch party details: {e}")
         return None
-    party_dict = dict(party)
-    cur.execute('SELECT user_id, joined, joined_at FROM WatchPartyParticipants WHERE party_id = ?', (party_id,))
-    participants = [dict(r) for r in cur.fetchall()]
-    conn.close()
-    party_dict['participants'] = participants
-    return party_dict
+    finally:
+        conn.close()
 
 def end_watch_party(party_id: int):
     """Mark a watch party as ended."""

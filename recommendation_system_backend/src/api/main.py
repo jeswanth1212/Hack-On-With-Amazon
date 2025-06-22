@@ -14,6 +14,8 @@ from pathlib import Path
 import traceback
 import json
 import random
+import socketio
+import asyncio
 
 # Add the project root to the path to import our modules
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
@@ -53,20 +55,223 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Add CORS middleware
+# Define CORS allowed origins
+allowed_origins = ["http://localhost:3000", "http://localhost", "http://127.0.0.1:3000", "*"]  # Explicitly allow the frontend origin
+
+# Add CORS middleware to FastAPI - make sure it's before mounting the socket_app
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*", "http://localhost:3000"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Initialize Socket.IO server with proper CORS settings
+sio = socketio.AsyncServer(
+    async_mode='asgi', 
+    cors_allowed_origins=allowed_origins,
+    logger=True,
+    engineio_logger=True,
+    ping_timeout=60,  # Increase ping timeout
+    ping_interval=25,  # Reduce ping interval
+    max_http_buffer_size=1e8  # Increase buffer size for larger packets
+)
+
+# Create a Socket.IO ASGI app
+socket_app = socketio.ASGIApp(sio, socketio_path='socket.io')
+
+# Mount the Socket.IO app at a specific path instead of root
+app.mount("/socket.io", socket_app)
 
 # Create a queue for processing interactions
 interaction_queue = Queue()
 
 # Initialize recommendation engine with strengthened contextual factor weights
 engine = RecommendationEngine(cf_weight=0.6, cb_weight=0.4, context_alpha=0.5)
+
+# Dictionary to track active watch parties and their participants
+active_watch_parties = {}
+
+# Socket.IO events
+@sio.event
+async def connect(sid, environ, auth):
+    logger.info(f"Client connected: {sid}")
+    logger.info(f"Connection environ: {environ.get('HTTP_ORIGIN', 'unknown')} - Headers: {environ.get('HTTP_SEC_WEBSOCKET_KEY', 'unknown')}")
+    return True
+
+@sio.event
+async def disconnect(sid):
+    logger.info(f"Client disconnected: {sid}")
+    # Remove user from any watch parties they were in
+    for party_id in list(active_watch_parties.keys()):
+        found_participant = None
+        for participant in active_watch_parties[party_id]['participants']:
+            if isinstance(participant, dict) and participant.get('sid') == sid:
+                found_participant = participant
+                break
+                
+        if found_participant:
+            # Remove participant from the party
+            active_watch_parties[party_id]['participants'].remove(found_participant)
+            logger.info(f"Removed participant {found_participant.get('user_id')} with sid {sid} from party {party_id}")
+            
+            # Notify other participants that this user has left
+            await sio.emit('participant_left', {'sid': sid, 'user_id': found_participant.get('user_id')}, 
+                          room=f"party_{party_id}")
+            
+            # If party is now empty, clean it up
+            if not active_watch_parties[party_id]['participants']:
+                logger.info(f"Party {party_id} is now empty, removing it")
+                del active_watch_parties[party_id]
+
+@sio.event
+async def join_watch_party(sid, data):
+    logger.info(f"Join watch party request from {sid}: {data}")
+    party_id = data.get('party_id')
+    user_id = data.get('user_id')
+    username = data.get('username', user_id)
+    
+    if not party_id:
+        logger.error(f"Join request missing party_id: {data}")
+        return {'success': False, 'error': 'Party ID is required'}
+    
+    # Create party room if it doesn't exist yet
+    room_name = f"party_{party_id}"
+    if party_id not in active_watch_parties:
+        active_watch_parties[party_id] = {
+            'participants': [],
+            'video_state': {
+                'playing': False,
+                'currentTime': 0,
+                'tmdbId': data.get('tmdbId')
+            }
+        }
+        logger.info(f"Created new watch party: {party_id}")
+    
+    # Check if user is already in the party
+    for participant in active_watch_parties[party_id]['participants']:
+        if isinstance(participant, dict) and participant.get('user_id') == user_id:
+            # Update the SID if user reconnected
+            logger.info(f"User {user_id} reconnected with new SID {sid}")
+            participant['sid'] = sid
+            await sio.enter_room(sid, room_name)
+            return {
+                'success': True,
+                'participants': active_watch_parties[party_id]['participants'],
+                'video_state': active_watch_parties[party_id]['video_state']
+            }
+    
+    # Add user to party room
+    logger.info(f"User {username} ({user_id}) joined party {party_id} with SID {sid}")
+    await sio.enter_room(sid, room_name)
+    
+    # Create participant record
+    participant = {
+        'sid': sid,
+        'user_id': user_id,
+        'username': username
+    }
+    
+    active_watch_parties[party_id]['participants'].append(participant)
+    
+    # Notify others in room that user has joined
+    logger.info(f"Broadcasting new participant to room {room_name}")
+    await sio.emit('participant_joined', participant, room=room_name, skip_sid=sid)
+    
+    # Send current participants to the joining user
+    return {
+        'success': True,
+        'participants': active_watch_parties[party_id]['participants'],
+        'video_state': active_watch_parties[party_id]['video_state']
+    }
+
+@sio.event
+async def leave_watch_party(sid, data):
+    logger.info(f"Leave watch party request: {data}")
+    party_id = data.get('party_id')
+    user_id = data.get('user_id')
+    
+    if not party_id or party_id not in active_watch_parties:
+        logger.error(f"Invalid party ID in leave request: {party_id}")
+        return {'success': False, 'error': 'Invalid party ID'}
+        
+    room_name = f"party_{party_id}"
+    
+    # Find and remove user from participants list
+    participants = active_watch_parties[party_id]['participants']
+    for i, participant in enumerate(participants):
+        if participant['sid'] == sid:
+            removed_participant = participants.pop(i)
+            break
+    
+    # Notify others that user has left
+    await sio.emit('participant_left', {
+        'user_id': user_id
+    }, room=room_name)
+    
+    # Leave the room
+    await sio.leave_room(sid, room_name)
+    
+    # If party is now empty, clean it up
+    if not active_watch_parties[party_id]['participants']:
+        del active_watch_parties[party_id]
+        
+    return {'success': True}
+
+@sio.event
+async def video_state_change(sid, data):
+    logger.info(f"Video state change from {sid}: {data}")
+    party_id = data.get('party_id')
+    state = data.get('state', {})
+    
+    if not party_id or party_id not in active_watch_parties:
+        logger.error(f"Invalid party ID in video state change: {party_id}")
+        return {'success': False, 'error': 'Invalid party ID'}
+        
+    # Update stored state
+    active_watch_parties[party_id]['video_state'].update(state)
+    
+    # Broadcast to other participants
+    room_name = f"party_{party_id}"
+    await sio.emit('video_state_updated', {
+        'state': state
+    }, room=room_name, skip_sid=sid)
+    
+    return {'success': True}
+
+@sio.event
+async def send_signal(sid, data):
+    party_id = data.get('party_id')
+    target_sid = data.get('target_sid')
+    signal_data = data.get('signal')
+    
+    logger.info(f"Signal from {sid} to {target_sid} in party {party_id}")
+    
+    if not party_id or party_id not in active_watch_parties:
+        logger.error(f"Invalid party ID in signal: {party_id}")
+        return {'success': False, 'error': 'Invalid party ID'}
+    
+    # Ensure target user is in the party
+    participant_exists = False
+    for participant in active_watch_parties[party_id]['participants']:
+        if isinstance(participant, dict) and participant.get('sid') == target_sid:
+            participant_exists = True
+            break
+    
+    if not participant_exists:
+        logger.warning(f"Target user {target_sid} not in party {party_id}")
+        return {'success': False, 'error': 'Target user not in this party'}
+    
+    # Forward WebRTC signal to the target peer
+    logger.info(f"Forwarding signal from {sid} to {target_sid} in party {party_id}")
+    
+    await sio.emit('signal_received', {
+        'signal': signal_data,
+        'from_sid': sid
+    }, to=target_sid)
+    
+    return {'success': True}
 
 # Pydantic models for API
 class InteractionCreate(BaseModel):
@@ -223,10 +428,26 @@ async def api_accept_watch_party(party_id: int = Query(...), user_id: str = Quer
 
 @app.get('/watchparty/details/{party_id}', response_model=WatchPartyDetailsResponse, tags=['WatchParty'])
 async def api_get_watch_party_details(party_id: int):
-    details = get_watch_party_details(party_id)
-    if not details:
-        raise HTTPException(status_code=404, detail="Party not found")
-    return details
+    """
+    Get details of a watch party including participants.
+    
+    Args:
+        party_id (int): ID of the watch party
+        
+    Returns:
+        WatchPartyDetailsResponse: Watch party details
+    """
+    logger.info(f"Fetching details for watch party ID: {party_id}")
+    try:
+        details = get_watch_party_details(party_id)
+        if not details:
+            logger.warning(f"Watch party ID {party_id} not found")
+            raise HTTPException(status_code=404, detail=f"Party with ID {party_id} not found")
+        logger.info(f"Successfully retrieved watch party details for ID {party_id}")
+        return details
+    except Exception as e:
+        logger.error(f"Error retrieving watch party details for ID {party_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error retrieving watch party: {str(e)}")
 
 @app.post('/watchparty/end', response_model=Dict[str, str], tags=['WatchParty'])
 async def api_end_watch_party(party_id: int = Query(...)):
@@ -792,6 +1013,19 @@ async def shutdown_event():
             logger.info("Recommendation engine models saved")
         except Exception as e:
             logger.error(f"Error saving recommendation engine models: {e}")
+    
+    # Stop any remaining tasks gracefully
+    logger.info("Cleaning up resources...")
+    try:
+        # Give tasks time to complete
+        await asyncio.sleep(1)
+    except asyncio.CancelledError:
+        # This is expected during shutdown, ignore it
+        pass
+    except Exception as e:
+        logger.error(f"Error during shutdown cleanup: {e}")
+    
+    logger.info("API server shutdown complete")
 
 def cache_recommendations(cache_key, recommendations, ttl_seconds=1800):
     """
@@ -824,7 +1058,19 @@ def cache_recommendations(cache_key, recommendations, ttl_seconds=1800):
 
 def start():
     """Start the API server."""
-    uvicorn.run("src.api.main:app", host="0.0.0.0", port=8080, reload=True)
+    # This function is kept for backward compatibility
+    # The actual server configuration is now in run.py
+    import uvicorn
+    uvicorn.run(
+        "src.api.main:app", 
+        host="0.0.0.0", 
+        port=8080, 
+        reload=True,
+        ws_max_size=16777216,  # 16MB max WebSocket message size
+        ws_ping_interval=20.0,  # Send pings to client every 20 seconds
+        ws_ping_timeout=30.0,   # Wait up to 30 seconds for pings
+        log_level="info"
+    )
 
 # Friend system endpoints
 @app.post("/friends/search", response_model=List[UserProfileResponse], tags=["Friends"])

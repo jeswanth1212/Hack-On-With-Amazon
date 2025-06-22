@@ -123,4 +123,88 @@ This project automatically downloads and uses the following datasets:
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-**Note**: All datasets are used in compliance with their respective licenses and terms of use. 
+**Note**: All datasets are used in compliance with their respective licenses and terms of use.
+
+# Recommendation System Backend
+
+This directory contains the backend code for the recommendation system.
+
+## Running the Backend
+
+### Quick Start (With WebSocket Support)
+
+To run the API server with WebSocket support for watch parties:
+
+```bash
+python run.py --step api
+```
+
+This will start the server at:
+- API endpoint: http://localhost:8080
+- WebSocket endpoint: ws://localhost:8080/socket.io/
+
+### Full System
+
+To run the full system with data preprocessing and model training:
+
+```bash
+python run.py
+```
+
+This will:
+1. Download necessary datasets
+2. Preprocess the data
+3. Train recommendation models
+4. Start the API server with WebSocket support
+
+To run only specific steps:
+
+```bash
+python run.py --step preprocess  # Only preprocess data
+python run.py --step train       # Only train models
+python run.py --step api         # Only start API server
+```
+
+## Troubleshooting
+
+### Port Conflicts
+
+If you see errors related to port 8080 already being in use:
+
+1. Run the port kill script to free the port:
+   ```bash
+   python kill_port.py
+   ```
+
+2. If that doesn't work, manually find and stop the process:
+   - For Windows: `netstat -ano | findstr :8080` to find the PID, then `taskkill /F /PID <PID>` to kill it
+   - For Linux/Mac: `lsof -i :8080` to find the PID, then `kill -9 <PID>` to kill it
+
+3. Make sure you don't have multiple instances of the server running
+
+### Startup Crashes
+
+If the server crashes immediately after startup:
+
+1. Check logs in `logs/api.log` for specific error messages
+2. Make sure no other process is using port 8080
+3. Try running with logging level set to debug by setting environment variable: `set DEBUG=1` (Windows) or `export DEBUG=1` (Linux/Mac)
+
+### WebSocket Connection Issues
+
+If you're experiencing WebSocket connection issues:
+
+1. Check that the server is running at http://localhost:8080
+2. Verify the WebSocket endpoint is accessible at ws://localhost:8080/socket.io/
+3. Check browser console for connection errors
+4. Look at server logs in logs/api.log for connection details
+
+## API Endpoints
+
+The API provides the following endpoints:
+
+- `/recommend?user_id=<user_id>` - Get recommendations for a user
+- `/interaction` - Record user interactions with content
+- `/user/<user_id>/history` - Get user interaction history
+
+See FastAPI documentation at http://localhost:8080/docs for more details. 
