@@ -14,8 +14,12 @@ import {
   Users,
   Heart,
   Search,
+  Tv,
+  UserCircle2,
+  UserPlus,
   LogOut,
   Home,
+  Network,
 } from "lucide-react";
 import { 
   DropdownMenu,
@@ -120,7 +124,7 @@ export default function Navbar({ onSearchOpen, onSearchClose }: NavbarProps = {}
     if (pathname === '/friends') {
       markActivityAsRead();
     }
-  }, [pathname, markActivityAsRead]);
+  }, [pathname]);
 
   const handleSearchClick = () => {
     setSearchOpen(true);
@@ -191,10 +195,15 @@ export default function Navbar({ onSearchOpen, onSearchClose }: NavbarProps = {}
               label="Search"
               onClick={handleSearchClick}
             />
-            <NavItem icon={<Tv2 size={24} className="text-white" />} label="Live TV" />
             <NavItem 
-              icon={<Users size={24} className="text-white" />} 
-              label="Friends" 
+              icon={<Tv size={24} className="text-white" />} 
+              label="Watch Party" 
+              href="/watch-party"
+              isActive={pathname === '/watch-party'}
+            />
+            <NavItem 
+              icon={<Network size={24} className="text-white" />} 
+              label="Ur Network" 
               href="/friends"
               isActive={pathname === '/friends'}
               badge={user ? totalCount : undefined}

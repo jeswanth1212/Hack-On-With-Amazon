@@ -8,13 +8,15 @@ import RequestsView from './RequestsView';
 import FriendsListView from './FriendsListView';
 import ActivityView from './ActivityView';
 import TiersView from './TiersView';
+import WatchPartyRequestsView from './WatchPartyRequestsView';
 import { Badge } from '@/components/ui/badge';
 import { getFriendRequests } from '@/lib/utils';
-import { useAuth } from '@/lib/hooks';
+import { useAuth, useNotifications } from '@/lib/hooks';
 
 export default function FriendsPage() {
   const [pendingCount, setPendingCount] = useState(0);
   const { user } = useAuth();
+  const { watchPartyCount } = useNotifications();
   
   // Current user ID from auth context
   const currentUserId = user?.user_id || "guest";
@@ -69,6 +71,9 @@ export default function FriendsPage() {
               <TabsTrigger value="requests" className="flex-1 py-3 data-[state=active]:bg-secondary flex items-center justify-center gap-2">
                 Requests {pendingCount > 0 && <Badge variant="secondary">{pendingCount}</Badge>}
               </TabsTrigger>
+              <TabsTrigger value="wp" className="flex-1 py-3 data-[state=active]:bg-secondary flex items-center justify-center gap-2">
+                Watch Party {watchPartyCount > 0 && <Badge variant="secondary">{watchPartyCount}</Badge>}
+              </TabsTrigger>
               <TabsTrigger value="friends" className="flex-1 py-3 data-[state=active]:bg-secondary">Friends</TabsTrigger>
               <TabsTrigger value="activity" className="flex-1 py-3 data-[state=active]:bg-secondary">Activity</TabsTrigger>
               <TabsTrigger value="tiers" className="flex-1 py-3 data-[state=active]:bg-secondary">Tiers</TabsTrigger>
@@ -78,6 +83,7 @@ export default function FriendsPage() {
           <TabsContent value="search"><SearchUsersView onSendRequest={handleSendRequest} /></TabsContent>
           <TabsContent value="requests"><RequestsView onAccept={handleAcceptRequest} onReject={handleRejectRequest} /></TabsContent>
           <TabsContent value="friends"><FriendsListView onRemove={handleRemoveFriend} /></TabsContent>
+          <TabsContent value="wp"><WatchPartyRequestsView /></TabsContent>
           <TabsContent value="activity"><ActivityView currentUser={currentUser} /></TabsContent>
           <TabsContent value="tiers"><TiersView currentPoints={100} /></TabsContent>
         </Tabs>

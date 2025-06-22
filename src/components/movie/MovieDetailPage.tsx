@@ -9,7 +9,12 @@ import { Separator } from '../ui/separator';
 import ContentCard from '../ui/ContentCard';
 import ContentCarousel from '../ui/ContentCarousel';
 import { useAuth } from '@/lib/hooks';
-import { recordInteraction } from '@/lib/utils';
+import { recordInteraction, getFriends, Friend } from '@/lib/utils';
+import { RECOMMENDATION_API_URL } from '@/lib/utils';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '../ui/dialog';
+import { Checkbox } from '../ui/checkbox';
+import { useSearchParams, useRouter } from 'next/navigation';
+import WatchPartyBox from '@/components/watch-party/WatchPartyBox';
 
 // TODO: Replace with your actual TMDb API key
 const TMDB_API_KEY = 'ee41666274420bb7514d6f2f779b5fd9';
@@ -56,8 +61,16 @@ const MovieDetailPage: React.FC<MovieDetailPageProps> = ({ tmdbId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { user, userContext } = useAuth();
+  const searchParams = useSearchParams();
+  const partyMode = searchParams.get('party') === '1';
+  const sessionMode = searchParams.get('session') === '1';
+  const friendsParam = searchParams.get('friends') || '';
+  const router = useRouter();
   const [watching, setWatching] = useState(false);
   const [watchSuccess, setWatchSuccess] = useState(false);
+  const [friendDialogOpen, setFriendDialogOpen] = useState(false);
+  const [friends, setFriends] = useState<Friend[]>([]);
+  const [selectedFriends, setSelectedFriends] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     setLoading(true);
@@ -67,6 +80,32 @@ const MovieDetailPage: React.FC<MovieDetailPageProps> = ({ tmdbId }) => {
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
   }, [tmdbId]);
+
+  useEffect(() => {
+    if (sessionMode && watchSuccess) {
+      router.push(`/watch-party/session?tmdb=${tmdbId}&friends=${encodeURIComponent(friendsParam)}`);
+    }
+  }, [sessionMode, watchSuccess, tmdbId, friendsParam, router]);
+
+  useEffect(() => {
+    if (partyMode && !sessionMode && watchSuccess && user) {
+      // open dialog and load friends
+      setFriendDialogOpen(true);
+      (async () => {
+        const list = await getFriends(user.user_id);
+        setFriends(list);
+      })();
+    }
+  }, [partyMode, !sessionMode, watchSuccess, user]);
+
+  const toggleFriend = (id: string) => {
+    setSelectedFriends(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) newSet.delete(id);
+      else newSet.add(id);
+      return newSet;
+    });
+  };
 
   if (loading) return <div className="flex justify-center items-center h-96">Loading...</div>;
   if (error) return <div className="text-red-500">{error}</div>;
@@ -135,8 +174,8 @@ const MovieDetailPage: React.FC<MovieDetailPageProps> = ({ tmdbId }) => {
     />
   ));
 
-  return (
-    <MainLayout>
+  const Content = (
+    <>
       {/* Hero Section with Large Poster and Fade */}
       <div className="relative w-full min-h-[90vh] flex items-end justify-start bg-black overflow-hidden rounded-b-3xl shadow-lg mb-0">
         {/* Backdrop as background */}
@@ -264,6 +303,55 @@ const MovieDetailPage: React.FC<MovieDetailPageProps> = ({ tmdbId }) => {
           </div>
         </div>
       )}
+
+      {/* Friend Selection Dialog */}
+      <Dialog open={friendDialogOpen} onOpenChange={setFriendDialogOpen}>
+        <DialogContent className="sm:max-w-md bg-gray-900 text-white">
+          <DialogHeader>
+            <DialogTitle>Select Friends for Watch Party</DialogTitle>
+          </DialogHeader>
+          <div className="max-h-[50vh] overflow-auto space-y-3 py-2">
+            {friends.map(fr => (
+              <label key={fr.user_id} className="flex items-center gap-3 cursor-pointer">
+                <Checkbox
+                  checked={selectedFriends.has(fr.user_id)}
+                  onCheckedChange={() => toggleFriend(fr.user_id)}
+                />
+                <span>{fr.user_id}</span>
+              </label>
+            ))}
+            {friends.length === 0 && <p>No friends to invite.</p>}
+          </div>
+          <DialogFooter className="mt-4">
+            <Button
+              onClick={async () => {
+                const friendsStr = Array.from(selectedFriends);
+                try {
+                  const res = await fetch(`${RECOMMENDATION_API_URL}/watchparty/create`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ host_id: user?.user_id, tmdb_id: parseInt(tmdbId), friend_ids: friendsStr })
+                  });
+                  const data = await res.json();
+                  const partyId = data.party_id;
+                  window.location.href = `/watch-party/session?party=${partyId}`;
+                } catch (e) {
+                  alert('Failed to create party');
+                }
+              }}
+              disabled={selectedFriends.size === 0}
+            >
+              Start Party
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+
+  return (
+    <MainLayout>
+      {partyMode ? <WatchPartyBox>{Content}</WatchPartyBox> : Content}
     </MainLayout>
   );
 };

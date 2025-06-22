@@ -15539,3 +15539,1706 @@ ValueError: The truth value of an array with more than one element is ambiguous.
 2025-06-22 03:35:10,886 - src.api.main - INFO - Shutting down API server...
 2025-06-22 03:35:11,268 - src.models.model - INFO - Saved all models to disk
 2025-06-22 03:35:11,270 - src.api.main - INFO - Recommendation engine models saved
+2025-06-22 11:51:00,864 - __main__ - INFO - Environment setup complete
+2025-06-22 11:51:00,865 - __main__ - INFO - Running data preprocessing...
+2025-06-22 11:51:10,371 - src.database.download - INFO - Starting dataset downloads
+2025-06-22 11:51:10,372 - src.database.download - INFO - Data directories created.
+2025-06-22 11:51:10,372 - src.database.download - INFO - TMDB data already exists, skipping download
+2025-06-22 11:51:10,682 - src.database.preprocess - INFO - Starting data preprocessing...
+2025-06-22 11:51:10,683 - src.database.preprocess - INFO - Created necessary directories
+2025-06-22 11:51:10,683 - src.database.preprocess - INFO - Processing TMDB dataset...
+2025-06-22 11:51:10,927 - src.database.preprocess - INFO - Loaded 725 movies from TMDB JSON
+2025-06-22 11:51:11,167 - src.database.preprocess - INFO - Processed 725 TMDB movies
+2025-06-22 11:51:11,180 - src.database.preprocess - INFO - Creating users dataframe with demographics...
+2025-06-22 11:51:11,359 - src.database.preprocess - INFO - Created 500 users
+2025-06-22 11:51:11,360 - src.database.preprocess - INFO - Creating simulated interactions...
+2025-06-22 11:51:12,747 - src.database.preprocess - INFO - Created 4794 interactions
+2025-06-22 11:51:12,749 - __main__ - INFO - Data preprocessing complete
+2025-06-22 11:51:12,750 - __main__ - INFO - Training recommendation models...
+2025-06-22 11:51:25,821 - src.models.train_models - INFO - Starting model training...
+2025-06-22 11:51:25,822 - src.models.train_models - INFO - Loading data...
+2025-06-22 11:51:25,912 - src.models.train_models - INFO - Loaded 725 movies, 500 users, and 4794 interactions
+2025-06-22 11:51:25,912 - src.models.train_models - INFO - Training recommendation models...
+2025-06-22 11:51:25,934 - src.models.model - INFO - Loaded SVD model
+2025-06-22 11:51:25,974 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 11:51:25,977 - src.models.model - INFO - Loaded context model
+2025-06-22 11:51:25,979 - src.models.model - INFO - Loaded item features
+2025-06-22 11:51:25,984 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 11:51:25,988 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 11:51:26,020 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 11:51:26,023 - src.models.model - INFO - Loaded user factors
+2025-06-22 11:51:26,024 - src.models.model - INFO - Loaded item factors
+2025-06-22 11:51:26,031 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 11:51:26,031 - src.models.model - INFO - Loaded 500 user IDs
+2025-06-22 11:51:26,031 - src.models.model - INFO - Loaded 564 item IDs
+2025-06-22 11:51:26,031 - src.models.train_models - INFO - Preparing context features...
+2025-06-22 11:51:26,324 - src.models.train_models - INFO - Prepared 4794 context features with 30 dimensions
+2025-06-22 11:51:26,371 - src.models.model - INFO - Training recommendation engine...
+2025-06-22 11:51:26,372 - src.models.model - INFO - Preparing user-item matrix...
+2025-06-22 11:51:26,627 - src.models.model - INFO - Created user-item matrix with shape (500, 588)
+2025-06-22 11:51:26,628 - src.models.model - INFO - Training collaborative filtering model...
+2025-06-22 11:51:28,126 - src.models.model - INFO - Trained SVD model with 50 components
+2025-06-22 11:51:28,126 - src.models.model - INFO - Training content-based filtering model...
+2025-06-22 11:51:28,291 - src.models.model - INFO - Trained TF-IDF vectorizer with 5000 features
+2025-06-22 11:51:28,291 - src.models.model - INFO - Training context model...
+2025-06-22 11:51:28,332 - src.models.model - INFO - Trained context model
+2025-06-22 11:51:28,333 - src.models.model - INFO - Recommendation engine training complete
+2025-06-22 11:51:28,499 - src.models.model - INFO - Saved all models to disk
+2025-06-22 11:51:28,500 - src.models.train_models - INFO - Models trained and saved successfully
+2025-06-22 11:51:28,500 - src.models.train_models - INFO - Testing recommendations...
+2025-06-22 11:51:28,501 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 11:51:28,501 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 11:51:28,501 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 11:51:28,672 - src.models.train_models - INFO - Top 5 recommendations for user 1 (without context):
+2025-06-22 11:51:28,672 - src.models.train_models - INFO -   - Item 18: 0.5000
+2025-06-22 11:51:28,672 - src.models.train_models - INFO -   - Item 1087192: 0.5000
+2025-06-22 11:51:28,672 - src.models.train_models - INFO -   - Item 1426776: 0.5000
+2025-06-22 11:51:28,672 - src.models.train_models - INFO -   - Item 605722: 0.5000
+2025-06-22 11:51:28,674 - src.models.train_models - INFO -   - Item 533991: 0.5000
+2025-06-22 11:51:28,674 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 11:51:28,674 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 11:51:28,675 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 11:51:28,688 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 11:51:28,689 - src.models.train_models - INFO - Top 5 recommendations for user 1 (with context - happy, evening):
+2025-06-22 11:51:28,689 - src.models.train_models - INFO -   - Item 538858: 0.5935
+2025-06-22 11:51:28,689 - src.models.train_models - INFO -   - Item 1306845: 0.5874
+2025-06-22 11:51:28,689 - src.models.train_models - INFO -   - Item 920059: 0.5860
+2025-06-22 11:51:28,689 - src.models.train_models - INFO -   - Item 870028: 0.5820
+2025-06-22 11:51:28,691 - src.models.train_models - INFO -   - Item 1156202: 0.5684
+2025-06-22 11:51:28,691 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 11:51:28,691 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 11:51:28,692 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 11:51:28,701 - src.models.train_models - INFO - Top 5 recommendations for user 2 (without context):
+2025-06-22 11:51:28,701 - src.models.train_models - INFO -   - Item 920059: 0.5000
+2025-06-22 11:51:28,701 - src.models.train_models - INFO -   - Item 1160018: 0.5000
+2025-06-22 11:51:28,703 - src.models.train_models - INFO -   - Item 327665: 0.5000
+2025-06-22 11:51:28,703 - src.models.train_models - INFO -   - Item 1301632: 0.5000
+2025-06-22 11:51:28,703 - src.models.train_models - INFO -   - Item 581361: 0.5000
+2025-06-22 11:51:28,704 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 11:51:28,704 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 11:51:28,704 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 11:51:28,716 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 11:51:28,717 - src.models.train_models - INFO - Top 5 recommendations for user 2 (with context - happy, evening):
+2025-06-22 11:51:28,717 - src.models.train_models - INFO -   - Item 112999: 0.5995
+2025-06-22 11:51:28,717 - src.models.train_models - INFO -   - Item 822788: 0.5987
+2025-06-22 11:51:28,718 - src.models.train_models - INFO -   - Item 1112426: 0.5891
+2025-06-22 11:51:28,718 - src.models.train_models - INFO -   - Item 1083241: 0.5885
+2025-06-22 11:51:28,718 - src.models.train_models - INFO -   - Item 521315: 0.5826
+2025-06-22 11:51:28,718 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 11:51:28,719 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 11:51:28,719 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 11:51:28,733 - src.models.train_models - INFO - Top 5 recommendations for user 3 (without context):
+2025-06-22 11:51:28,733 - src.models.train_models - INFO -   - Item 1239193: 0.5000
+2025-06-22 11:51:28,733 - src.models.train_models - INFO -   - Item 781732: 0.5000
+2025-06-22 11:51:28,733 - src.models.train_models - INFO -   - Item 585268: 0.5000
+2025-06-22 11:51:28,734 - src.models.train_models - INFO -   - Item 959834: 0.5000
+2025-06-22 11:51:28,734 - src.models.train_models - INFO -   - Item 1190511: 0.5000
+2025-06-22 11:51:28,734 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 11:51:28,735 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 11:51:28,735 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 11:51:28,753 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 11:51:28,753 - src.models.train_models - INFO - Top 5 recommendations for user 3 (with context - happy, evening):
+2025-06-22 11:51:28,753 - src.models.train_models - INFO -   - Item 1289601: 0.5936
+2025-06-22 11:51:28,755 - src.models.train_models - INFO -   - Item 533991: 0.5893
+2025-06-22 11:51:28,755 - src.models.train_models - INFO -   - Item 1311844: 0.5815
+2025-06-22 11:51:28,755 - src.models.train_models - INFO -   - Item 872906: 0.5811
+2025-06-22 11:51:28,756 - src.models.train_models - INFO -   - Item 61202: 0.5780
+2025-06-22 11:51:28,756 - src.models.train_models - INFO - Model training completed successfully
+2025-06-22 11:51:28,759 - __main__ - INFO - Model training complete
+2025-06-22 11:51:28,762 - __main__ - INFO - Database schema setup complete
+2025-06-22 11:51:28,764 - __main__ - INFO - Cleaned recommendation cache
+2025-06-22 11:51:31,843 - src.models.model - INFO - Loaded SVD model
+2025-06-22 11:51:31,980 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 11:51:31,983 - src.models.model - INFO - Loaded context model
+2025-06-22 11:51:31,986 - src.models.model - INFO - Loaded item features
+2025-06-22 11:51:32,003 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 11:51:32,022 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 11:51:32,035 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 11:51:32,038 - src.models.model - INFO - Loaded user factors
+2025-06-22 11:51:32,045 - src.models.model - INFO - Loaded item factors
+2025-06-22 11:51:32,055 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 11:51:32,057 - src.models.model - INFO - Loaded 500 user IDs
+2025-06-22 11:51:32,058 - src.models.model - INFO - Loaded 588 item IDs
+2025-06-22 11:51:32,154 - src.api.main - INFO - Starting interaction processing thread
+2025-06-22 11:51:32,244 - __main__ - INFO - Starting API server...
+2025-06-22 11:51:35,160 - src.models.model - INFO - Loaded SVD model
+2025-06-22 11:51:35,218 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 11:51:35,219 - src.models.model - INFO - Loaded context model
+2025-06-22 11:51:35,220 - src.models.model - INFO - Loaded item features
+2025-06-22 11:51:35,226 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 11:51:35,230 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 11:51:35,234 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 11:51:35,235 - src.models.model - INFO - Loaded user factors
+2025-06-22 11:51:35,235 - src.models.model - INFO - Loaded item factors
+2025-06-22 11:51:35,239 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 11:51:35,239 - src.models.model - INFO - Loaded 500 user IDs
+2025-06-22 11:51:35,239 - src.models.model - INFO - Loaded 588 item IDs
+2025-06-22 11:51:35,259 - src.api.main - INFO - Starting interaction processing thread
+2025-06-22 11:51:35,379 - src.api.main - INFO - Starting API server...
+2025-06-22 11:51:35,380 - src.database.database - INFO - Initializing database...
+2025-06-22 11:51:35,381 - src.database.database - INFO - Database initialized successfully.
+2025-06-22 11:51:35,382 - src.database.database - INFO - Loading data from CSV files into the database...
+2025-06-22 11:51:35,396 - src.database.database - INFO - Loaded 725 movies from CSV
+2025-06-22 11:51:35,475 - src.database.database - INFO - Movies data loaded into database
+2025-06-22 11:51:35,497 - src.database.database - INFO - Loaded 4794 interactions from CSV
+2025-06-22 11:51:35,499 - src.database.database - INFO - Processing interactions batch 1 to 1000 of 4794
+2025-06-22 11:51:35,759 - src.database.database - INFO - Processing interactions batch 1001 to 2000 of 4794
+2025-06-22 11:51:35,911 - src.database.database - INFO - Processing interactions batch 2001 to 3000 of 4794
+2025-06-22 11:51:36,099 - src.database.database - INFO - Processing interactions batch 3001 to 4000 of 4794
+2025-06-22 11:51:36,471 - src.database.database - INFO - Processing interactions batch 4001 to 4794 of 4794
+2025-06-22 11:51:36,645 - src.database.database - INFO - Interactions data loaded into database
+2025-06-22 11:51:36,646 - src.database.database - INFO - Database setup completed successfully.
+2025-06-22 11:51:36,646 - src.api.main - INFO - Database initialized and data loaded successfully
+2025-06-22 11:51:36,647 - src.models.model - INFO - Loaded SVD model
+2025-06-22 11:51:36,752 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 11:51:36,754 - src.models.model - INFO - Loaded context model
+2025-06-22 11:51:36,755 - src.models.model - INFO - Loaded item features
+2025-06-22 11:51:36,769 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 11:51:36,787 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 11:51:36,794 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 11:51:36,803 - src.models.model - INFO - Loaded user factors
+2025-06-22 11:51:36,805 - src.models.model - INFO - Loaded item factors
+2025-06-22 11:51:36,821 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 11:51:36,821 - src.models.model - INFO - Loaded 500 user IDs
+2025-06-22 11:51:36,821 - src.models.model - INFO - Loaded 588 item IDs
+2025-06-22 11:52:57,988 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'neutral', 'time_of_day': 'morning', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 11:52:57,989 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 11:52:57,990 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 11:52:57,990 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 11:52:58,015 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 11:52:59,161 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 11:52:59,161 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 11:52:59,161 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 11:53:46,062 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'excited', 'time_of_day': 'morning', 'day_of_week': 'Sunday', 'weather': 'windy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 11:53:46,062 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 11:53:46,063 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 11:53:46,063 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 11:53:46,106 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 11:53:46,972 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 11:53:46,973 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 11:53:46,973 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 11:55:38,028 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'relaxed', 'time_of_day': 'morning', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 11:55:38,028 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 11:55:38,028 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 11:55:38,028 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 11:55:38,049 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 11:55:39,040 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 11:55:39,040 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 11:55:39,040 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 11:56:16,586 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'excited', 'time_of_day': 'morning', 'day_of_week': 'Sunday', 'weather': 'sunny', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 11:56:16,586 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 11:56:16,586 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 11:56:16,587 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 11:56:16,602 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 11:56:16,631 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'neutral', 'time_of_day': 'morning', 'day_of_week': 'Sunday', 'weather': 'stormy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 11:56:16,632 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 11:56:16,632 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 11:56:16,632 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 11:56:16,652 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 11:56:17,499 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 11:56:17,500 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 11:56:17,500 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 11:56:17,548 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 11:56:17,548 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 11:56:17,549 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 11:58:37,029 - src.database.database - INFO - Friend request sent from 1 to 2
+2025-06-22 12:00:30,224 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'stressed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'stormy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:00:30,226 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:00:30,227 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:00:30,227 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:00:30,252 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:00:31,484 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:00:31,484 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:00:31,484 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:00:36,648 - src.database.database - INFO - Added interaction: 1 - 552524
+2025-06-22 12:00:36,651 - src.models.model - INFO - Recording interaction: user=1, item=552524, score=1.0
+2025-06-22 12:00:36,755 - src.models.model - INFO - Updated user and item factors for user 1 and item 552524
+2025-06-22 12:00:36,885 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 12:02:03,955 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'neutral', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'snowy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:02:03,955 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:02:03,990 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:02:03,991 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:02:04,012 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:02:04,861 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:02:04,862 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:02:04,862 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:02:11,355 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:11,725 - src.api.main - INFO - Getting fresh recommendations for user 2 with context: {'mood': 'excited', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['comedy', 'adventure', 'action']}
+2025-06-22 12:02:11,729 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 12:02:11,731 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 12:02:11,733 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 12:02:11,772 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:02:35,948 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:35,962 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:35,975 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:35,988 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:35,999 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,014 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,032 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,072 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,111 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,147 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,164 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,179 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,191 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,206 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,225 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,244 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,274 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,314 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,359 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,412 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,456 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,489 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,535 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,572 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,614 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,630 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,646 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,671 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,682 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,699 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,736 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,781 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,834 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,887 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,943 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:36,988 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,069 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,112 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,159 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,210 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,250 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,296 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,329 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,364 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,414 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,455 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,492 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,525 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,540 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,551 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,560 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,568 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,577 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,589 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,604 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,621 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,633 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,651 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,664 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,676 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,691 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,706 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,744 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,818 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,828 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,844 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:37,926 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,011 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,051 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,090 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,166 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,223 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,278 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,325 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,361 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,403 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,442 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,480 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,527 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,566 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,600 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,613 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,624 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,639 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,679 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,691 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,710 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,726 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,740 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,749 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,770 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,811 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,856 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,926 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,939 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:38,984 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:39,032 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:40,877 - src.database.database - INFO - Friendship created between 1 and 2
+2025-06-22 12:02:40,888 - src.database.database - INFO - Friend request 2 accepted
+2025-06-22 12:02:59,022 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:02:59,036 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:03:03,328 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:03:16,084 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:03:16,245 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'neutral', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'sunny', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:03:16,245 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:03:16,247 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:03:16,247 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:03:16,327 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:03:19,558 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:03:19,569 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:03:19,592 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:04:20,039 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:05:20,354 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:06:20,337 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:07:19,603 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:08:20,368 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:08:44,668 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:09:45,348 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:10:45,030 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:11:45,342 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:11:59,019 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:12:02,005 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:12:02,028 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:12:03,241 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'stressed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:12:03,243 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:12:03,397 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:12:03,398 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:12:03,446 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:12:03,494 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'bored', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:12:03,495 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:12:03,495 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:12:03,496 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:12:03,528 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:12:10,526 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:12:10,531 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:13:11,352 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:14:11,344 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:15:33,544 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:15:56,212 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:16:56,342 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:17:57,328 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:19:16,362 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:20:16,334 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:21:31,742 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:21:31,752 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:21:32,094 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'stressed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'foggy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:21:32,094 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:21:32,204 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:21:32,205 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:21:32,252 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:21:32,364 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'stressed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'snowy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:21:32,364 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:21:32,364 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:21:32,364 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:21:32,397 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:21:47,553 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:21:47,562 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:22:48,344 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:23:48,342 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:24:48,341 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:25:48,041 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:26:48,337 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:26:54,523 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:26:54,585 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:26:55,092 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'relaxed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'cloudy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:26:55,092 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:26:55,093 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:26:55,094 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:26:55,120 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:26:55,175 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'sad', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'foggy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:26:55,176 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:26:55,176 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:26:55,176 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:26:55,202 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:27:06,123 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'neutral', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'rainy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:27:06,126 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:27:06,127 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:27:06,131 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:27:06,242 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:27:14,234 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:27:14,245 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:27:17,111 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:27:17,152 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:27:17,191 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:28:06,874 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:28:06,890 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:28:12,605 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:28:17,164 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'happy', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:28:17,166 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:28:17,167 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:28:17,172 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:28:17,194 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:28:26,028 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:28:26,039 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:28:28,258 - src.database.database - INFO - Added interaction: 1 - 346698
+2025-06-22 12:28:28,274 - src.models.model - INFO - Recording interaction: user=1, item=346698, score=1.0
+2025-06-22 12:28:28,345 - src.models.model - INFO - Updated user and item factors for user 1 and item 346698
+2025-06-22 12:28:28,714 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 12:28:35,386 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:28:35,412 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:28:35,421 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'excited', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'stormy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:28:35,422 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:28:35,422 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:28:35,422 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:28:35,440 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:28:35,467 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'curious', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:28:35,468 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:28:35,468 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:28:35,469 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:28:35,494 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:28:54,933 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:28:54,944 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:28:55,848 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'bored', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'stormy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:28:55,852 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:28:55,853 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:28:55,854 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:28:55,897 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:28:59,904 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:28:59,911 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:29:01,513 - src.database.database - INFO - Added interaction: 1 - 1087891
+2025-06-22 12:29:01,513 - src.models.model - INFO - Recording interaction: user=1, item=1087891, score=1.0
+2025-06-22 12:29:01,515 - src.models.model - INFO - Updated user and item factors for user 1 and item 1087891
+2025-06-22 12:29:01,517 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 12:29:11,043 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:29:11,072 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:29:11,080 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'neutral', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'cloudy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:29:11,080 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:29:11,081 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:29:11,081 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:29:11,100 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:29:11,118 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'relaxed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'sunny', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:29:11,118 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:29:11,118 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:29:11,119 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:29:11,142 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:29:14,933 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:29:14,940 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:29:16,673 - src.database.database - INFO - Added interaction: 1 - 552524
+2025-06-22 12:29:16,673 - src.models.model - INFO - Recording interaction: user=1, item=552524, score=1.0
+2025-06-22 12:29:16,674 - src.models.model - INFO - Updated user and item factors for user 1 and item 552524
+2025-06-22 12:29:16,675 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 12:29:40,530 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:29:40,536 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:29:41,853 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'relaxed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'snowy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:29:41,853 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:29:41,857 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:29:41,858 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:29:41,876 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:30:41,342 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:31:41,035 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:32:41,343 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:32:50,072 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'stressed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'snowy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:32:50,073 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:32:50,073 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:32:50,073 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:32:50,087 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:32:55,320 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:32:55,358 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:32:55,376 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'curious', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'rainy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:32:55,380 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:32:55,382 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:32:55,383 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:32:55,424 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:32:55,473 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'curious', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:32:55,473 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:32:55,473 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:32:55,473 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:32:55,509 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:33:39,462 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:33:39,694 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'curious', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'snowy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:33:39,694 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:33:39,695 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:33:39,695 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:33:39,717 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:33:45,075 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:33:45,093 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:33:46,305 - src.database.database - INFO - Added interaction: 1 - 1421982
+2025-06-22 12:33:46,307 - src.models.model - INFO - Recording interaction: user=1, item=1421982, score=1.0
+2025-06-22 12:33:46,311 - src.models.model - INFO - Updated user and item factors for user 1 and item 1421982
+2025-06-22 12:33:46,317 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 12:33:48,494 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:33:48,513 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:33:49,697 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'happy', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'windy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:33:49,698 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:33:49,699 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:33:49,701 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:33:49,715 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:33:52,731 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:33:52,741 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:34:03,075 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:34:04,238 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'happy', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'rainy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:34:04,238 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:34:04,238 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:34:04,242 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:34:04,290 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:34:08,150 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:34:08,156 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:34:10,207 - src.database.database - INFO - Added interaction: 1 - 1227495
+2025-06-22 12:34:10,207 - src.models.model - INFO - Recording interaction: user=1, item=1227495, score=1.0
+2025-06-22 12:34:10,209 - src.models.model - INFO - Updated user and item factors for user 1 and item 1227495
+2025-06-22 12:34:10,212 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 12:35:04,605 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:35:04,623 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:35:04,626 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:35:20,723 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:35:20,740 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:35:21,273 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'stressed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'snowy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:35:21,273 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:35:21,273 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:35:21,273 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:35:21,302 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:35:21,337 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'stressed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'cloudy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:35:21,337 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:35:21,337 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:35:21,337 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:35:21,352 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:35:38,877 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:35:38,884 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:35:41,080 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:35:41,088 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:35:41,131 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'relaxed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'snowy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:35:41,131 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:35:41,131 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:35:41,131 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:35:41,157 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:35:41,168 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'sad', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'rainy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:35:41,168 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:35:41,168 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:35:41,168 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:35:41,193 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:35:52,274 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:35:52,300 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:35:55,600 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'excited', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'windy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:35:55,600 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:35:55,600 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:35:55,600 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:35:55,633 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:35:55,649 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'neutral', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'windy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:35:55,649 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:35:55,649 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:35:55,649 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:35:55,677 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:36:09,684 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:36:09,704 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 12:36:10,451 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'sad', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 12:36:10,451 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 12:36:10,451 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 12:36:10,451 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 12:36:10,475 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 12:37:10,344 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:08:24,589 - __main__ - INFO - Environment setup complete
+2025-06-22 13:08:24,589 - __main__ - INFO - Running data preprocessing...
+2025-06-22 13:08:40,768 - src.database.download - INFO - Starting dataset downloads
+2025-06-22 13:08:40,768 - src.database.download - INFO - Data directories created.
+2025-06-22 13:08:40,769 - src.database.download - INFO - TMDB data already exists, skipping download
+2025-06-22 13:08:41,135 - src.database.preprocess - INFO - Starting data preprocessing...
+2025-06-22 13:08:41,137 - src.database.preprocess - INFO - Created necessary directories
+2025-06-22 13:08:41,137 - src.database.preprocess - INFO - Processing TMDB dataset...
+2025-06-22 13:08:41,471 - src.database.preprocess - INFO - Loaded 725 movies from TMDB JSON
+2025-06-22 13:08:41,731 - src.database.preprocess - INFO - Processed 725 TMDB movies
+2025-06-22 13:08:41,754 - src.database.preprocess - INFO - Creating users dataframe with demographics...
+2025-06-22 13:08:41,864 - src.database.preprocess - INFO - Created 500 users
+2025-06-22 13:08:41,864 - src.database.preprocess - INFO - Creating simulated interactions...
+2025-06-22 13:08:43,599 - src.database.preprocess - INFO - Created 4748 interactions
+2025-06-22 13:08:43,602 - __main__ - INFO - Data preprocessing complete
+2025-06-22 13:08:43,603 - __main__ - INFO - Training recommendation models...
+2025-06-22 13:09:07,058 - src.models.train_models - INFO - Starting model training...
+2025-06-22 13:09:07,058 - src.models.train_models - INFO - Loading data...
+2025-06-22 13:09:07,320 - src.models.train_models - INFO - Loaded 725 movies, 500 users, and 4748 interactions
+2025-06-22 13:09:07,320 - src.models.train_models - INFO - Training recommendation models...
+2025-06-22 13:09:07,390 - src.models.model - INFO - Loaded SVD model
+2025-06-22 13:09:07,477 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 13:09:07,487 - src.models.model - INFO - Loaded context model
+2025-06-22 13:09:07,566 - src.models.model - INFO - Loaded item features
+2025-06-22 13:09:07,582 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 13:09:07,599 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 13:09:07,624 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 13:09:07,635 - src.models.model - INFO - Loaded user factors
+2025-06-22 13:09:07,648 - src.models.model - INFO - Loaded item factors
+2025-06-22 13:09:07,659 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 13:09:07,661 - src.models.model - INFO - Loaded 500 user IDs
+2025-06-22 13:09:07,661 - src.models.model - INFO - Loaded 588 item IDs
+2025-06-22 13:09:07,661 - src.models.train_models - INFO - Preparing context features...
+2025-06-22 13:09:08,511 - src.models.train_models - INFO - Prepared 4748 context features with 30 dimensions
+2025-06-22 13:09:08,546 - src.models.model - INFO - Training recommendation engine...
+2025-06-22 13:09:08,548 - src.models.model - INFO - Preparing user-item matrix...
+2025-06-22 13:09:09,060 - src.models.model - INFO - Created user-item matrix with shape (500, 577)
+2025-06-22 13:09:09,061 - src.models.model - INFO - Training collaborative filtering model...
+2025-06-22 13:09:11,575 - src.models.model - INFO - Trained SVD model with 50 components
+2025-06-22 13:09:11,575 - src.models.model - INFO - Training content-based filtering model...
+2025-06-22 13:09:12,649 - src.models.model - INFO - Trained TF-IDF vectorizer with 5000 features
+2025-06-22 13:09:12,649 - src.models.model - INFO - Training context model...
+2025-06-22 13:09:13,138 - src.models.model - INFO - Trained context model
+2025-06-22 13:09:13,138 - src.models.model - INFO - Recommendation engine training complete
+2025-06-22 13:09:13,559 - src.models.model - INFO - Saved all models to disk
+2025-06-22 13:09:13,559 - src.models.train_models - INFO - Models trained and saved successfully
+2025-06-22 13:09:13,560 - src.models.train_models - INFO - Testing recommendations...
+2025-06-22 13:09:13,561 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 13:09:13,561 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:09:13,562 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 13:09:13,717 - src.models.train_models - INFO - Top 5 recommendations for user 1 (without context):
+2025-06-22 13:09:13,717 - src.models.train_models - INFO -   - Item 112999: 0.5000
+2025-06-22 13:09:13,718 - src.models.train_models - INFO -   - Item 920059: 0.5000
+2025-06-22 13:09:13,718 - src.models.train_models - INFO -   - Item 680133: 0.5000
+2025-06-22 13:09:13,718 - src.models.train_models - INFO -   - Item 1225915: 0.5000
+2025-06-22 13:09:13,718 - src.models.train_models - INFO -   - Item 605722: 0.5000
+2025-06-22 13:09:13,718 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 13:09:13,719 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:09:13,719 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 13:09:13,727 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:09:13,727 - src.models.train_models - INFO - Top 5 recommendations for user 1 (with context - happy, evening):
+2025-06-22 13:09:13,728 - src.models.train_models - INFO -   - Item 1239193: 0.5994
+2025-06-22 13:09:13,728 - src.models.train_models - INFO -   - Item 1311844: 0.5928
+2025-06-22 13:09:13,728 - src.models.train_models - INFO -   - Item 1230555: 0.5883
+2025-06-22 13:09:13,728 - src.models.train_models - INFO -   - Item 1163258: 0.5867
+2025-06-22 13:09:13,728 - src.models.train_models - INFO -   - Item 1257960: 0.5770
+2025-06-22 13:09:13,730 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 13:09:13,730 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:09:13,730 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 13:09:13,739 - src.models.train_models - INFO - Top 5 recommendations for user 2 (without context):
+2025-06-22 13:09:13,739 - src.models.train_models - INFO -   - Item 1225915: 0.5000
+2025-06-22 13:09:13,740 - src.models.train_models - INFO -   - Item 575265: 0.5000
+2025-06-22 13:09:13,740 - src.models.train_models - INFO -   - Item 541671: 0.5000
+2025-06-22 13:09:13,740 - src.models.train_models - INFO -   - Item 803796: 0.5000
+2025-06-22 13:09:13,740 - src.models.train_models - INFO -   - Item 533991: 0.5000
+2025-06-22 13:09:13,741 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 13:09:13,741 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:09:13,741 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 13:09:13,754 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:09:13,755 - src.models.train_models - INFO - Top 5 recommendations for user 2 (with context - happy, evening):
+2025-06-22 13:09:13,755 - src.models.train_models - INFO -   - Item 1379587: 0.5985
+2025-06-22 13:09:13,755 - src.models.train_models - INFO -   - Item 878607: 0.5837
+2025-06-22 13:09:13,756 - src.models.train_models - INFO -   - Item 1146210: 0.5827
+2025-06-22 13:09:13,756 - src.models.train_models - INFO -   - Item 20453: 0.5787
+2025-06-22 13:09:13,756 - src.models.train_models - INFO -   - Item 1137339: 0.5692
+2025-06-22 13:09:13,756 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:09:13,757 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:09:13,757 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:09:13,764 - src.models.train_models - INFO - Top 5 recommendations for user 3 (without context):
+2025-06-22 13:09:13,765 - src.models.train_models - INFO -   - Item 1100988: 0.5000
+2025-06-22 13:09:13,766 - src.models.train_models - INFO -   - Item 574475: 0.5000
+2025-06-22 13:09:13,766 - src.models.train_models - INFO -   - Item 1449951: 0.5000
+2025-06-22 13:09:13,766 - src.models.train_models - INFO -   - Item 18: 0.5000
+2025-06-22 13:09:13,766 - src.models.train_models - INFO -   - Item 1233208: 0.5000
+2025-06-22 13:09:13,768 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:09:13,768 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:09:13,768 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:09:13,778 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:09:13,780 - src.models.train_models - INFO - Top 5 recommendations for user 3 (with context - happy, evening):
+2025-06-22 13:09:13,780 - src.models.train_models - INFO -   - Item 1112426: 0.6000
+2025-06-22 13:09:13,781 - src.models.train_models - INFO -   - Item 822788: 0.5984
+2025-06-22 13:09:13,781 - src.models.train_models - INFO -   - Item 18: 0.5805
+2025-06-22 13:09:13,782 - src.models.train_models - INFO -   - Item 611598: 0.5758
+2025-06-22 13:09:13,783 - src.models.train_models - INFO -   - Item 575265: 0.5693
+2025-06-22 13:09:13,783 - src.models.train_models - INFO - Model training completed successfully
+2025-06-22 13:09:13,785 - __main__ - INFO - Model training complete
+2025-06-22 13:09:13,786 - __main__ - INFO - Database schema setup complete
+2025-06-22 13:09:13,788 - __main__ - INFO - Cleaned recommendation cache
+2025-06-22 13:09:17,000 - src.models.model - INFO - Loaded SVD model
+2025-06-22 13:09:17,048 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 13:09:17,049 - src.models.model - INFO - Loaded context model
+2025-06-22 13:09:17,050 - src.models.model - INFO - Loaded item features
+2025-06-22 13:09:17,057 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 13:09:17,060 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 13:09:17,063 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 13:09:17,065 - src.models.model - INFO - Loaded user factors
+2025-06-22 13:09:17,066 - src.models.model - INFO - Loaded item factors
+2025-06-22 13:09:17,068 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 13:09:17,068 - src.models.model - INFO - Loaded 500 user IDs
+2025-06-22 13:09:17,069 - src.models.model - INFO - Loaded 577 item IDs
+2025-06-22 13:09:17,100 - src.api.main - INFO - Starting interaction processing thread
+2025-06-22 13:09:17,128 - __main__ - INFO - Starting API server...
+2025-06-22 13:09:26,619 - src.models.model - INFO - Loaded SVD model
+2025-06-22 13:09:26,664 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 13:09:26,665 - src.models.model - INFO - Loaded context model
+2025-06-22 13:09:26,667 - src.models.model - INFO - Loaded item features
+2025-06-22 13:09:26,671 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 13:09:26,675 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 13:09:26,682 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 13:09:26,683 - src.models.model - INFO - Loaded user factors
+2025-06-22 13:09:26,684 - src.models.model - INFO - Loaded item factors
+2025-06-22 13:09:26,686 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 13:09:26,687 - src.models.model - INFO - Loaded 500 user IDs
+2025-06-22 13:09:26,687 - src.models.model - INFO - Loaded 577 item IDs
+2025-06-22 13:09:26,703 - src.api.main - INFO - Starting interaction processing thread
+2025-06-22 13:09:26,835 - src.api.main - INFO - Starting API server...
+2025-06-22 13:09:26,836 - src.database.database - INFO - Initializing database...
+2025-06-22 13:09:26,840 - src.database.database - INFO - Database initialized successfully.
+2025-06-22 13:09:26,840 - src.database.database - INFO - Loading data from CSV files into the database...
+2025-06-22 13:09:26,856 - src.database.database - INFO - Loaded 725 movies from CSV
+2025-06-22 13:09:26,930 - src.database.database - INFO - Movies data loaded into database
+2025-06-22 13:09:26,947 - src.database.database - INFO - Loaded 4748 interactions from CSV
+2025-06-22 13:09:26,949 - src.database.database - INFO - Processing interactions batch 1 to 1000 of 4748
+2025-06-22 13:09:27,635 - src.database.database - INFO - Processing interactions batch 1001 to 2000 of 4748
+2025-06-22 13:09:28,095 - src.database.database - INFO - Processing interactions batch 2001 to 3000 of 4748
+2025-06-22 13:09:28,684 - src.database.database - INFO - Processing interactions batch 3001 to 4000 of 4748
+2025-06-22 13:09:29,110 - src.database.database - INFO - Processing interactions batch 4001 to 4748 of 4748
+2025-06-22 13:09:29,417 - src.database.database - INFO - Interactions data loaded into database
+2025-06-22 13:09:29,417 - src.database.database - INFO - Database setup completed successfully.
+2025-06-22 13:09:29,419 - src.api.main - INFO - Database initialized and data loaded successfully
+2025-06-22 13:09:29,420 - src.models.model - INFO - Loaded SVD model
+2025-06-22 13:09:29,466 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 13:09:29,468 - src.models.model - INFO - Loaded context model
+2025-06-22 13:09:29,469 - src.models.model - INFO - Loaded item features
+2025-06-22 13:09:29,474 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 13:09:29,482 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 13:09:29,485 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 13:09:29,486 - src.models.model - INFO - Loaded user factors
+2025-06-22 13:09:29,489 - src.models.model - INFO - Loaded item factors
+2025-06-22 13:09:29,492 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 13:09:29,494 - src.models.model - INFO - Loaded 500 user IDs
+2025-06-22 13:09:29,495 - src.models.model - INFO - Loaded 577 item IDs
+2025-06-22 13:10:14,449 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:10:15,014 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'neutral', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'snowy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 13:10:15,014 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 13:10:15,014 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 13:10:15,014 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 13:10:15,026 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:11:14,417 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:11:21,096 - src.api.main - INFO - Getting fresh recommendations for user 1 with context: {'mood': 'stressed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'foggy', 'age': 12, 'location': 'India', 'language': 'en', 'preferred_genres': ['adventure', 'comedy']}
+2025-06-22 13:11:21,097 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 13:11:21,097 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 13:11:21,097 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 13:11:21,129 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:11:40,431 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:11:40,835 - src.api.main - INFO - Getting fresh recommendations for user 2 with context: {'mood': 'relaxed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'sunny', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['comedy', 'adventure', 'action']}
+2025-06-22 13:11:40,839 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 13:11:40,840 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 13:11:40,845 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 13:11:40,871 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:12:03,816 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:12:03,823 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:12:05,695 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:12:05,705 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:12:05,791 - src.api.main - INFO - Getting fresh recommendations for user 2 with context: {'mood': 'neutral', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'snowy', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['comedy', 'adventure', 'action']}
+2025-06-22 13:12:05,791 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 13:12:05,792 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 13:12:05,792 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 13:12:05,815 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:12:05,837 - src.api.main - INFO - Getting fresh recommendations for user 2 with context: {'mood': 'neutral', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'sunny', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['comedy', 'adventure', 'action']}
+2025-06-22 13:12:05,839 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 13:12:05,841 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 13:12:05,842 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 13:12:05,876 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:12:55,015 - src.database.database - INFO - Added user: 4
+2025-06-22 13:12:55,017 - src.models.model - INFO - Recording interaction: user=4, item=initialization, score=0.0
+2025-06-22 13:12:55,071 - src.models.model - INFO - Updated user and item factors for user 4 and item initialization
+2025-06-22 13:12:55,225 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 13:12:56,027 - src.api.main - INFO - Getting fresh recommendations for user 4 with context: {'mood': 'excited', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': 20, 'location': 'Andhra pradesh', 'language': 'te', 'preferred_genres': ['action']}
+2025-06-22 13:12:56,028 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 13:12:56,032 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:12:56,033 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 13:12:56,054 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:12:56,382 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 13:12:56,384 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:12:56,385 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 13:13:22,788 - src.api.main - INFO - Getting fresh recommendations for user 4 with context: {'mood': 'sad', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'foggy', 'age': 20, 'location': 'Andhra pradesh', 'language': 'te', 'preferred_genres': ['action']}
+2025-06-22 13:13:22,789 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 13:13:22,789 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:13:22,789 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 13:13:22,801 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:13:22,820 - src.api.main - INFO - Getting fresh recommendations for user 4 with context: {'mood': 'bored', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'snowy', 'age': 20, 'location': 'Andhra pradesh', 'language': 'te', 'preferred_genres': ['action']}
+2025-06-22 13:13:22,821 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 13:13:22,821 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:13:22,822 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 13:13:22,840 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:13:22,866 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 13:13:22,868 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:13:22,868 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 13:13:22,900 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 13:13:22,901 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:13:22,901 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 13:13:31,069 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:13:31,478 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'curious', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'rainy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:13:31,478 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:13:31,478 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:13:31,479 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:13:31,488 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:13:44,201 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:13:44,209 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:13:48,151 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:13:48,159 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:13:48,237 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'neutral', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'rainy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:13:48,238 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:13:48,238 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:13:48,239 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:13:48,259 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:13:48,277 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'neutral', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'foggy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:13:48,278 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:13:48,278 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:13:48,278 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:13:48,299 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:14:22,991 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'excited', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'stormy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:14:22,993 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:14:22,996 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:14:22,999 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:14:23,064 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:14:30,759 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:14:30,770 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:14:30,788 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:14:40,212 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:14:40,220 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:14:40,305 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'stressed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'snowy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:14:40,305 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:14:40,306 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:14:40,306 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:14:40,318 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:14:40,334 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'neutral', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'foggy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:14:40,335 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:14:40,336 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:14:40,336 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:14:40,354 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:15:11,253 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:15:11,265 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:15:12,699 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'neutral', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'cloudy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:15:12,700 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:15:12,700 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:15:12,705 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:15:12,737 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:16:12,431 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:17:12,120 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:17:19,574 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:17:19,585 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:17:19,757 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'excited', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'windy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:17:19,758 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:17:19,760 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:17:19,760 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:17:19,779 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:17:19,811 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'happy', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'sunny', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:17:19,812 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:17:19,812 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:17:19,812 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:17:19,838 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:18:11,790 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:18:11,802 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:18:13,908 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'stressed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'sunny', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:18:13,908 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:18:13,910 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:18:13,910 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:18:13,957 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:18:34,808 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:18:34,826 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:18:34,835 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'neutral', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:18:34,836 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:18:34,837 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:18:34,837 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:18:34,882 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:18:34,924 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'bored', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:18:34,925 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:18:34,926 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:18:34,926 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:18:34,966 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:19:35,432 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:19:54,057 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:19:54,075 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:19:55,041 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'sad', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'cloudy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:19:55,042 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:19:55,043 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:19:55,044 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:19:55,071 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:19:59,656 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:19:59,664 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:20:46,233 - src.database.database - INFO - Added interaction: 3 - 1155089
+2025-06-22 13:20:46,252 - src.models.model - INFO - Recording interaction: user=3, item=1155089, score=1.0
+2025-06-22 13:20:46,257 - src.models.model - INFO - Updated user and item factors for user 3 and item 1155089
+2025-06-22 13:20:46,261 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 13:20:57,399 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:20:57,412 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:20:57,420 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:21:05,740 - src.database.database - INFO - Friend request sent from 3 to 4
+2025-06-22 13:21:15,733 - src.api.main - INFO - Getting fresh recommendations for user 4 with context: {'mood': 'excited', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'foggy', 'age': 20, 'location': 'Andhra pradesh', 'language': 'te', 'preferred_genres': ['action']}
+2025-06-22 13:21:15,734 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 13:21:15,736 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:21:15,737 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 13:21:15,789 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:21:15,836 - src.models.model - INFO - Getting recommendations for user 4
+2025-06-22 13:21:15,837 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:21:15,837 - src.models.model - WARNING - User 4 not found in training data
+2025-06-22 13:21:21,667 - src.database.database - INFO - Friendship created between 3 and 4
+2025-06-22 13:21:21,678 - src.database.database - INFO - Friend request 3 accepted
+2025-06-22 13:21:29,802 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:21:29,942 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'neutral', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'windy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:21:29,943 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:21:29,945 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:21:29,945 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:21:29,973 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:21:32,363 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:21:32,372 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:21:35,913 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'bored', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'foggy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:21:35,914 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:21:35,914 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:21:35,914 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:21:35,938 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:21:40,529 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:21:40,535 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:21:44,213 - src.database.database - INFO - Added interaction: 3 - 1299652
+2025-06-22 13:21:44,213 - src.models.model - INFO - Recording interaction: user=3, item=1299652, score=1.0
+2025-06-22 13:21:44,217 - src.models.model - INFO - Updated user and item factors for user 3 and item 1299652
+2025-06-22 13:21:44,219 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 13:22:41,109 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:23:41,437 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:24:41,118 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:25:41,429 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:26:15,229 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:26:15,289 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:26:39,273 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:26:39,293 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:26:39,333 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:26:41,438 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:26:41,458 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:26:42,762 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'bored', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'stormy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:26:42,764 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:26:42,769 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:26:42,773 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:26:42,816 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:26:50,710 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:26:50,716 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:26:52,733 - src.database.database - INFO - Added interaction: 3 - 456287
+2025-06-22 13:26:52,733 - src.models.model - INFO - Recording interaction: user=3, item=456287, score=1.0
+2025-06-22 13:26:52,739 - src.models.model - INFO - Updated user and item factors for user 3 and item 456287
+2025-06-22 13:26:52,741 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 13:27:00,135 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:27:09,425 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:27:09,431 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:27:18,526 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'relaxed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'foggy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:27:18,527 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:27:18,527 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:27:18,527 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:27:18,553 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:27:28,050 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:27:28,060 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:27:29,422 - src.database.database - INFO - Added interaction: 3 - 63647
+2025-06-22 13:27:29,422 - src.models.model - INFO - Recording interaction: user=3, item=63647, score=1.0
+2025-06-22 13:27:29,430 - src.models.model - INFO - Updated user and item factors for user 3 and item 63647
+2025-06-22 13:27:29,433 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 13:27:31,272 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:27:31,284 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:27:32,468 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'stressed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'sunny', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:27:32,469 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:27:32,473 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:27:32,476 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:27:32,508 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:27:34,607 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:27:34,613 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:27:38,242 - src.database.database - INFO - Added interaction: 3 - 1203329
+2025-06-22 13:27:38,242 - src.models.model - INFO - Recording interaction: user=3, item=1203329, score=1.0
+2025-06-22 13:27:38,244 - src.models.model - INFO - Updated user and item factors for user 3 and item 1203329
+2025-06-22 13:27:38,246 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 13:27:42,301 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:28:42,296 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:32:51,672 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:32:51,682 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:32:59,420 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'curious', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'foggy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:32:59,421 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:32:59,421 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:32:59,422 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:32:59,452 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:33:05,462 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:33:05,485 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:33:06,353 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'happy', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'cloudy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:33:06,354 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:33:06,354 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:33:06,354 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:33:06,389 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:33:09,430 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:33:09,434 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:37:10,594 - __main__ - INFO - Environment setup complete
+2025-06-22 13:37:10,596 - __main__ - INFO - Running data preprocessing...
+2025-06-22 13:37:22,655 - src.database.download - INFO - Starting dataset downloads
+2025-06-22 13:37:22,657 - src.database.download - INFO - Data directories created.
+2025-06-22 13:37:22,657 - src.database.download - INFO - TMDB data already exists, skipping download
+2025-06-22 13:37:23,382 - src.database.preprocess - INFO - Starting data preprocessing...
+2025-06-22 13:37:23,383 - src.database.preprocess - INFO - Created necessary directories
+2025-06-22 13:37:23,383 - src.database.preprocess - INFO - Processing TMDB dataset...
+2025-06-22 13:37:23,803 - src.database.preprocess - INFO - Loaded 725 movies from TMDB JSON
+2025-06-22 13:37:24,156 - src.database.preprocess - INFO - Processed 725 TMDB movies
+2025-06-22 13:37:24,181 - src.database.preprocess - INFO - Creating users dataframe with demographics...
+2025-06-22 13:37:24,319 - src.database.preprocess - INFO - Created 500 users
+2025-06-22 13:37:24,320 - src.database.preprocess - INFO - Creating simulated interactions...
+2025-06-22 13:37:26,180 - src.database.preprocess - INFO - Created 4754 interactions
+2025-06-22 13:37:26,183 - __main__ - INFO - Data preprocessing complete
+2025-06-22 13:37:26,184 - __main__ - INFO - Training recommendation models...
+2025-06-22 13:37:41,992 - src.models.train_models - INFO - Starting model training...
+2025-06-22 13:37:41,993 - src.models.train_models - INFO - Loading data...
+2025-06-22 13:37:42,101 - src.models.train_models - INFO - Loaded 725 movies, 500 users, and 4754 interactions
+2025-06-22 13:37:42,102 - src.models.train_models - INFO - Training recommendation models...
+2025-06-22 13:37:42,146 - src.models.model - INFO - Loaded SVD model
+2025-06-22 13:37:42,305 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 13:37:42,327 - src.models.model - INFO - Loaded context model
+2025-06-22 13:37:42,357 - src.models.model - INFO - Loaded item features
+2025-06-22 13:37:42,397 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 13:37:42,440 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 13:37:42,493 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 13:37:42,513 - src.models.model - INFO - Loaded user factors
+2025-06-22 13:37:42,529 - src.models.model - INFO - Loaded item factors
+2025-06-22 13:37:42,555 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 13:37:42,556 - src.models.model - INFO - Loaded 500 user IDs
+2025-06-22 13:37:42,557 - src.models.model - INFO - Loaded 577 item IDs
+2025-06-22 13:37:42,557 - src.models.train_models - INFO - Preparing context features...
+2025-06-22 13:37:43,479 - src.models.train_models - INFO - Prepared 4754 context features with 30 dimensions
+2025-06-22 13:37:43,524 - src.models.model - INFO - Training recommendation engine...
+2025-06-22 13:37:43,524 - src.models.model - INFO - Preparing user-item matrix...
+2025-06-22 13:37:44,454 - src.models.model - INFO - Created user-item matrix with shape (500, 576)
+2025-06-22 13:37:44,466 - src.models.model - INFO - Training collaborative filtering model...
+2025-06-22 13:37:48,132 - src.models.model - INFO - Trained SVD model with 50 components
+2025-06-22 13:37:48,132 - src.models.model - INFO - Training content-based filtering model...
+2025-06-22 13:37:48,495 - src.models.model - INFO - Trained TF-IDF vectorizer with 5000 features
+2025-06-22 13:37:48,496 - src.models.model - INFO - Training context model...
+2025-06-22 13:37:48,650 - src.models.model - INFO - Trained context model
+2025-06-22 13:37:48,651 - src.models.model - INFO - Recommendation engine training complete
+2025-06-22 13:37:49,075 - src.models.model - INFO - Saved all models to disk
+2025-06-22 13:37:49,075 - src.models.train_models - INFO - Models trained and saved successfully
+2025-06-22 13:37:49,076 - src.models.train_models - INFO - Testing recommendations...
+2025-06-22 13:37:49,077 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 13:37:49,077 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:37:49,078 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 13:37:49,161 - src.models.train_models - INFO - Top 5 recommendations for user 1 (without context):
+2025-06-22 13:37:49,162 - src.models.train_models - INFO -   - Item 1087891: 0.5000
+2025-06-22 13:37:49,162 - src.models.train_models - INFO -   - Item 538858: 0.5000
+2025-06-22 13:37:49,163 - src.models.train_models - INFO -   - Item 581361: 0.5000
+2025-06-22 13:37:49,163 - src.models.train_models - INFO -   - Item 1163258: 0.5000
+2025-06-22 13:37:49,163 - src.models.train_models - INFO -   - Item 1233413: 0.5000
+2025-06-22 13:37:49,164 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 13:37:49,165 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:37:49,165 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 13:37:49,199 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:37:49,200 - src.models.train_models - INFO - Top 5 recommendations for user 1 (with context - happy, evening):
+2025-06-22 13:37:49,202 - src.models.train_models - INFO -   - Item 590077: 0.5997
+2025-06-22 13:37:49,204 - src.models.train_models - INFO -   - Item 575265: 0.5966
+2025-06-22 13:37:49,205 - src.models.train_models - INFO -   - Item 1097311: 0.5868
+2025-06-22 13:37:49,206 - src.models.train_models - INFO -   - Item 1241982: 0.5866
+2025-06-22 13:37:49,206 - src.models.train_models - INFO -   - Item 297222: 0.5693
+2025-06-22 13:37:49,206 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 13:37:49,207 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:37:49,207 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 13:37:49,229 - src.models.train_models - INFO - Top 5 recommendations for user 2 (without context):
+2025-06-22 13:37:49,230 - src.models.train_models - INFO -   - Item 1190511: 0.5000
+2025-06-22 13:37:49,230 - src.models.train_models - INFO -   - Item 1160018: 0.5000
+2025-06-22 13:37:49,231 - src.models.train_models - INFO -   - Item 1201012: 0.5000
+2025-06-22 13:37:49,231 - src.models.train_models - INFO -   - Item 112999: 0.5000
+2025-06-22 13:37:49,231 - src.models.train_models - INFO -   - Item 943333: 0.5000
+2025-06-22 13:37:49,232 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 13:37:49,233 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:37:49,233 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 13:37:49,265 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:37:49,266 - src.models.train_models - INFO - Top 5 recommendations for user 2 (with context - happy, evening):
+2025-06-22 13:37:49,267 - src.models.train_models - INFO -   - Item 1410100: 0.6000
+2025-06-22 13:37:49,267 - src.models.train_models - INFO -   - Item 950387: 0.5933
+2025-06-22 13:37:49,268 - src.models.train_models - INFO -   - Item 1112466: 0.5860
+2025-06-22 13:37:49,268 - src.models.train_models - INFO -   - Item 981057: 0.5711
+2025-06-22 13:37:49,268 - src.models.train_models - INFO -   - Item 1146210: 0.5706
+2025-06-22 13:37:49,269 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:37:49,269 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:37:49,271 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:37:49,293 - src.models.train_models - INFO - Top 5 recommendations for user 3 (without context):
+2025-06-22 13:37:49,293 - src.models.train_models - INFO -   - Item 1112426: 0.5000
+2025-06-22 13:37:49,295 - src.models.train_models - INFO -   - Item 1151655: 0.5000
+2025-06-22 13:37:49,295 - src.models.train_models - INFO -   - Item 943333: 0.5000
+2025-06-22 13:37:49,296 - src.models.train_models - INFO -   - Item 574475: 0.5000
+2025-06-22 13:37:49,296 - src.models.train_models - INFO -   - Item 713854: 0.5000
+2025-06-22 13:37:49,297 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:37:49,298 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:37:49,301 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:37:49,334 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:37:49,336 - src.models.train_models - INFO - Top 5 recommendations for user 3 (with context - happy, evening):
+2025-06-22 13:37:49,337 - src.models.train_models - INFO -   - Item 1426776: 0.5986
+2025-06-22 13:37:49,338 - src.models.train_models - INFO -   - Item 376812: 0.5907
+2025-06-22 13:37:49,338 - src.models.train_models - INFO -   - Item 1257361: 0.5902
+2025-06-22 13:37:49,338 - src.models.train_models - INFO -   - Item 554600: 0.5891
+2025-06-22 13:37:49,339 - src.models.train_models - INFO -   - Item 959834: 0.5775
+2025-06-22 13:37:49,339 - src.models.train_models - INFO - Model training completed successfully
+2025-06-22 13:37:49,341 - __main__ - INFO - Model training complete
+2025-06-22 13:37:49,343 - __main__ - INFO - Database schema setup complete
+2025-06-22 13:37:49,345 - __main__ - INFO - Cleaned recommendation cache
+2025-06-22 13:37:51,705 - src.models.model - INFO - Loaded SVD model
+2025-06-22 13:37:51,776 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 13:37:51,779 - src.models.model - INFO - Loaded context model
+2025-06-22 13:37:51,780 - src.models.model - INFO - Loaded item features
+2025-06-22 13:37:51,792 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 13:37:51,799 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 13:37:51,835 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 13:37:51,846 - src.models.model - INFO - Loaded user factors
+2025-06-22 13:37:51,854 - src.models.model - INFO - Loaded item factors
+2025-06-22 13:37:51,858 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 13:37:51,858 - src.models.model - INFO - Loaded 500 user IDs
+2025-06-22 13:37:51,860 - src.models.model - INFO - Loaded 576 item IDs
+2025-06-22 13:37:51,951 - src.api.main - INFO - Starting interaction processing thread
+2025-06-22 13:37:52,021 - __main__ - INFO - Starting API server...
+2025-06-22 13:37:59,628 - src.models.model - INFO - Loaded SVD model
+2025-06-22 13:37:59,766 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 13:37:59,775 - src.models.model - INFO - Loaded context model
+2025-06-22 13:37:59,781 - src.models.model - INFO - Loaded item features
+2025-06-22 13:37:59,797 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 13:37:59,823 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 13:37:59,844 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 13:37:59,860 - src.models.model - INFO - Loaded user factors
+2025-06-22 13:37:59,873 - src.models.model - INFO - Loaded item factors
+2025-06-22 13:37:59,896 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 13:37:59,904 - src.models.model - INFO - Loaded 500 user IDs
+2025-06-22 13:37:59,906 - src.models.model - INFO - Loaded 576 item IDs
+2025-06-22 13:37:59,988 - src.api.main - INFO - Starting interaction processing thread
+2025-06-22 13:38:00,306 - src.api.main - INFO - Starting API server...
+2025-06-22 13:38:00,310 - src.database.database - INFO - Initializing database...
+2025-06-22 13:38:00,339 - src.database.database - INFO - Database initialized successfully.
+2025-06-22 13:38:00,359 - src.database.database - INFO - Loading data from CSV files into the database...
+2025-06-22 13:38:00,466 - src.database.database - INFO - Loaded 725 movies from CSV
+2025-06-22 13:38:02,278 - src.database.database - INFO - Movies data loaded into database
+2025-06-22 13:38:02,360 - src.database.database - INFO - Loaded 4754 interactions from CSV
+2025-06-22 13:38:02,364 - src.database.database - INFO - Processing interactions batch 1 to 1000 of 4754
+2025-06-22 13:38:03,916 - src.database.database - INFO - Processing interactions batch 1001 to 2000 of 4754
+2025-06-22 13:38:05,284 - src.database.database - INFO - Processing interactions batch 2001 to 3000 of 4754
+2025-06-22 13:38:06,408 - src.database.database - INFO - Processing interactions batch 3001 to 4000 of 4754
+2025-06-22 13:38:06,902 - src.database.database - INFO - Processing interactions batch 4001 to 4754 of 4754
+2025-06-22 13:38:07,464 - src.database.database - INFO - Interactions data loaded into database
+2025-06-22 13:38:07,467 - src.database.database - INFO - Database setup completed successfully.
+2025-06-22 13:38:07,468 - src.api.main - INFO - Database initialized and data loaded successfully
+2025-06-22 13:38:07,470 - src.models.model - INFO - Loaded SVD model
+2025-06-22 13:38:07,717 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 13:38:07,737 - src.models.model - INFO - Loaded context model
+2025-06-22 13:38:07,758 - src.models.model - INFO - Loaded item features
+2025-06-22 13:38:07,788 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 13:38:07,814 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 13:38:07,845 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 13:38:07,855 - src.models.model - INFO - Loaded user factors
+2025-06-22 13:38:07,861 - src.models.model - INFO - Loaded item factors
+2025-06-22 13:38:07,875 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 13:38:07,888 - src.models.model - INFO - Loaded 500 user IDs
+2025-06-22 13:38:07,894 - src.models.model - INFO - Loaded 576 item IDs
+2025-06-22 13:38:33,056 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:38:33,066 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:39:31,730 - src.database.database - INFO - Added interaction: 3 - 1156202
+2025-06-22 13:39:31,731 - src.models.model - INFO - Recording interaction: user=3, item=1156202, score=1.0
+2025-06-22 13:39:31,902 - src.models.model - INFO - Updated user and item factors for user 3 and item 1156202
+2025-06-22 13:39:32,258 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 13:39:32,680 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:41:05,245 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:41:05,280 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:41:34,811 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:41:34,816 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:41:38,763 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'neutral', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'foggy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:41:38,765 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:41:38,803 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:41:38,804 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:41:38,840 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:41:38,862 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'sad', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'foggy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:41:38,862 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:41:38,863 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:41:38,863 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:41:38,876 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:42:31,580 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:42:31,595 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:42:33,865 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'excited', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'stormy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:42:33,870 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:42:33,876 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:42:33,877 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:42:33,996 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:42:38,432 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:42:38,441 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:42:40,591 - src.database.database - INFO - Added interaction: 3 - 1155089
+2025-06-22 13:42:40,591 - src.models.model - INFO - Recording interaction: user=3, item=1155089, score=1.0
+2025-06-22 13:42:40,597 - src.models.model - INFO - Updated user and item factors for user 3 and item 1155089
+2025-06-22 13:42:40,602 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 13:43:44,222 - src.database.database - INFO - Added interaction: 3 - 1155089
+2025-06-22 13:43:44,222 - src.models.model - INFO - Recording interaction: user=3, item=1155089, score=1.0
+2025-06-22 13:43:44,223 - src.models.model - INFO - Updated user and item factors for user 3 and item 1155089
+2025-06-22 13:43:44,224 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 13:43:45,367 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'stressed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'stormy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:43:45,367 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:43:45,369 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:43:45,369 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:43:45,394 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:43:45,451 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'curious', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'cloudy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:43:45,451 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:43:45,452 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:43:45,453 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:43:45,496 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:44:14,016 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'bored', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:44:14,016 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:44:14,017 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:44:14,018 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:44:14,035 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:44:14,066 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'bored', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'foggy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:44:14,068 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:44:14,069 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:44:14,072 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:44:14,106 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:44:25,633 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:44:25,650 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:44:25,817 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'neutral', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'snowy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:44:25,817 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:44:25,818 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:44:25,818 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:44:25,854 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:44:25,883 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'stressed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'stormy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:44:25,883 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:44:25,883 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:44:25,884 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:44:25,905 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:44:28,906 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:44:28,917 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:44:30,059 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'excited', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'windy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:44:30,060 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:44:30,064 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:44:30,064 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:44:30,089 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:44:32,745 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:44:32,754 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:44:34,728 - src.database.database - INFO - Added interaction: 3 - 554600
+2025-06-22 13:44:34,728 - src.models.model - INFO - Recording interaction: user=3, item=554600, score=1.0
+2025-06-22 13:44:34,730 - src.models.model - INFO - Updated user and item factors for user 3 and item 554600
+2025-06-22 13:44:34,731 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 13:51:00,649 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'curious', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'sunny', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:51:00,651 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:51:00,688 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:51:00,689 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:51:00,723 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:51:00,865 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'curious', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'cloudy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:51:00,866 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:51:00,875 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:51:00,879 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:51:00,985 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:51:03,961 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:51:03,968 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:51:06,307 - src.database.database - INFO - Added interaction: 3 - 1390021
+2025-06-22 13:51:06,308 - src.models.model - INFO - Recording interaction: user=3, item=1390021, score=1.0
+2025-06-22 13:51:06,444 - src.models.model - INFO - Updated user and item factors for user 3 and item 1390021
+2025-06-22 13:51:06,562 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 13:51:18,639 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:51:18,668 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:51:19,085 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'sad', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'windy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:51:19,087 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:51:19,091 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:51:19,092 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:51:19,123 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:51:19,137 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'relaxed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 13:51:19,138 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 13:51:19,138 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 13:51:19,139 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 13:51:19,158 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 13:51:58,822 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:51:58,846 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:51:58,854 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:52:58,583 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:53:59,425 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:54:59,129 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:55:59,429 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:56:59,129 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:57:59,441 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:59:27,454 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 13:59:58,596 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:00:07,147 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:00:07,631 - src.api.main - INFO - Getting fresh recommendations for user 2 with context: {'mood': 'bored', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'rainy', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['comedy', 'adventure', 'action']}
+2025-06-22 14:00:07,633 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 14:00:07,645 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 14:00:07,651 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 14:00:07,725 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 14:00:13,245 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:00:13,277 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:00:13,318 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:01:13,133 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:01:37,934 - src.api.main - INFO - Shutting down API server...
+2025-06-22 14:01:38,653 - src.models.model - INFO - Saved all models to disk
+2025-06-22 14:01:38,653 - src.api.main - INFO - Recommendation engine models saved
+2025-06-22 14:02:08,277 - src.models.model - INFO - Loaded SVD model
+2025-06-22 14:02:08,428 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 14:02:08,431 - src.models.model - INFO - Loaded context model
+2025-06-22 14:02:08,433 - src.models.model - INFO - Loaded item features
+2025-06-22 14:02:08,437 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 14:02:08,441 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 14:02:08,472 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 14:02:08,473 - src.models.model - INFO - Loaded user factors
+2025-06-22 14:02:08,474 - src.models.model - INFO - Loaded item factors
+2025-06-22 14:02:08,476 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 14:02:08,478 - src.models.model - INFO - Loaded 501 user IDs
+2025-06-22 14:02:08,480 - src.models.model - INFO - Loaded 580 item IDs
+2025-06-22 14:02:08,507 - src.api.main - INFO - Starting interaction processing thread
+2025-06-22 14:02:08,599 - src.api.main - INFO - Starting API server...
+2025-06-22 14:02:08,600 - src.database.database - INFO - Initializing database...
+2025-06-22 14:02:08,649 - src.database.database - INFO - Database initialized successfully.
+2025-06-22 14:02:08,649 - src.database.database - INFO - Loading data from CSV files into the database...
+2025-06-22 14:02:08,792 - src.database.database - INFO - Loaded 725 movies from CSV
+2025-06-22 14:02:09,011 - src.database.database - INFO - Movies data loaded into database
+2025-06-22 14:02:09,040 - src.database.database - INFO - Loaded 4754 interactions from CSV
+2025-06-22 14:02:09,041 - src.database.database - INFO - Processing interactions batch 1 to 1000 of 4754
+2025-06-22 14:02:09,351 - src.database.database - INFO - Processing interactions batch 1001 to 2000 of 4754
+2025-06-22 14:02:09,681 - src.database.database - INFO - Processing interactions batch 2001 to 3000 of 4754
+2025-06-22 14:02:10,078 - src.database.database - INFO - Processing interactions batch 3001 to 4000 of 4754
+2025-06-22 14:02:10,294 - src.database.database - INFO - Processing interactions batch 4001 to 4754 of 4754
+2025-06-22 14:02:10,593 - src.database.database - INFO - Interactions data loaded into database
+2025-06-22 14:02:10,597 - src.database.database - INFO - Database setup completed successfully.
+2025-06-22 14:02:10,598 - src.api.main - INFO - Database initialized and data loaded successfully
+2025-06-22 14:02:10,600 - src.models.model - INFO - Loaded SVD model
+2025-06-22 14:02:10,706 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 14:02:10,708 - src.models.model - INFO - Loaded context model
+2025-06-22 14:02:10,710 - src.models.model - INFO - Loaded item features
+2025-06-22 14:02:10,723 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 14:02:10,742 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 14:02:10,756 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 14:02:10,759 - src.models.model - INFO - Loaded user factors
+2025-06-22 14:02:10,769 - src.models.model - INFO - Loaded item factors
+2025-06-22 14:02:10,800 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 14:02:10,803 - src.models.model - INFO - Loaded 501 user IDs
+2025-06-22 14:02:10,806 - src.models.model - INFO - Loaded 580 item IDs
+2025-06-22 14:02:10,810 - src.api.main - INFO - Shutting down API server...
+2025-06-22 14:02:11,192 - src.models.model - INFO - Saved all models to disk
+2025-06-22 14:02:11,192 - src.api.main - INFO - Recommendation engine models saved
+2025-06-22 14:02:16,908 - src.models.model - INFO - Loaded SVD model
+2025-06-22 14:02:17,103 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 14:02:17,106 - src.models.model - INFO - Loaded context model
+2025-06-22 14:02:17,110 - src.models.model - INFO - Loaded item features
+2025-06-22 14:02:17,130 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 14:02:17,148 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 14:02:17,158 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 14:02:17,161 - src.models.model - INFO - Loaded user factors
+2025-06-22 14:02:17,167 - src.models.model - INFO - Loaded item factors
+2025-06-22 14:02:17,175 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 14:02:17,176 - src.models.model - INFO - Loaded 501 user IDs
+2025-06-22 14:02:17,176 - src.models.model - INFO - Loaded 580 item IDs
+2025-06-22 14:02:17,384 - src.api.main - INFO - Starting interaction processing thread
+2025-06-22 14:02:17,482 - src.api.main - INFO - Starting API server...
+2025-06-22 14:02:17,484 - src.database.database - INFO - Initializing database...
+2025-06-22 14:02:17,490 - src.database.database - INFO - Database initialized successfully.
+2025-06-22 14:02:17,491 - src.database.database - INFO - Loading data from CSV files into the database...
+2025-06-22 14:02:17,521 - src.database.database - INFO - Loaded 725 movies from CSV
+2025-06-22 14:02:17,639 - src.database.database - INFO - Movies data loaded into database
+2025-06-22 14:02:17,656 - src.database.database - INFO - Loaded 4754 interactions from CSV
+2025-06-22 14:02:17,656 - src.database.database - INFO - Processing interactions batch 1 to 1000 of 4754
+2025-06-22 14:02:17,999 - src.database.database - INFO - Processing interactions batch 1001 to 2000 of 4754
+2025-06-22 14:02:18,422 - src.database.database - INFO - Processing interactions batch 2001 to 3000 of 4754
+2025-06-22 14:02:18,808 - src.database.database - INFO - Processing interactions batch 3001 to 4000 of 4754
+2025-06-22 14:02:19,339 - src.database.database - INFO - Processing interactions batch 4001 to 4754 of 4754
+2025-06-22 14:02:19,575 - src.database.database - INFO - Interactions data loaded into database
+2025-06-22 14:02:19,576 - src.database.database - INFO - Database setup completed successfully.
+2025-06-22 14:02:19,577 - src.api.main - INFO - Database initialized and data loaded successfully
+2025-06-22 14:02:19,578 - src.models.model - INFO - Loaded SVD model
+2025-06-22 14:02:19,635 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 14:02:19,637 - src.models.model - INFO - Loaded context model
+2025-06-22 14:02:19,638 - src.models.model - INFO - Loaded item features
+2025-06-22 14:02:19,644 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 14:02:19,653 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 14:02:19,659 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 14:02:19,660 - src.models.model - INFO - Loaded user factors
+2025-06-22 14:02:19,663 - src.models.model - INFO - Loaded item factors
+2025-06-22 14:02:19,668 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 14:02:19,668 - src.models.model - INFO - Loaded 501 user IDs
+2025-06-22 14:02:19,669 - src.models.model - INFO - Loaded 580 item IDs
+2025-06-22 14:02:19,686 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:03:13,125 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:04:13,444 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:04:20,145 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:04:20,202 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:04:20,258 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:04:40,705 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:04:40,720 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:04:40,770 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:05:26,718 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:05:26,729 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:06:27,457 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:06:33,431 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:06:33,451 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:06:34,159 - src.api.main - INFO - Getting fresh recommendations for user 2 with context: {'mood': 'stressed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['comedy', 'adventure', 'action']}
+2025-06-22 14:06:34,161 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 14:06:34,161 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 14:06:34,161 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 14:06:34,188 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 14:06:34,207 - src.api.main - INFO - Getting fresh recommendations for user 2 with context: {'mood': 'bored', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'stormy', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['comedy', 'adventure', 'action']}
+2025-06-22 14:06:34,207 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 14:06:34,207 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 14:06:34,208 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 14:06:34,229 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 14:06:42,656 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:06:43,955 - src.api.main - INFO - Getting fresh recommendations for user 2 with context: {'mood': 'sad', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'cloudy', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['comedy', 'adventure', 'action']}
+2025-06-22 14:06:43,955 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 14:06:43,956 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 14:06:43,956 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 14:06:43,986 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 14:06:56,393 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:06:57,064 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'sad', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'stormy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 14:06:57,076 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 14:06:57,121 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 14:06:57,123 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 14:06:57,199 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 14:07:02,102 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:07:02,116 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:07:03,365 - src.api.main - INFO - Getting fresh recommendations for user 2 with context: {'mood': 'happy', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'sunny', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['comedy', 'adventure', 'action']}
+2025-06-22 14:07:03,367 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 14:07:03,368 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 14:07:03,369 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 14:07:03,417 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 14:07:08,324 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:07:08,376 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:07:10,352 - src.database.database - INFO - Added interaction: 2 - 937020
+2025-06-22 14:07:10,352 - src.models.model - INFO - Recording interaction: user=2, item=937020, score=1.0
+2025-06-22 14:07:10,435 - src.models.model - INFO - Updated user and item factors for user 2 and item 937020
+2025-06-22 14:07:10,617 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 14:07:13,651 - src.database.database - INFO - Watch party 1 created by 2 for movie 937020
+2025-06-22 14:07:24,282 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:07:24,298 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:07:24,320 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:07:29,259 - src.database.database - INFO - User 3 accepted party 1
+2025-06-22 14:08:02,566 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:08:02,581 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:08:02,717 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'sad', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'windy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 14:08:02,718 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 14:08:02,720 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 14:08:02,720 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 14:08:02,754 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 14:08:02,789 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'bored', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'rainy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 14:08:02,792 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 14:08:02,793 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 14:08:02,794 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 14:08:02,830 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 14:08:06,344 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:08:06,366 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:08:06,473 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'curious', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'cloudy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 14:08:06,475 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 14:08:06,475 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 14:08:06,476 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 14:08:06,497 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 14:08:06,530 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'curious', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'windy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 14:08:06,533 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 14:08:06,538 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 14:08:06,539 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 14:08:06,609 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 14:08:10,444 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:08:10,459 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:08:10,479 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:08:13,180 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:08:13,204 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:08:14,298 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'curious', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'clear', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 14:08:14,299 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 14:08:14,304 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 14:08:14,305 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 14:08:14,408 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 14:08:19,036 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:08:19,057 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:08:20,493 - src.database.database - INFO - Added interaction: 3 - 452606
+2025-06-22 14:08:20,495 - src.models.model - INFO - Recording interaction: user=3, item=452606, score=1.0
+2025-06-22 14:08:20,503 - src.models.model - INFO - Updated user and item factors for user 3 and item 452606
+2025-06-22 14:08:20,510 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 14:08:24,375 - src.database.database - INFO - Watch party 2 created by 3 for movie 452606
+2025-06-22 14:08:39,830 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:08:40,164 - src.api.main - INFO - Getting fresh recommendations for user 2 with context: {'mood': 'excited', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'sunny', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['comedy', 'adventure', 'action']}
+2025-06-22 14:08:40,165 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 14:08:40,165 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 14:08:40,168 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 14:08:40,220 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 14:08:42,643 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:08:42,656 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:08:44,388 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:08:44,408 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:08:44,435 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:08:54,012 - src.database.database - INFO - User 2 accepted party 2
+2025-06-22 14:09:43,833 - src.api.main - INFO - Shutting down API server...
+2025-06-22 14:09:44,171 - src.models.model - INFO - Saved all models to disk
+2025-06-22 14:09:44,171 - src.api.main - INFO - Recommendation engine models saved
+2025-06-22 14:40:58,866 - __main__ - INFO - Environment setup complete
+2025-06-22 14:40:58,875 - __main__ - INFO - Running data preprocessing...
+2025-06-22 14:41:23,897 - src.database.download - INFO - Starting dataset downloads
+2025-06-22 14:41:23,898 - src.database.download - INFO - Data directories created.
+2025-06-22 14:41:23,898 - src.database.download - INFO - TMDB data already exists, skipping download
+2025-06-22 14:41:24,223 - src.database.preprocess - INFO - Starting data preprocessing...
+2025-06-22 14:41:24,224 - src.database.preprocess - INFO - Created necessary directories
+2025-06-22 14:41:24,224 - src.database.preprocess - INFO - Processing TMDB dataset...
+2025-06-22 14:41:24,453 - src.database.preprocess - INFO - Loaded 725 movies from TMDB JSON
+2025-06-22 14:41:26,816 - src.database.preprocess - INFO - Processed 725 TMDB movies
+2025-06-22 14:41:26,848 - src.database.preprocess - INFO - Creating users dataframe with demographics...
+2025-06-22 14:41:27,227 - src.database.preprocess - INFO - Created 500 users
+2025-06-22 14:41:27,228 - src.database.preprocess - INFO - Creating simulated interactions...
+2025-06-22 14:41:31,674 - src.database.preprocess - INFO - Created 4782 interactions
+2025-06-22 14:41:31,681 - __main__ - INFO - Data preprocessing complete
+2025-06-22 14:41:31,682 - __main__ - INFO - Training recommendation models...
+2025-06-22 14:41:55,972 - src.models.train_models - INFO - Starting model training...
+2025-06-22 14:41:55,973 - src.models.train_models - INFO - Loading data...
+2025-06-22 14:41:56,069 - src.models.train_models - INFO - Loaded 725 movies, 500 users, and 4782 interactions
+2025-06-22 14:41:56,069 - src.models.train_models - INFO - Training recommendation models...
+2025-06-22 14:41:56,106 - src.models.model - INFO - Loaded SVD model
+2025-06-22 14:41:56,169 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 14:41:56,179 - src.models.model - INFO - Loaded context model
+2025-06-22 14:41:56,190 - src.models.model - INFO - Loaded item features
+2025-06-22 14:41:56,202 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 14:41:56,222 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 14:41:56,258 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 14:41:56,269 - src.models.model - INFO - Loaded user factors
+2025-06-22 14:41:56,282 - src.models.model - INFO - Loaded item factors
+2025-06-22 14:41:56,296 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 14:41:56,297 - src.models.model - INFO - Loaded 502 user IDs
+2025-06-22 14:41:56,297 - src.models.model - INFO - Loaded 582 item IDs
+2025-06-22 14:41:56,297 - src.models.train_models - INFO - Preparing context features...
+2025-06-22 14:41:56,827 - src.models.train_models - INFO - Prepared 4782 context features with 30 dimensions
+2025-06-22 14:41:56,844 - src.models.model - INFO - Training recommendation engine...
+2025-06-22 14:41:56,845 - src.models.model - INFO - Preparing user-item matrix...
+2025-06-22 14:41:57,174 - src.models.model - INFO - Created user-item matrix with shape (500, 579)
+2025-06-22 14:41:57,175 - src.models.model - INFO - Training collaborative filtering model...
+2025-06-22 14:41:58,209 - src.models.model - INFO - Trained SVD model with 50 components
+2025-06-22 14:41:58,209 - src.models.model - INFO - Training content-based filtering model...
+2025-06-22 14:41:58,408 - src.models.model - INFO - Trained TF-IDF vectorizer with 5000 features
+2025-06-22 14:41:58,408 - src.models.model - INFO - Training context model...
+2025-06-22 14:41:58,554 - src.models.model - INFO - Trained context model
+2025-06-22 14:41:58,555 - src.models.model - INFO - Recommendation engine training complete
+2025-06-22 14:41:58,744 - src.models.model - INFO - Saved all models to disk
+2025-06-22 14:41:58,744 - src.models.train_models - INFO - Models trained and saved successfully
+2025-06-22 14:41:58,746 - src.models.train_models - INFO - Testing recommendations...
+2025-06-22 14:41:58,746 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 14:41:58,746 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 14:41:58,746 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 14:41:58,919 - src.models.train_models - INFO - Top 5 recommendations for user 1 (without context):
+2025-06-22 14:41:58,921 - src.models.train_models - INFO -   - Item 1152619: 0.5000
+2025-06-22 14:41:58,921 - src.models.train_models - INFO -   - Item 541671: 0.5000
+2025-06-22 14:41:58,922 - src.models.train_models - INFO -   - Item 1146210: 0.5000
+2025-06-22 14:41:58,922 - src.models.train_models - INFO -   - Item 297222: 0.5000
+2025-06-22 14:41:58,923 - src.models.train_models - INFO -   - Item 803796: 0.5000
+2025-06-22 14:41:58,929 - src.models.model - INFO - Getting recommendations for user 1
+2025-06-22 14:41:58,939 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 14:41:58,941 - src.models.model - WARNING - User 1 not found in training data
+2025-06-22 14:41:58,957 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 14:41:58,958 - src.models.train_models - INFO - Top 5 recommendations for user 1 (with context - happy, evening):
+2025-06-22 14:41:58,958 - src.models.train_models - INFO -   - Item 1196943: 0.5971
+2025-06-22 14:41:58,959 - src.models.train_models - INFO -   - Item 376812: 0.5964
+2025-06-22 14:41:58,959 - src.models.train_models - INFO -   - Item 1083241: 0.5896
+2025-06-22 14:41:58,959 - src.models.train_models - INFO -   - Item 112999: 0.5826
+2025-06-22 14:41:58,959 - src.models.train_models - INFO -   - Item 1190511: 0.5780
+2025-06-22 14:41:58,961 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 14:41:58,961 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 14:41:58,961 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 14:41:58,973 - src.models.train_models - INFO - Top 5 recommendations for user 2 (without context):
+2025-06-22 14:41:58,974 - src.models.train_models - INFO -   - Item 1226572: 0.5000
+2025-06-22 14:41:58,974 - src.models.train_models - INFO -   - Item 143976: 0.5000
+2025-06-22 14:41:58,975 - src.models.train_models - INFO -   - Item 112999: 0.5000
+2025-06-22 14:41:58,975 - src.models.train_models - INFO -   - Item 1146210: 0.5000
+2025-06-22 14:41:58,975 - src.models.train_models - INFO -   - Item 1239193: 0.5000
+2025-06-22 14:41:58,976 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 14:41:58,976 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 14:41:58,977 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 14:41:58,997 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 14:41:58,998 - src.models.train_models - INFO - Top 5 recommendations for user 2 (with context - happy, evening):
+2025-06-22 14:41:58,998 - src.models.train_models - INFO -   - Item 1376434: 0.5993
+2025-06-22 14:41:58,999 - src.models.train_models - INFO -   - Item 993637: 0.5992
+2025-06-22 14:41:58,999 - src.models.train_models - INFO -   - Item 11518: 0.5775
+2025-06-22 14:41:59,000 - src.models.train_models - INFO -   - Item 1112426: 0.5774
+2025-06-22 14:41:59,001 - src.models.train_models - INFO -   - Item 899718: 0.5759
+2025-06-22 14:41:59,001 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 14:41:59,002 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 14:41:59,002 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 14:41:59,022 - src.models.train_models - INFO - Top 5 recommendations for user 3 (without context):
+2025-06-22 14:41:59,022 - src.models.train_models - INFO -   - Item 1016346: 0.5000
+2025-06-22 14:41:59,022 - src.models.train_models - INFO -   - Item 1357713: 0.5000
+2025-06-22 14:41:59,023 - src.models.train_models - INFO -   - Item 1110390: 0.5000
+2025-06-22 14:41:59,023 - src.models.train_models - INFO -   - Item 143976: 0.5000
+2025-06-22 14:41:59,023 - src.models.train_models - INFO -   - Item 920059: 0.5000
+2025-06-22 14:41:59,024 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 14:41:59,024 - src.models.model - WARNING - Matrix factorization models not available, using fallback
+2025-06-22 14:41:59,024 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 14:41:59,043 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 14:41:59,043 - src.models.train_models - INFO - Top 5 recommendations for user 3 (with context - happy, evening):
+2025-06-22 14:41:59,043 - src.models.train_models - INFO -   - Item 11518: 0.5984
+2025-06-22 14:41:59,044 - src.models.train_models - INFO -   - Item 585268: 0.5961
+2025-06-22 14:41:59,044 - src.models.train_models - INFO -   - Item 533991: 0.5935
+2025-06-22 14:41:59,044 - src.models.train_models - INFO -   - Item 1239193: 0.5822
+2025-06-22 14:41:59,044 - src.models.train_models - INFO -   - Item 10191: 0.5801
+2025-06-22 14:41:59,045 - src.models.train_models - INFO - Model training completed successfully
+2025-06-22 14:41:59,046 - __main__ - INFO - Model training complete
+2025-06-22 14:41:59,047 - __main__ - INFO - Database schema setup complete
+2025-06-22 14:41:59,048 - __main__ - INFO - Cleaned recommendation cache
+2025-06-22 14:42:02,150 - src.models.model - INFO - Loaded SVD model
+2025-06-22 14:42:02,261 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 14:42:02,262 - src.models.model - INFO - Loaded context model
+2025-06-22 14:42:02,264 - src.models.model - INFO - Loaded item features
+2025-06-22 14:42:02,273 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 14:42:02,279 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 14:42:02,285 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 14:42:02,286 - src.models.model - INFO - Loaded user factors
+2025-06-22 14:42:02,287 - src.models.model - INFO - Loaded item factors
+2025-06-22 14:42:02,290 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 14:42:02,292 - src.models.model - INFO - Loaded 500 user IDs
+2025-06-22 14:42:02,292 - src.models.model - INFO - Loaded 579 item IDs
+2025-06-22 14:42:02,341 - src.api.main - INFO - Starting interaction processing thread
+2025-06-22 14:42:02,384 - __main__ - INFO - Starting API server...
+2025-06-22 14:42:12,358 - src.models.model - INFO - Loaded SVD model
+2025-06-22 14:42:12,407 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 14:42:12,408 - src.models.model - INFO - Loaded context model
+2025-06-22 14:42:12,410 - src.models.model - INFO - Loaded item features
+2025-06-22 14:42:12,415 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 14:42:12,419 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 14:42:12,421 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 14:42:12,422 - src.models.model - INFO - Loaded user factors
+2025-06-22 14:42:12,422 - src.models.model - INFO - Loaded item factors
+2025-06-22 14:42:12,426 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 14:42:12,426 - src.models.model - INFO - Loaded 500 user IDs
+2025-06-22 14:42:12,426 - src.models.model - INFO - Loaded 579 item IDs
+2025-06-22 14:42:12,476 - src.api.main - INFO - Starting interaction processing thread
+2025-06-22 14:42:12,519 - src.api.main - INFO - Starting API server...
+2025-06-22 14:42:12,519 - src.database.database - INFO - Initializing database...
+2025-06-22 14:42:12,520 - src.database.database - INFO - Database initialized successfully.
+2025-06-22 14:42:12,522 - src.database.database - INFO - Loading data from CSV files into the database...
+2025-06-22 14:42:12,532 - src.database.database - INFO - Loaded 725 movies from CSV
+2025-06-22 14:42:12,607 - src.database.database - INFO - Movies data loaded into database
+2025-06-22 14:42:12,615 - src.database.database - INFO - Loaded 4782 interactions from CSV
+2025-06-22 14:42:12,616 - src.database.database - INFO - Processing interactions batch 1 to 1000 of 4782
+2025-06-22 14:42:12,937 - src.database.database - INFO - Processing interactions batch 1001 to 2000 of 4782
+2025-06-22 14:42:13,148 - src.database.database - INFO - Processing interactions batch 2001 to 3000 of 4782
+2025-06-22 14:42:13,358 - src.database.database - INFO - Processing interactions batch 3001 to 4000 of 4782
+2025-06-22 14:42:13,553 - src.database.database - INFO - Processing interactions batch 4001 to 4782 of 4782
+2025-06-22 14:42:13,732 - src.database.database - INFO - Interactions data loaded into database
+2025-06-22 14:42:13,735 - src.database.database - INFO - Database setup completed successfully.
+2025-06-22 14:42:13,736 - src.api.main - INFO - Database initialized and data loaded successfully
+2025-06-22 14:42:13,738 - src.models.model - INFO - Loaded SVD model
+2025-06-22 14:42:13,786 - src.models.model - INFO - Loaded TF-IDF vectorizer
+2025-06-22 14:42:13,787 - src.models.model - INFO - Loaded context model
+2025-06-22 14:42:13,788 - src.models.model - INFO - Loaded item features
+2025-06-22 14:42:13,795 - src.models.model - INFO - Loaded item ID to index mapping
+2025-06-22 14:42:13,799 - src.models.model - INFO - Loaded user ID to index mapping
+2025-06-22 14:42:13,801 - src.models.model - INFO - Loaded items dataframe
+2025-06-22 14:42:13,803 - src.models.model - INFO - Loaded user factors
+2025-06-22 14:42:13,803 - src.models.model - INFO - Loaded item factors
+2025-06-22 14:42:13,805 - src.models.model - INFO - Loaded user-item matrix
+2025-06-22 14:42:13,805 - src.models.model - INFO - Loaded 500 user IDs
+2025-06-22 14:42:13,805 - src.models.model - INFO - Loaded 579 item IDs
+2025-06-22 14:42:13,926 - src.database.database - INFO - Watch party 2 ended
+2025-06-22 14:42:18,626 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:42:18,635 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:42:18,642 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:42:18,650 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:42:19,628 - src.api.main - INFO - Getting fresh recommendations for user 2 with context: {'mood': 'happy', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'sunny', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['comedy', 'adventure', 'action']}
+2025-06-22 14:42:19,628 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 14:42:19,629 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 14:42:19,629 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 14:42:19,644 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 14:42:19,661 - src.api.main - INFO - Getting fresh recommendations for user 2 with context: {'mood': 'excited', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'foggy', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['comedy', 'adventure', 'action']}
+2025-06-22 14:42:19,661 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 14:42:19,662 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 14:42:19,662 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 14:42:19,684 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 14:42:19,705 - src.api.main - INFO - Getting fresh recommendations for user 2 with context: {'mood': 'neutral', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'snowy', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['comedy', 'adventure', 'action']}
+2025-06-22 14:42:19,706 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 14:42:19,708 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 14:42:19,710 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 14:42:19,733 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 14:42:19,752 - src.api.main - INFO - Getting fresh recommendations for user 2 with context: {'mood': 'stressed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'stormy', 'age': 20, 'location': 'Chennai', 'language': 'ta', 'preferred_genres': ['comedy', 'adventure', 'action']}
+2025-06-22 14:42:19,752 - src.models.model - INFO - Getting recommendations for user 2
+2025-06-22 14:42:19,753 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 14:42:19,753 - src.models.model - WARNING - User 2 not found in training data
+2025-06-22 14:42:19,772 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 14:42:48,411 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:42:48,460 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:42:48,510 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:42:58,394 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:42:59,058 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'relaxed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'stormy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 14:42:59,059 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 14:42:59,059 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 14:42:59,059 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 14:42:59,172 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 14:43:06,772 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:43:06,782 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:43:48,526 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:44:18,719 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:44:42,887 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'relaxed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'sunny', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 14:44:42,888 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 14:44:42,888 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 14:44:42,888 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 14:44:42,901 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 14:44:48,529 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:44:50,638 - src.api.main - INFO - Getting fresh recommendations for user 3 with context: {'mood': 'stressed', 'time_of_day': 'afternoon', 'day_of_week': 'Sunday', 'weather': 'stormy', 'age': 20, 'location': 'Banglore', 'language': 'en', 'preferred_genres': ['action', 'animation']}
+2025-06-22 14:44:50,639 - src.models.model - INFO - Getting recommendations for user 3
+2025-06-22 14:44:50,641 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 14:44:50,644 - src.models.model - WARNING - User 3 not found in training data
+2025-06-22 14:44:50,670 - src.models.model - ERROR - Error getting item metadata: 'sqlite3.Row' object has no attribute 'get'
+2025-06-22 14:44:53,750 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:44:53,756 - src.api.main - ERROR - Error getting notification counts: can't compare offset-naive and offset-aware datetimes
+2025-06-22 14:45:00,768 - src.database.database - INFO - Added interaction: 3 - 1203329
+2025-06-22 14:45:00,770 - src.models.model - INFO - Recording interaction: user=3, item=1203329, score=1.0
+2025-06-22 14:45:01,090 - src.models.model - INFO - Updated user and item factors for user 3 and item 1203329
+2025-06-22 14:45:01,290 - src.models.model - INFO - Updated context model with new interaction data
+2025-06-22 14:45:05,437 - src.database.database - INFO - Watch party 3 created by 3 for movie 1203329

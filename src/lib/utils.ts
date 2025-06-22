@@ -304,7 +304,15 @@ export interface FriendActivity {
 export interface NotificationCount {
   friend_requests: number;
   friend_activities: number;
+  watch_parties: number;
   total: number;
+}
+
+export interface WatchPartyInvite {
+  party_id: number;
+  host_id: string;
+  tmdb_id: number;
+  created_at: string;
 }
 
 // Search for users
@@ -431,7 +439,7 @@ export const getNotificationCount = async (userId: string, sinceTimestamp?: stri
     return await response.json();
   } catch (error) {
     console.error('Failed to fetch notification count:', error);
-    return { friend_requests: 0, friend_activities: 0, total: 0 };
+    return { friend_requests: 0, friend_activities: 0, watch_parties: 0, total: 0 };
   }
 };
 
@@ -448,5 +456,28 @@ export const getFriendRecommendations = async (userId: string, n: number = 5): P
   } catch (error) {
     console.error('Error getting friend recommendations:', error);
     return [];
+  }
+};
+
+export const getWatchPartyInvites = async (userId: string): Promise<WatchPartyInvite[]> => {
+  try {
+    const res = await fetch(`${RECOMMENDATION_API_URL}/watchparty/notifications/${userId}`);
+    if (!res.ok) throw new Error('Failed to fetch watch party invites');
+    return await res.json();
+  } catch (e) {
+    console.error('Error fetching watch party invites:', e);
+    return [];
+  }
+};
+
+export const acceptWatchPartyInvite = async (partyId: number, userId: string): Promise<boolean> => {
+  try {
+    const res = await fetch(`${RECOMMENDATION_API_URL}/watchparty/accept?party_id=${partyId}&user_id=${encodeURIComponent(userId)}`, {
+      method: 'POST'
+    });
+    return res.ok;
+  } catch (e) {
+    console.error('Error accepting watch party invite:', e);
+    return false;
   }
 };

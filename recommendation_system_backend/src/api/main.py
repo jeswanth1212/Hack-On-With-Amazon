@@ -23,7 +23,9 @@ from src.database.database import (
     init_db, setup_database, add_user, add_interaction, get_user_interactions, 
     get_db_connection, get_item_details, get_all_users, get_all_items, get_all_interactions,
     search_users, send_friend_request, respond_to_friend_request, 
-    get_pending_friend_requests, get_friends, get_friend_activities
+    get_pending_friend_requests, get_friends, get_friend_activities,
+    create_watch_party, get_watch_party_invites, accept_watch_party, get_watch_party_details,
+    end_watch_party
 )
 from src.utils.context_utils import (
     get_current_time_of_day, get_current_day_of_week,
@@ -161,6 +163,7 @@ class FriendActivityResponse(BaseModel):
 class NotificationCountResponse(BaseModel):
     friend_requests: int
     friend_activities: int
+    watch_parties: int = 0
     total: int
 
 class SearchUserRequest(BaseModel):
@@ -168,6 +171,71 @@ class SearchUserRequest(BaseModel):
 
 class FriendRequestAction(BaseModel):
     status: str
+
+# ------------------- Watch Party models -------------------
+
+class WatchPartyCreate(BaseModel):
+    host_id: str
+    tmdb_id: int
+    friend_ids: List[str]
+
+class WatchPartyInviteResponse(BaseModel):
+    party_id: int
+    host_id: str
+    tmdb_id: int
+    created_at: str
+
+class WatchPartyDetailsResponse(BaseModel):
+    party_id: int
+    host_id: str
+    tmdb_id: int
+    status: str
+    created_at: str
+    participants: List[Dict[str, Any]]
+
+# ------------------- Watch Party endpoints -------------------
+
+@app.post('/watchparty/create', response_model=Dict[str, Any], tags=['WatchParty'])
+async def api_create_watch_party(party: WatchPartyCreate):
+    try:
+        party_id = create_watch_party(party.host_id, party.tmdb_id, party.friend_ids)
+        return {"party_id": party_id}
+    except Exception as e:
+        logger.error(e)
+        raise HTTPException(status_code=500, detail="Failed to create party")
+
+@app.get('/watchparty/notifications/{user_id}', response_model=List[WatchPartyInviteResponse], tags=['WatchParty'])
+async def api_get_watch_party_invites(user_id: str):
+    try:
+        return get_watch_party_invites(user_id)
+    except Exception as e:
+        logger.error(e)
+        raise HTTPException(status_code=500, detail="Failed to fetch invites")
+
+@app.post('/watchparty/accept', response_model=Dict[str, str], tags=['WatchParty'])
+async def api_accept_watch_party(party_id: int = Query(...), user_id: str = Query(...)):
+    try:
+        accept_watch_party(party_id, user_id)
+        return {"status": "accepted"}
+    except Exception as e:
+        logger.error(e)
+        raise HTTPException(status_code=500, detail="Failed to accept invite")
+
+@app.get('/watchparty/details/{party_id}', response_model=WatchPartyDetailsResponse, tags=['WatchParty'])
+async def api_get_watch_party_details(party_id: int):
+    details = get_watch_party_details(party_id)
+    if not details:
+        raise HTTPException(status_code=404, detail="Party not found")
+    return details
+
+@app.post('/watchparty/end', response_model=Dict[str, str], tags=['WatchParty'])
+async def api_end_watch_party(party_id: int = Query(...)):
+    try:
+        end_watch_party(party_id)
+        return {"status": "ended"}
+    except Exception as e:
+        logger.error(e)
+        raise HTTPException(status_code=500, detail="Failed to end party")
 
 # Background thread for processing interactions
 def process_interactions():
@@ -899,10 +967,15 @@ async def get_notification_count(
                 
         activity_count = len(activities)
         
+        # watch party invites
+        watch_party_invites = len(get_watch_party_invites(user_id))
+        total = request_count + activity_count + watch_party_invites
+        
         return {
             "friend_requests": request_count,
             "friend_activities": activity_count,
-            "total": request_count + activity_count
+            "watch_parties": watch_party_invites,
+            "total": total,
         }
     except Exception as e:
         logger.error(f"Error getting notification counts: {e}")

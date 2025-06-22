@@ -138,6 +138,32 @@ def init_db():
     cursor.execute('CREATE INDEX IF NOT EXISTS idx_friend_requests_receiver ON FriendRequests (receiver_id)')
     cursor.execute('CREATE INDEX IF NOT EXISTS idx_friend_requests_status ON FriendRequests (status)')
     
+    # -----------------------------
+    # Watch Party tables
+    # -----------------------------
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS WatchParties (
+        party_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        host_id TEXT,
+        tmdb_id INTEGER,
+        status TEXT CHECK(status IN ("pending", "active", "ended")) DEFAULT "pending",
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    ''')
+
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS WatchPartyParticipants (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        party_id INTEGER,
+        user_id TEXT,
+        joined INTEGER DEFAULT 0,
+        joined_at TIMESTAMP,
+        FOREIGN KEY (party_id) REFERENCES WatchParties(party_id)
+    )
+    ''')
+
+    cursor.execute('CREATE INDEX IF NOT EXISTS idx_watchparty_participants_user ON WatchPartyParticipants(user_id)')
+    
     conn.commit()
     conn.close()
     logger.info("Database initialized successfully.")
@@ -687,6 +713,92 @@ def get_friend_activities(user_id, limit=50):
         result.append(activity_dict)
     
     return result
+
+# ====================================================
+# Watch Party helper functions
+# ====================================================
+
+def create_watch_party(host_id: str, tmdb_id: int, friend_ids: list[str]):
+    """Create a new watch party and invitations."""
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute('INSERT INTO WatchParties (host_id, tmdb_id) VALUES (?, ?)', (host_id, tmdb_id))
+    party_id = cur.lastrowid
+
+    # Add host as joined participant
+    cur.execute('INSERT INTO WatchPartyParticipants (party_id, user_id, joined, joined_at) VALUES (?, ?, 1, CURRENT_TIMESTAMP)', (party_id, host_id))
+
+    # Add friends as pending
+    for fid in friend_ids:
+        cur.execute('INSERT INTO WatchPartyParticipants (party_id, user_id, joined) VALUES (?, ?, 0)', (party_id, fid))
+
+    conn.commit()
+    conn.close()
+    logger.info(f"Watch party {party_id} created by {host_id} for movie {tmdb_id}")
+    return party_id
+
+
+def get_watch_party_invites(user_id: str):
+    """Return pending invites for user."""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('''
+        SELECT wp.party_id, wp.host_id, wp.tmdb_id, wp.created_at
+        FROM WatchPartyParticipants wpp
+        JOIN WatchParties wp ON wp.party_id = wpp.party_id
+        WHERE wpp.user_id = ? AND wpp.joined = 0 AND wp.status = "pending"
+    ''', (user_id,))
+    rows = cur.fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
+
+def accept_watch_party(party_id: int, user_id: str):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    # Update participant joined
+    cur.execute('''
+        UPDATE WatchPartyParticipants SET joined = 1, joined_at = CURRENT_TIMESTAMP
+        WHERE party_id = ? AND user_id = ?
+    ''', (party_id, user_id))
+
+    # Check if all participants joined
+    cur.execute('''
+        SELECT COUNT(*) as total, SUM(joined) as joined_count FROM WatchPartyParticipants WHERE party_id = ?
+    ''', (party_id,))
+    res = cur.fetchone()
+    if res and res['total'] == res['joined_count']:
+        cur.execute('UPDATE WatchParties SET status = "active" WHERE party_id = ?', (party_id,))
+
+    conn.commit()
+    conn.close()
+    logger.info(f"User {user_id} accepted party {party_id}")
+
+
+def get_watch_party_details(party_id: int):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('SELECT * FROM WatchParties WHERE party_id = ?', (party_id,))
+    party = cur.fetchone()
+    if not party:
+        conn.close()
+        return None
+    party_dict = dict(party)
+    cur.execute('SELECT user_id, joined, joined_at FROM WatchPartyParticipants WHERE party_id = ?', (party_id,))
+    participants = [dict(r) for r in cur.fetchall()]
+    conn.close()
+    party_dict['participants'] = participants
+    return party_dict
+
+def end_watch_party(party_id: int):
+    """Mark a watch party as ended."""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute('UPDATE WatchParties SET status = "ended" WHERE party_id = ?', (party_id,))
+    conn.commit()
+    conn.close()
+    logger.info(f"Watch party {party_id} ended")
 
 if __name__ == "__main__":
     # Initialize the database

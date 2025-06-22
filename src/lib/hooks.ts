@@ -186,6 +186,7 @@ export function useAuth(): AuthContextType {
 interface NotificationState {
   friendRequestCount: number;
   friendActivityCount: number;
+  watchPartyCount: number;
   totalCount: number;
   lastCheckedActivity: number;
   markActivityAsRead: () => void;
@@ -194,6 +195,7 @@ interface NotificationState {
 const NotificationContext = createContext<NotificationState>({
   friendRequestCount: 0,
   friendActivityCount: 0,
+  watchPartyCount: 0,
   totalCount: 0,
   lastCheckedActivity: Date.now(),
   markActivityAsRead: () => {}
@@ -203,6 +205,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
   const { user } = useAuth();
   const [friendRequestCount, setFriendRequestCount] = useState(0);
   const [friendActivityCount, setFriendActivityCount] = useState(0);
+  const [watchPartyCount, setWatchPartyCount] = useState(0);
   const [lastCheckedActivity, setLastCheckedActivity] = useState(() => {
     // Initialize with stored value or current time
     const stored = localStorage.getItem('lastCheckedActivity');
@@ -221,6 +224,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
         
         setFriendRequestCount(counts.friend_requests);
         setFriendActivityCount(counts.friend_activities);
+        setWatchPartyCount(counts.watch_parties ?? 0);
       } catch (error) {
         console.error('Error loading notifications:', error);
       }
@@ -242,14 +246,15 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     localStorage.setItem('lastCheckedActivity', now.toString());
   };
   
-  const totalCount = friendRequestCount + friendActivityCount;
+  const totalCount = friendRequestCount + friendActivityCount + watchPartyCount;
   
   return React.createElement(
     NotificationContext.Provider,
     {
       value: { 
         friendRequestCount, 
-        friendActivityCount, 
+        friendActivityCount,
+        watchPartyCount,
         totalCount,
         lastCheckedActivity,
         markActivityAsRead
