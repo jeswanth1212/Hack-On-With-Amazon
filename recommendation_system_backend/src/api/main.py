@@ -6,7 +6,7 @@ import uvicorn
 import datetime
 from queue import Queue
 from threading import Thread
-from fastapi import FastAPI, HTTPException, Query, Depends
+from fastapi import FastAPI, HTTPException, Query, Depends, Body, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
@@ -16,6 +16,22 @@ import json
 import random
 import socketio
 import asyncio
+import sqlite3
+import requests
+from flask import jsonify, request
+from io import BytesIO      
+# import tensorflow as tf
+# from tensorflow.keras.models import load_model
+import numpy as np
+from PIL import Image
+import io
+import base64
+try:
+    import cv2
+except ImportError:
+    cv2 = None  # If OpenCV is not available, fallback to PIL only
+
+API_TOKEN = "3760ad39c6fd49c2bd4742a60aa8e884"
 
 # Add the project root to the path to import our modules
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
@@ -397,6 +413,29 @@ class WatchPartyDetailsResponse(BaseModel):
     status: str
     created_at: str
     participants: List[Dict[str, Any]]
+
+
+#emotion detection
+@app.route('/predict_emotion', methods=['POST'])
+def predict_emotion():
+    try:
+        # Get base64 image from request
+        img_data = request.json['image']
+        img_data = img_data.split(',')[1]  # Remove "data:image/jpeg;base64,"
+        img_bytes = base64.b64decode(img_data)
+        img = BytesIO(img_bytes)
+
+        url = "https://api.luxand.cloud/photo/emotions"
+        headers = {"token": API_TOKEN}
+        files = {"photo": img}
+
+        response = requests.post(url, headers=headers, files=files)
+        if response.status_code == 200:
+            return jsonify(response.json())
+        else:
+            return jsonify({"error": response.text}), 400
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # ------------------- Watch Party endpoints -------------------
 
@@ -1318,6 +1357,56 @@ async def get_friend_recommendations(
     except Exception as e:
         logger.error(f"Error getting friend recommendations: {e}")
         raise HTTPException(status_code=500, detail="Error getting friend recommendations")
+
+# Add emotion table creation to setup_database
+def setup_database():
+    try:
+        db_path = os.path.join(script_dir, "data/processed/recommendation.db")
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        # ... existing code ...
+        # Create emotions table if it doesn't exist
+        cursor.execute('''
+        CREATE TABLE IF NOT EXISTS emotions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id TEXT NOT NULL,
+            tmdb_id INTEGER NOT NULL,
+            emotion TEXT NOT NULL,
+            timestamp TEXT NOT NULL
+        )
+        ''')
+        conn.commit()
+        conn.close()
+        logger.info("Database schema setup complete")
+    except Exception as e:
+        logger.error(f"Error setting up database: {e}")
+
+# Add FastAPI endpoint to receive and store emotion data
+class EmotionRecord(BaseModel):
+    user_id: str
+    tmdb_id: int
+    emotion: str
+    timestamp: str
+
+@app.post('/emotion', tags=["Emotion"])
+async def record_emotion(emotion: EmotionRecord = Body(...)):
+    try:
+        db_path = os.path.join(script_dir, "data/processed/recommendation.db")
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        cursor.execute(
+            "INSERT INTO emotions (user_id, tmdb_id, emotion, timestamp) VALUES (?, ?, ?, ?)",
+            (emotion.user_id, emotion.tmdb_id, emotion.emotion, emotion.timestamp)
+        )
+        conn.commit()
+        conn.close()
+        logger.info(f"Stored emotion for user {emotion.user_id}, tmdb_id {emotion.tmdb_id}: {emotion.emotion}")
+        return {"success": True}
+    except Exception as e:
+        logger.error(f"Error storing emotion: {e}")
+        return {"success": False, "error": str(e)}
+
+
 
 if __name__ == "__main__":
     start() 
